@@ -10,7 +10,6 @@ namespace NutriView.Shared.Domain
     {
         public int Id { get; set; }
         public DateTime DateCreated { get; set; }
-
         public DateTime DateUpdated { get; set; }
 
         public string? UpdatedBy { get; set; }

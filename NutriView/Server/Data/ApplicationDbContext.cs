@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using NutriView.Server.Configurations.Entities;
 using NutriView.Server.Models;
 using NutriView.Shared.Domain;
 
@@ -27,6 +28,26 @@ namespace NutriView.Server.Data
         public DbSet<SubscriptionInfo> SubscriptionInfos { get; set; }
 
         public DbSet<Customer> Customers { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.ApplyConfiguration(new SubscriptionInfoSeedConfiguration());
+            builder.ApplyConfiguration(new CompanySeedConfiguration());
+            builder.ApplyConfiguration(new NutritionInfoSeedConfiguration());
+            builder.ApplyConfiguration(new FoodSeedConfiguration());
+            builder.ApplyConfiguration(new RoleSeedConfiguration());
+            builder.ApplyConfiguration(new StaffSeedConfiguration());
+            builder.ApplyConfiguration(new UserRoleSeedConfiguration());
+            builder.ApplyConfiguration(new UserSeedConfiguration());
+            builder.ApplyConfiguration(new CustomerSeedConfiguration());
+            builder.ApplyConfiguration(new SubscriptionSeedConfiguration());
+            builder.ApplyConfiguration(new FoodEntrySeedConfiguration());
+            builder.ApplyConfiguration(new MealSeedConfiguration());
+            builder.ApplyConfiguration(new NutritionalQuotaSeedConfiguration());
+        }
+
 
     }
 }
