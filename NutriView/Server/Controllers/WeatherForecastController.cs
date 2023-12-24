@@ -4,7 +4,7 @@ using NutriView.Shared;
 
 namespace NutriView.Server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
