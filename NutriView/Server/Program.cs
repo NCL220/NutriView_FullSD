@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using NutriView.Server.Data;
 using NutriView.Server.Models;
 using Microsoft.AspNetCore.Identity;
+using NutriView.Server.IRepository;
+using NutriView.Server.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
