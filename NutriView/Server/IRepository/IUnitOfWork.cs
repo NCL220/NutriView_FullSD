@@ -18,7 +18,7 @@ namespace NutriView.Server.IRepository
         IGenericRepository<NutritionInfo> NutritionInfos { get; }
         IGenericRepository<Staff> Staffs { get; }
         IGenericRepository<Subscription> Subscriptions { get; }
-        IGenericRepository<Subscription> SubscriptionInfos { get; }
+        IGenericRepository<SubscriptionInfo> SubscriptionInfos { get; }
 
 
         IGenericRepository<Customer> Customers { get; }
