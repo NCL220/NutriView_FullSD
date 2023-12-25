@@ -1,0 +1,83 @@
+﻿@page "/companies"
+@inject HttpClient _client
+@inject IJSRuntime js
+@using NutriView.Shared.Domain
+
+<h3 class="card-title">Companies</h3>
+
+@if (companies is null)
+{
+    <div class="alert alert-info">Loading companies...</div>
+}
+else if (companies.Count == 0)
+{
+    <p>No companies found.</p>
+}
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Mission</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var company in companies)
+            {
+                <tr>
+                    <td>@company.CompanyName</td>
+                    <td>@company.Mission</td>
+                    <td>@company.CompanyDescription</td>
+                    <td>
+                        <a href="/companies/edit/@company.Id" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-danger" @onclick="() => Delete(company.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Company>? companies;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            companies = await _client.GetFromJsonAsync<List<Company>>("api/companies");
+            if (companies is null)
+            {
+                companies = new List<Company>(); // Initialize to an empty list if null is returned
+            }
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+        }
+    }
+
+    private async Task Delete(int companyId)
+    {
+        if (companies is null) return; // Guard clause for null 'companies'
+
+        var company = companies.FirstOrDefault(c => c.Id == companyId);
+        if (company != null && await js.InvokeAsync<bool>("confirm", $"Do you want to delete {company.CompanyName}?"))
+        {
+            try
+            {
+                await _client.DeleteAsync($"api/companies/{companyId}");
+                companies.Remove(company);
+                StateHasChanged(); // Refresh the UI
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting company: {ex.Message}");
+                // Handle the error, e.g., show a message to the user
+            }
+        }
+    }
+}

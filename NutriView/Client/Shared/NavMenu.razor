@@ -17,7 +17,6 @@
                         <span class="oi oi-person" aria-hidden="true"></span> Hello, @context.User.Identity?.Name!
                     </NavLink>
                 </div>
-
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="#" @onclick="BeginLogOut" Match="NavLinkMatch.All">
                         <span class="oi oi-account-logout" aria-hidden="true"></span> Log out
@@ -44,7 +43,7 @@
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="AboutUs">
-                <span class="oi oi-clipboard"aria-hidden="true"></span> About Us
+                <span class="oi oi-clipboard" aria-hidden="true"></span> About Us
             </NavLink>
         </div>
         <div class="nav-item px-3">
@@ -62,8 +61,12 @@
                 <span class="oi oi-clipboard" aria-hidden="true"></span> Personal Tracker
             </NavLink>
         </div>
-
-
+        <!-- Added Companies NavLink -->
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="companies">
+                <span class="oi oi-briefcase" aria-hidden="true"></span> Companies
+            </NavLink>
+        </div>
     </nav>
 </div>
 
@@ -76,8 +79,9 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
     private void BeginLogOut(MouseEventArgs args)
     {
-        Navigation.NavigateToLogout("authentication/logout", "/");
+        Navigation.NavigateTo("authentication/logout", forceLoad: true);
     }
 }
