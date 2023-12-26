@@ -7,7 +7,8 @@
             @foreach (var company in companies)
             {
                 <h1>About @company.CompanyName</h1>
-                <img src=@company.CompanyImagePath style="300px"/>
+                <p>@company.Mission</p>
+                <img src=@company.CompanyImagePath/>
                 <h2>Our Mission</h2>
                 <p>@company.CompanyDescription</p>
             }

@@ -1,0 +1,36 @@
+﻿@page "/subscriptionpage"
+
+<head>
+    <style>
+        body{
+            background-color: lightgreen;
+        }
+        .Subscription_container{
+            padding:10px;
+            display:grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 16px;
+            margin-bottom: 16px; 
+        }
+
+        .subscription_card {
+            position:center;
+            border: 5px solid black;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            height:700px;
+            box-shadow: 10px 10px 5px lightblue;
+        }
+
+        .subscription_button {
+            margin-top: auto; /* Push the button to the bottom of the card */
+        }
+    </style>
+</head>
+
+<SubscriptionPageComponent />
+@code {
+
+}

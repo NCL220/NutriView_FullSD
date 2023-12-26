@@ -1,0 +1,42 @@
+﻿@inject HttpClient _client
+@inject IJSRuntime js
+@using NutriView.Shared.Domain
+<body>
+    <div class="SubscriptionHeader">
+        <h1>Be A Subscriber And Support Us!</h1>
+    </div>
+    <div class="Subscription_container">
+    @foreach(var SubscriptionInfo in SubscriptionInfos)
+    {
+            <div class="subscription_card">
+            <h1>Be A @SubscriptionInfo.SubTierName !!!</h1>
+            <p>Benefits: @SubscriptionInfo.SubDescription</p>
+            <p>Cost: @SubscriptionInfo.SubCost</p>
+            <button class="subscription_button" @onclick=" ()=> ShowPurchase(SubscriptionInfo.Id)">Purchase</button>
+        </div>
+    }
+    </div>
+</body>
+@code {
+    private List<SubscriptionInfo>? SubscriptionInfos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            SubscriptionInfos = await _client.GetFromJsonAsync<List<SubscriptionInfo>>("api/SubscriptionInfos");
+            if (SubscriptionInfos is null)
+            {
+                SubscriptionInfos = new List<SubscriptionInfo>(); // Initialize to an empty list if null is returned
+            }
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+        }
+    }
+    private void ShowPurchase(int SubId)
+    {
+        Console.WriteLine("You Are Subscribed");
+    }
+}

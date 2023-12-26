@@ -1,0 +1,96 @@
+﻿@page "/SubscriptionInfos"
+@inject HttpClient _client
+@inject IJSRuntime js
+@using NutriView.Shared.Domain
+
+<h3 class="card-title">SubscriptionInfos</h3>
+
+@if (SubscriptionInfos is null)
+{
+    <div class="alert alert-info">Loading SubscriptionInfos...</div>
+}
+else if (SubscriptionInfos.Count == 0)
+{
+    <p>No SubscriptionInfos found.</p>
+}
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>subTierName</th>
+                <th>Subscription Desc</th>
+                <th>Subscription Cost</th>
+                <th>Subscription Id</th>
+                <th>Subscription</th>
+                <th>id</th>
+                <th>Date created</th>
+                <th>Date updated</th>
+                <th>Updated By</th>
+                <th>Created By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var SubscriptionInfo in SubscriptionInfos)
+            {
+                <tr>
+                    <td>@SubscriptionInfo.SubTierName</td>
+                    <td>@SubscriptionInfo.SubDescription</td>
+                    <td>@SubscriptionInfo.SubCost</td>
+                    <td>@SubscriptionInfo.SubscriptionID</td>
+                    <td>@SubscriptionInfo.Subscription</td>
+                    <td>@SubscriptionInfo.Id</td>
+                    <td>@SubscriptionInfo.DateCreated</td>
+                    <td>@SubscriptionInfo.DateUpdated</td>
+                    <td>@SubscriptionInfo.UpdatedBy</td>
+                    <td>@SubscriptionInfo.CreatedBy</td>
+                    <td>
+                        <a href="/SubscriptionInfos/edit/@SubscriptionInfo.Id" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-danger" @onclick="() => Delete(SubscriptionInfo.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<SubscriptionInfo>? SubscriptionInfos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            SubscriptionInfos = await _client.GetFromJsonAsync<List<SubscriptionInfo>>("api/SubscriptionInfos");
+            if (SubscriptionInfos is null)
+            {
+                SubscriptionInfos = new List<SubscriptionInfo>(); // Initialize to an empty list if null is returned
+            }
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+        }
+    }
+
+    private async Task Delete(int SubscriptionInfoId)
+    {
+        if (SubscriptionInfos is null) return; // Guard clause for null 'SubscriptionInfos'
+
+        var SubscriptionInfo = SubscriptionInfos.FirstOrDefault(c => c.Id == SubscriptionInfoId);
+        if (SubscriptionInfo != null && await js.InvokeAsync<bool>("confirm", $"Do you want to delete {SubscriptionInfo.SubTierName}?"))
+        {
+            try
+            {
+                await _client.DeleteAsync($"api/SubscriptionInfos/{SubscriptionInfoId}");
+                SubscriptionInfos.Remove(SubscriptionInfo);
+                StateHasChanged(); // Refresh the UI
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting SubscriptionInfo: {ex.Message}");
+                // Handle the error, e.g., show a message to the user
+            }
+        }
+    }
+}
