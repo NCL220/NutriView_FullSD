@@ -1,0 +1,82 @@
+﻿@page "/customers"
+@inject HttpClient _client
+@inject IJSRuntime js
+@using NutriView.Shared.Domain
+
+<h3>Customers</h3>
+
+@if (customers is null)
+{
+    <div>Loading customers...</div>
+}
+else if (!customers.Any())
+{
+    <div>No customers found.</div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Height</th>
+                <th>Weight</th>
+                <th>Gender</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in customers)
+            {
+                <tr>
+                    <td>@customer.UserName</td>
+                    <td>@customer.Age</td>
+                    <td>@customer.Email</td>
+                    <td>@customer.Height cm</td>
+                    <td>@customer.Weight kg</td>
+                    <td>@customer.Gender</td>
+                    <td>
+                        <a href="/customer/edit/@customer.Id" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-danger" @onclick="() => DeleteCustomer(customer.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Customer>? customers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        customers = await _client.GetFromJsonAsync<List<Customer>>("api/customers");
+        if (customers is null)
+        {
+            customers = new List<Customer>();
+        }
+    }
+
+    private async Task DeleteCustomer(int customerId)
+    {
+        var confirmed = await js.InvokeAsync<bool>("confirm", "Are you sure you want to delete this customer?");
+        if (!confirmed)
+        {
+            return;
+        }
+
+        var response = await _client.DeleteAsync($"api/customers/{customerId}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            customers = customers.Where(c => c.Id != customerId).ToList();
+            StateHasChanged();
+        }
+        else
+        {
+            // Handle the error, e.g., show an error message
+        }
+    }
+}

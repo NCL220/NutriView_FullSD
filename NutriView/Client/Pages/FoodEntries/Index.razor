@@ -1,0 +1,75 @@
+﻿@page "/foodentries"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@using NutriView.Shared.Domain
+
+<h3>Food Entries</h3>
+
+@if (foodEntries is null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (foodEntries.Count == 0)
+{
+    <p>No food entries found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Total Calories</th>
+                <th>Time Stamp</th>
+                <th>Customer ID</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var foodEntry in foodEntries)
+            {
+                <tr>
+                    <td>@foodEntry.TotalCalories</td>
+                    <td>@foodEntry.Time_Stamp</td>
+                    <td>@foodEntry.CustomerID</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => EditFoodEntry(foodEntry.Id)">Edit</button>
+                        <button class="btn btn-danger" @onclick="() => DeleteFoodEntry(foodEntry.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<FoodEntry>? foodEntries;
+
+    protected override async Task OnInitializedAsync()
+    {
+        foodEntries = await Http.GetFromJsonAsync<List<FoodEntry>>("api/FoodEntries");
+    }
+
+    private void EditFoodEntry(int foodEntryId)
+    {
+        NavigationManager.NavigateTo($"/edit-food-entry/{foodEntryId}");
+    }
+
+    private async Task DeleteFoodEntry(int foodEntryId)
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete this food entry?");
+        if (confirmed)
+        {
+            var response = await Http.DeleteAsync($"api/FoodEntries/{foodEntryId}");
+            if (response.IsSuccessStatusCode)
+            {
+                foodEntries = foodEntries.Where(fe => fe.Id != foodEntryId).ToList();
+                StateHasChanged();
+            }
+            else
+            {
+                // Handle error here
+            }
+        }
+    }
+}
