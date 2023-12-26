@@ -29,8 +29,7 @@
     <Folder Include="Pages\Meals\" />
     <Folder Include="Pages\Subscription\" />
     <Folder Include="Pages\SubscriptionInfo\" />
-    <Folder Include="Pages\Staff\" />
-    <Folder Include="Pages\NutritionalInfo\" />
+    <Folder Include="Pages\NutritionalInfos\" />
     <Folder Include="Pages\NutritionalQuotas\" />
   </ItemGroup>
 

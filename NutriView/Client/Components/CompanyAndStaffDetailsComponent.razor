@@ -1,0 +1,48 @@
+﻿@inject HttpClient _client
+@inject IJSRuntime js
+@using NutriView.Shared.Domain
+<body>
+    <div class="container">
+        <div class="leftDiv">
+            @foreach (var company in companies)
+            {
+                <h1>About @company.CompanyName</h1>
+                <img src=@company.CompanyImagePath style="300px"/>
+                <h2>Our Mission</h2>
+                <p>@company.CompanyDescription</p>
+            }
+            <img src="images/ourmission.jpg">
+        </div>
+        <div class="rightDiv">
+            @foreach(var Staff in Staffs){
+                <h1>Name : @Staff.UserName Role: @Staff.Role</h1>
+                <img src="@Staff.ImagePathStaff" style="align-items:center" />
+
+            }
+        </div>
+    </div>
+</body>
+@code {
+    private List<Company>? companies;
+    private List<Staff>? Staffs;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            companies = await _client.GetFromJsonAsync<List<Company>>("api/companies");
+            if (companies is null)
+            {
+                companies = new List<Company>(); // Initialize to an empty list if null is returned
+            }
+            Staffs = await _client.GetFromJsonAsync<List<Staff>>("api/Staffs");
+            if (Staffs is null)
+            {
+                Staffs = new List<Staff>(); // Initialize to an empty list if null is returned
+            }
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+        }
+    }
+}

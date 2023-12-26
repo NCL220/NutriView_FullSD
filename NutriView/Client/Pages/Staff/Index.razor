@@ -1,0 +1,92 @@
+﻿@page "/staffs"
+@inject HttpClient _client
+@inject IJSRuntime js
+@using NutriView.Shared.Domain
+
+<h3 class="card-title">Staffs</h3>
+
+@if (Staffs is null)
+{
+    <div class="alert alert-info">Loading Staffs...</div>
+}
+else if (Staffs.Count == 0)
+{
+    <p>No Staffs found.</p>
+}
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>UserName</th>
+                <th>Role</th>
+                <th>Password</th>
+                <th>Email</th>
+                <th>PhoneNumber</th>
+                <th>ImagePathStaff</th>
+                <th>ManagerID</th>
+                <th>CompanyId</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Staff in Staffs)
+            {
+                <tr>
+                    <td>@Staff.UserName</td>
+                    <td>@Staff.Role</td>
+                    <td>@Staff.Password</td>
+                    <td>@Staff.Email</td>
+                    <td>@Staff.PhoneNumber</td>
+                    <td>@Staff.ImagePathStaff</td>
+                    <td>@Staff.ManagerID</td>
+                    <td>@Staff.CompanyId</td>
+                    <td>
+                        <a href="/Staffs/edit/@Staff.Id" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-danger" @onclick="() => Delete(Staff.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Staff>? Staffs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Staffs = await _client.GetFromJsonAsync<List<Staff>>("api/Staffs");
+            if (Staffs is null)
+            {
+                Staffs = new List<Staff>(); // Initialize to an empty list if null is returned
+            }
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+        }
+    }
+
+    private async Task Delete(int StaffId)
+    {
+        if (Staffs is null) return; // Guard clause for null 'Staffs'
+
+        var Staff = Staffs.FirstOrDefault(c => c.Id == StaffId);
+        if (Staff != null && await js.InvokeAsync<bool>("confirm", $"Do you want to delete {Staff.UserName}?"))
+        {
+            try
+            {
+                await _client.DeleteAsync($"api/Staffs/{StaffId}");
+                Staffs.Remove(Staff);
+                StateHasChanged(); // Refresh the UI
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting Staff: {ex.Message}");
+                // Handle the error, e.g., show a message to the user
+            }
+        }
+    }
+}
