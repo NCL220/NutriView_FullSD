@@ -4,7 +4,12 @@
 @using NutriView.Shared.Domain
 
 <h3 class="card-title">Companies</h3>
-
+<a href="/companies/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Vehicle
+</a>
+<br />
+<br />
 @if (companies is null)
 {
     <div class="alert alert-info">Loading companies...</div>
