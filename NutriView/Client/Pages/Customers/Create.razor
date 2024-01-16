@@ -1,0 +1,68 @@
+﻿@page "/customers/create"
+@using NutriView.Shared.Domain
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create New Customer</h3>
+<EditForm Model="@customer" OnValidSubmit="CreateCustomer">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <InputText id="username" class="form-control" @bind-Value="customer.UserName" />
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <InputText id="email" class="form-control" @bind-Value="customer.Email" />
+    </div>
+
+    <div class="form-group">
+        <label for="age">Age:</label>
+        <InputNumber id="age" class="form-control" @bind-Value="customer.Age" />
+    </div>
+
+    <div class="form-group">
+        <label for="height">Height:</label>
+        <InputNumber id="height" class="form-control" @bind-Value="customer.Height" />
+    </div
+        <div class="form-group">
+        <label for="weight">Weight:</label>
+        <InputNumber id="weight" class="form-control" @bind-Value="customer.Weight" />
+    </div>
+
+    <div class="form-group">
+        <label for="gender">Gender:</label>
+        <InputSelect id="gender" class="form-control" @bind-Value="customer.Gender">
+            <option value="">-- Select Gender --</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-success">Create Customer</button>
+</EditForm>
+
+@code {
+    private Customer customer = new Customer();
+    private IList<FoodEntry> Entries;
+    protected override async Task OnInitializedAsync()
+    {
+        Entries = await _client.GetFromJsonAsync<List<FoodEntry>>($"{Endpoints.FoodEntriesEndpoint}");
+    }
+
+    private async Task CreateCustomer()
+    {
+        var response = await _client.PostAsJsonAsync("api/customers", customer);
+        if (response.IsSuccessStatusCode)
+        {
+            _navManager.NavigateTo("/customers/");
+        }
+        else
+        {
+            // Handle errors here
+        }
+    }
+}
