@@ -5,6 +5,13 @@
 
 <h3 class="card-title">Staffs</h3>
 
+<a href="/staffs/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Staff
+</a>
+<br />
+<br />
+
 @if (Staffs is null)
 {
     <div class="alert alert-info">Loading Staffs...</div>
@@ -69,7 +76,7 @@ else
         }
     }
 
-    private async Task Delete(int StaffId)
+    async Task Delete(int StaffId)
     {
         if (Staffs is null) return; // Guard clause for null 'Staffs'
 

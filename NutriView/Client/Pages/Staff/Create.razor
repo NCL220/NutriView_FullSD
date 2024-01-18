@@ -1,0 +1,30 @@
+﻿@page  "/staffs/create/"
+@using NutriView.Shared.Domain;
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create New Staff</h3>
+<hr />
+<br />
+
+<FormComponent ButtonText="Create Staff" staff="staff" OnValidSubmit="@CreateStaff" />
+@code {
+    Staff staff = new Staff();
+
+    private IList<Company>? Companies;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Companies = await _client.GetFromJsonAsync<List<Company>>($"{Endpoints.CompaniesEndpoint}");
+
+        // Initialize the staff object if needed
+    }
+
+    private async Task CreateStaff()
+    {
+        await _client.PostAsJsonAsync(Endpoints.StaffsEndpoint, staff);
+        _navManager.NavigateTo("/staffs/");
+    }
+}
+
