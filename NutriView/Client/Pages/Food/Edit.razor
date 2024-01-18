@@ -1,7 +1,7 @@
 ﻿@page "/foods/edit/{id:int}"
 @inject HttpClient _client
 @inject NavigationManager _navManager
-@using NutriView.Shared.Domain;
+
 
 <h3>Edit Food</h3>
 <FormComponent ButtonText="Update" OnValidSubmit="EditFood" food="food"></FormComponent>
