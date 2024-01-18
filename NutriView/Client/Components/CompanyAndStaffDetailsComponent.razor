@@ -4,28 +4,21 @@
 <body>
     <div class="container">
         <div class="leftDiv">
-            @if(companies is not null)
+            @foreach (var company in companies)
             {
-                @foreach (var company in companies)
-                {
-                    <h1>About @company.CompanyName</h1>
-                    <p>@company.Mission</p>
-                    <img src=@company.CompanyImagePath />
-                    <h2>Our Mission</h2>
-                    <p>@company.CompanyDescription</p>
-                }
+                <h1>About @company.CompanyName</h1>
+                <p>@company.Mission</p>
+                <img src=@company.CompanyImagePath/>
+                <h2>Our Mission</h2>
+                <p>@company.CompanyDescription</p>
             }
             <img src="images/ourmission.jpg">
         </div>
         <div class="rightDiv">
-            @if(Staffs is not null)
-            {
-                @foreach (var Staff in Staffs)
-                {
-                    <h1>Name : @Staff.UserName Role: @Staff.Role</h1>
-                    <img src="@Staff.ImagePathStaff" style="align-items:center" />
+            @foreach(var Staff in Staffs){
+                <h1>Name : @Staff.UserName Role: @Staff.Role</h1>
+                <img src="@Staff.ImagePathStaff" style="align-items:center" />
 
-                }
             }
         </div>
     </div>
