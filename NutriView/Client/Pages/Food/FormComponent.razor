@@ -1,0 +1,66 @@
+﻿@using NutriView.Shared.Domain;
+@inject HttpClient _client
+
+<EditForm Model="@food" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <InputText id="name" class="form-control" @bind-Value="food.Name" />
+        <ValidationMessage For="@(() => food.Name)" />
+    </div>
+
+    <div class="form-group">
+        <label for="calories">Calories:</label>
+        <InputNumber id="calories" class="form-control" @bind-Value="food.Calories" />
+        <ValidationMessage For="@(() => food.Calories)" />
+    </div>
+
+    <div class="form-group">
+        <label for="carbohydrates">Carbohydrates:</label>
+        <InputNumber id="carbohydrates" class="form-control" @bind-Value="food.Carbohydrates" />
+        <ValidationMessage For="@(() => food.Carbohydrates)" />
+    </div>
+
+    <div class="form-group">
+        <label for="fats">Fats:</label>
+        <InputNumber id="fats" class="form-control" @bind-Value="food.Fats" />
+        <ValidationMessage For="@(() => food.Fats)" />
+    </div>
+
+    <div class="form-group">
+        <label for="vitamins">Vitamins:</label>
+        <InputText id="vitamins" class="form-control" @bind-Value="food.Vitamins" />
+        <ValidationMessage For="@(() => food.Vitamins)" />
+    </div>
+
+    <div class="form-group">
+        <label for="servingSize">Serving Size:</label>
+        <InputNumber id="servingSize" class="form-control" @bind-Value="food.ServingSize" />
+        <ValidationMessage For="@(() => food.ServingSize)" />
+    </div>
+
+    <div class="form-group">
+        <label for="foodDesc">Description:</label>
+        <InputTextArea id="foodDesc" class="form-control" @bind-Value="food.FoodDesc" />
+        <ValidationMessage For="@(() => food.FoodDesc)" />
+    </div>
+
+    <button type="submit" class="btn btn-success">@ButtonText</button>
+</EditForm>
+
+@code {
+    [Parameter] public Food? food { get; set; } = new Food();
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public bool Disabled { get; set; } = false;
+
+    private IList<FoodEntry>? Entries;
+    private IList<Staff>? Staff;
+    protected async override Task OnInitializedAsync()
+    {
+        Entries = await _client.GetFromJsonAsync<List<FoodEntry>>($"{Endpoints.FoodEntriesEndpoint}");
+        Staff = await _client.GetFromJsonAsync<List<Staff>>($"{Endpoints.StaffsEndpoint}");
+    }
+}

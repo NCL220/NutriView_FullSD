@@ -4,7 +4,12 @@
 @using NutriView.Shared.Domain
 
 <h3>Customers</h3>
-
+<a href="/customers/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Customer
+</a>
+<br />
+<br />
 @if (customers is null)
 {
     <div>Loading customers...</div>
@@ -38,7 +43,7 @@ else
                     <td>@customer.Weight kg</td>
                     <td>@customer.Gender</td>
                     <td>
-                        <a href="/customer/edit/@customer.Id" class="btn btn-primary">Edit</a>
+                        <a href="/customers/edit/@customer.Id" class="btn btn-primary">Edit</a>
                         <button class="btn btn-danger" @onclick="() => DeleteCustomer(customer.Id)">Delete</button>
                     </td>
                 </tr>

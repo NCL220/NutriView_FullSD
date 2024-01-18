@@ -1,21 +1,24 @@
-﻿@page "/companies/edit/{id:int}"
+﻿@page "/customers/edit/{id:int}"
 @inject HttpClient _client
 @inject NavigationManager _navManager
 @using NutriView.Shared.Domain;
 
-<h3>Edit Company</h3>
-<FormComponent ButtonText="Update" OnValidSubmit="EditCompany" company="company"></FormComponent>
+<h3>Edit Customer</h3>
+<FormComponent ButtonText="Update" OnValidSubmit="EditCustomer" customer="customer"></FormComponent>
 
 @code {
-    [Parameter] public int Id { get; set; }
-    Company? company = new Company();
-	protected async override Task OnParametersSetAsync()
-	{
-		company = await _client.GetFromJsonAsync<Company>($"{Endpoints.CompaniesEndpoint}/{Id}");
-	}
-	async Task EditCompany()
-	{
-		await _client.PutAsJsonAsync($"{Endpoints.CompaniesEndpoint}/{Id}", company);
-		_navManager.NavigateTo("/companies/");
-	}
+    [Parameter] public int id { get; set; }
+    Customer? customer =new Customer(); 
+
+    protected override async Task OnInitializedAsync()
+    {
+        customer = await _client.GetFromJsonAsync<Customer>($"{Endpoints.CustomersEndpoint}/{id}");
+    }
+
+    async Task EditCustomer()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.CustomersEndpoint}/{id}", customer);
+        _navManager.NavigateTo("/customers/");
+    }
 }
+

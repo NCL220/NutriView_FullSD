@@ -1,0 +1,72 @@
+﻿@page "/foods/create"
+@using NutriView.Shared.Domain
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create New Food</h3>
+<EditForm Model="@food" OnValidSubmit="CreateFood">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <InputText id="name" class="form-control" @bind-Value="food.Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="calories">Calories:</label>
+        <InputNumber id="calories" class="form-control" @bind-Value="food.Calories" />
+    </div>
+
+    <div class="form-group">
+        <label for="carbohydrates">Carbohydrates:</label>
+        <InputNumber id="carbohydrates" class="form-control" @bind-Value="food.Carbohydrates" />
+    </div>
+
+    <div class="form-group">
+        <label for="fats">Fats:</label>
+        <InputNumber id="fats" class="form-control" @bind-Value="food.Fats" />
+    </div>
+
+    <div class="form-group">
+        <label for="vitamins">Vitamins:</label>
+        <InputText id="vitamins" class="form-control" @bind-Value="food.Vitamins" />
+    </div>
+
+    <div class="form-group">
+        <label for="servingSize">Serving Size:</label>
+        <InputNumber id="servingSize" class="form-control" @bind-Value="food.ServingSize" />
+    </div>
+
+    <div class="form-group">
+        <label for="foodDesc">Description:</label>
+        <InputTextArea id="foodDesc" class="form-control" @bind-Value="food.FoodDesc" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Create Food</button>
+</EditForm>
+
+@code {
+    private Food food = new Food();
+    private IList<FoodEntry> Entries;
+    private IList<Staff> Staff;
+    protected override async Task OnInitializedAsync()
+    {
+        Entries = await _client.GetFromJsonAsync<List<FoodEntry>>($"{Endpoints.FoodEntriesEndpoint}");
+        Staff = await _client.GetFromJsonAsync<List<Staff>>($"{Endpoints.StaffsEndpoint}");
+    }
+
+    private async Task CreateFood()
+    {
+        var response = await _client.PostAsJsonAsync(Endpoints.FoodsEndpoint, food);
+
+        if (response.IsSuccessStatusCode)
+        {
+            _navManager.NavigateTo("/foods/");
+        }
+        else
+        {
+            // Handle errors here
+        }
+    }
+}

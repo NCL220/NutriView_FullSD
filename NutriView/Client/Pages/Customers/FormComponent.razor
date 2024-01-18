@@ -7,7 +7,7 @@
 
     <div class="form-group">
         <label for="userName">Username:</label>
-        <InputText id="userName" class="form-control" @bind-Value="customer.UserName" />
+        <InputTextArea id="userName" class="form-control" @bind-Value="customer.UserName" />
         <ValidationMessage For="@(() => customer.UserName)" />
     </div>
 
@@ -43,9 +43,10 @@
             <option value="Other">Other</option>
         </InputSelect>
     </div>
+    <button type="submit" class="btn btn-success">@ButtonText</button>
 </EditForm>
 
-    <button type="submit" class="btn btn-success">@ButtonText</button>
+
 @code {
         [Parameter] public Customer? customer { get; set; } = new Customer();
         [Parameter] public string ButtonText { get; set; } = "Save";
