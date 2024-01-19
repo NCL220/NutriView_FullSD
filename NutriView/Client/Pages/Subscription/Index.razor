@@ -1,16 +1,19 @@
 ﻿@page "/subscriptions"
-@inject HttpClient Http
 @inject NavigationManager NavigationManager
-@inject IJSRuntime JSRuntime
+@inject HttpClient _client
+@inject IJSRuntime js
 @using NutriView.Shared.Domain
 
 <h3>Subscriptions</h3>
-
-@if (subscriptions is null)
+<a href="/subscriptions/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Subscriptions
+</a>
+@if (Subscriptions is null)
 {
     <p><em>Loading...</em></p>
 }
-else if (subscriptions.Count == 0)
+else if (Subscriptions.Count == 0)
 {
     <p>No subscriptions found.</p>
 }
@@ -25,16 +28,17 @@ else
                 <th>Actions</th>
             </tr>
         </thead>
+
         <tbody>
-            @foreach (var subscription in subscriptions)
+            @foreach (var Subscription in Subscriptions)
             {
                 <tr>
-                    <td>@subscription.CustomerID</td>
-                    <td>@subscription.DateStart.ToString("yyyy-MM-dd")</td>
-                    <td>@subscription.DateEnd.ToString("yyyy-MM-dd")</td>
+                    <td>@Subscription.CustomerID</td>
+                    <td>@Subscription.DateStart.ToString("yyyy-MM-dd")</td>
+                    <td>@Subscription.DateEnd.ToString("yyyy-MM-dd")</td>
                     <td>
-                        <button class="btn btn-primary" @onclick="() => EditSubscription(subscription.Id)">Edit</button>
-                        <button class="btn btn-danger" @onclick="() => DeleteSubscription(subscription.Id)">Delete</button>
+                        <a href="/Subscriptions/edit/@Subscription.Id" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-danger" @onclick="() => Delete(Subscription.Id)">Delete</button>
                     </td>
                 </tr>
             }
@@ -43,11 +47,22 @@ else
 }
 
 @code {
-    private List<Subscription>? subscriptions;
+    private List<Subscription>? Subscriptions;
 
     protected override async Task OnInitializedAsync()
     {
-        subscriptions = await Http.GetFromJsonAsync<List<Subscription>>("api/Subscriptions");
+        try
+        {
+            Subscriptions = await _client.GetFromJsonAsync<List<Subscription>>("api/Subscriptions");
+            if (Subscriptions is null)
+            {
+                Subscriptions = new List<Subscription>(); // Initialize to an empty list if null is returned
+            }
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+        }
     }
 
     private void EditSubscription(int subscriptionId)
@@ -55,20 +70,23 @@ else
         NavigationManager.NavigateTo($"/edit-subscription/{subscriptionId}");
     }
 
-    private async Task DeleteSubscription(int subscriptionId)
+    private async Task Delete(int subscriptionId)
     {
-        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete this subscription?");
-        if (confirmed)
+        if (Subscriptions is null) return; // Guard clause for null 'Subscriptions'
+
+        var Subscription = Subscriptions.FirstOrDefault(c => c.Id == subscriptionId);
+        if (Subscription != null && await js.InvokeAsync<bool>("confirm", $"Do you want to delete {Subscription.Id}?"))
         {
-            var response = await Http.DeleteAsync($"api/Subscriptions/{subscriptionId}");
-            if (response.IsSuccessStatusCode)
+            try
             {
-                subscriptions = subscriptions.Where(s => s.Id != subscriptionId).ToList();
-                StateHasChanged();
+                await _client.DeleteAsync($"api/Subscriptions/{subscriptionId}");
+                Subscriptions.Remove(Subscription);
+                StateHasChanged(); // Refresh the UI
             }
-            else
+            catch (Exception ex)
             {
-                // Handle error here
+                Console.WriteLine($"Error deleting Subscription: {ex.Message}");
+                // Handle the error, e.g., show a message to the user
             }
         }
     }

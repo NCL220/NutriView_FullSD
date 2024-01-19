@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace NutriView.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class changed1 : Migration
+    public partial class DBRedo : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,8 +32,8 @@ namespace NutriView.Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -152,6 +152,26 @@ namespace NutriView.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PersistedGrants", x => x.Key);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubscriptionInfos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SubDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SubCost = table.Column<double>(type: "float", nullable: false),
+                    SubTierName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SubType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubscriptionInfos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -351,6 +371,8 @@ namespace NutriView.Server.Migrations
                     DateStart = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CustomerID = table.Column<int>(type: "int", nullable: false),
+                    SubInfoID = table.Column<int>(type: "int", nullable: false),
+                    SubscriptionInfoId = table.Column<int>(type: "int", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -365,6 +387,11 @@ namespace NutriView.Server.Migrations
                         principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_SubscriptionInfos_SubscriptionInfoId",
+                        column: x => x.SubscriptionInfoId,
+                        principalTable: "SubscriptionInfos",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -458,33 +485,6 @@ namespace NutriView.Server.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "SubscriptionInfos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SubDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SubCost = table.Column<double>(type: "float", nullable: false),
-                    SubTierName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SubType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SubscriptionID = table.Column<int>(type: "int", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubscriptionInfos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SubscriptionInfos_Subscriptions_SubscriptionID",
-                        column: x => x.SubscriptionID,
-                        principalTable: "Subscriptions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
@@ -501,10 +501,10 @@ namespace NutriView.Server.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1507dbd1-1c83-4ad2-9b0e-4d298c7b4521", 0, "6c622a37-ffd2-4a38-ba84-0a11fd68767e", "Manager@localhost.com", false, "Manager", "User", false, null, "Manager@LOCALHOST.COM", "MANAGER@LOCALHOST.COM", "AQAAAAIAAYagAAAAEKloMqPoANIyN60lbtakTtPuX0/Ba370AHYa5ktU+1Jt4ZcfE6M1ikGGiKVXq9658Q==", null, false, "b54e911d-e2c7-43cb-ac36-cf55fc32c84d", false, "Manager@localhost.com" },
-                    { "41624b27-7496-447c-b299-4892483d6b47", 0, "56aa30ed-374d-45a1-84dc-f763a840042a", "Customer@localhost.com", false, "Customer", "User", false, null, "Customer@LOCALHOST.COM", "CUSTOMER@LOCALHOST.COM", "AQAAAAIAAYagAAAAEMhF1HQZpJF0U2A/gYGwfL//PcsHS6wuClgKjO0r8/b2ynLgzC6nn4IXjMmF5OHNhw==", null, false, "8fcdeffb-3296-4728-81f7-d5c74e0d42a4", false, "Customer@localhost.com" },
-                    { "4d3dfcba-a0af-4b10-989d-d63dcfec5e97", 0, "97c22c05-ad66-43f6-a71b-0d47dbc30ba2", "Staff@localhost.com", false, "Staff", "User", false, null, "Staff@LOCALHOST.COM", "STAFF@LOCALHOST.COM", "AQAAAAIAAYagAAAAEMKeWjF6yhGjMNqMGGh8rGu00vGJln7NbShYENnaKroTcTSZ1wiqTGS6pzvLCy8NcA==", null, false, "97fc23fa-756c-43d2-b8ad-72fe17da69f0", false, "Staff@localhost.com" },
-                    { "8aa738a7-6c07-4e5a-8a7f-5637388c41b4", 0, "44d3b1e0-2f0b-40da-8fcc-228e469322ba", "admin@localhost.com", false, "Admin", "User", false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAIAAYagAAAAENTRbHYQoa52INE0YAXL5YgcuBnH4weY6XUBOwzFAuq9KYK0BMXkkNRc22W5WPuTJg==", null, false, "6ca5e5f2-e908-47bc-94c9-a15db89e69ed", false, "admin@localhost.com" }
+                    { "1507dbd1-1c83-4ad2-9b0e-4d298c7b4521", 0, "f9960669-6e22-4284-9985-3156997f0307", "Manager@localhost.com", false, "Manager", "User", false, null, "Manager@LOCALHOST.COM", "MANAGER@LOCALHOST.COM", "AQAAAAIAAYagAAAAEMLVdjOsEjTRIdR/V0mMVRArr/tiLQdz2+s1oknUKsbaPhvh6W/n5dzR08EXht4w5A==", null, false, "811f21dd-7c6a-4c42-bd2d-2014a3b7d7fc", false, "Manager@localhost.com" },
+                    { "41624b27-7496-447c-b299-4892483d6b47", 0, "33ae445b-ccfc-4d37-9e7e-88b3300fd40d", "Customer@localhost.com", false, "Customer", "User", false, null, "Customer@LOCALHOST.COM", "CUSTOMER@LOCALHOST.COM", "AQAAAAIAAYagAAAAEKJNEMfE/lHnkar4kP4LzarOOR9C5pY9BjWfXT95kovr5F+1gucdrOLbPrNnczS4Mw==", null, false, "fca5e093-08fd-453a-a6bf-87ce3bcc3983", false, "Customer@localhost.com" },
+                    { "4d3dfcba-a0af-4b10-989d-d63dcfec5e97", 0, "bebc9cea-7309-4f22-b053-7c6dc8c65a0b", "Staff@localhost.com", false, "Staff", "User", false, null, "Staff@LOCALHOST.COM", "STAFF@LOCALHOST.COM", "AQAAAAIAAYagAAAAEE7HKA62ZykWUiv3mmeOYdgMaWEeq2AZoFJcqdJ0KU5js/awmUy/1Z4kx5bcJN6F9w==", null, false, "ce66f67b-d66d-4667-8a1b-d2e405ac4896", false, "Staff@localhost.com" },
+                    { "8aa738a7-6c07-4e5a-8a7f-5637388c41b4", 0, "d23cec03-3ed6-40c5-81ca-57ac139a5bc3", "admin@localhost.com", false, "Admin", "User", false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAIAAYagAAAAEDv4sbnnd7nWUXm5nNcq1eP2XV1ORC6PC/4SBslLoPnRt367d0HnPtfA5b4Amlq7MQ==", null, false, "b497b0ca-d85d-4804-bccb-6fa5f8ac5a91", false, "admin@localhost.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -512,8 +512,8 @@ namespace NutriView.Server.Migrations
                 columns: new[] { "Id", "CompanyDescription", "CompanyImagePath", "CompanyName", "CreatedBy", "DateCreated", "DateUpdated", "Mission", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, "At NuriView Corporations, we believe that a heathy lifestyle would always begins with proper nutrition.We are a dedicated team of nutritionists and dietitians comitted in providing you with the knowledge and tools to aid you in your journey to a healthier diet.", "Not Yet Available", "NutriView", "System", new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4417), new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4418), "Our mission is to empower individuals to achieve optimal health through mindful eating. We understand that nutrition is not always a one-size-fits-all.Our goal is to guide you on a personalized journey towards a balanced and nourishing lifestyle that will bring you a step closer to a healthier you.", "System" },
-                    { 2, "Not Yet Available", "Not Yet Available", "NutriViewCorps", "System", new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4421), new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4421), "Our Mission is to encourage people to eat healthy and live healthy", "System" }
+                    { 1, "At NuriView Corporations, we believe that a heathy lifestyle would always begins with proper nutrition.We are a dedicated team of nutritionists and dietitians comitted in providing you with the knowledge and tools to aid you in your journey to a healthier diet.", "Not Yet Available", "NutriView", "System", new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(2731), new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(2732), "Our mission is to empower individuals to achieve optimal health through mindful eating. We understand that nutrition is not always a one-size-fits-all.Our goal is to guide you on a personalized journey towards a balanced and nourishing lifestyle that will bring you a step closer to a healthier you.", "System" },
+                    { 2, "Not Yet Available", "Not Yet Available", "NutriViewCorps", "System", new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(2734), new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(2734), "Our Mission is to encourage people to eat healthy and live healthy", "System" }
                 });
 
             migrationBuilder.InsertData(
@@ -521,8 +521,17 @@ namespace NutriView.Server.Migrations
                 columns: new[] { "Id", "Age", "CreatedBy", "DateCreated", "DateUpdated", "Email", "Gender", "Height", "Password", "UpdatedBy", "UserName", "Weight" },
                 values: new object[,]
                 {
-                    { 1, 31, "System", new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(6804), new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(6817), "Test@Blazor.com", "Male", 160.0, "Test222", "System", "TestLim", 88.5 },
-                    { 2, 32, "System", new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(6862), new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(6863), "Test2@Blazor.com", "Female", 178.0, "Test2212", "System", "TestRRLim", 77.0 }
+                    { 1, 31, "System", new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5445), new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5456), "Test@Blazor.com", "Male", 160.0, "Test222", "System", "TestLim", 88.5 },
+                    { 2, 32, "System", new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5459), new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5460), "Test2@Blazor.com", "Female", 178.0, "Test2212", "System", "TestRRLim", 77.0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SubscriptionInfos",
+                columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "SubCost", "SubDescription", "SubTierName", "SubType", "UpdatedBy" },
+                values: new object[,]
+                {
+                    { 1, "System", new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(2397), new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(2407), 5.0, "Unlocks The Personal Quota Tracker", "Health Enthusiasts", "Monthly", "System" },
+                    { 2, "System", new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(2410), new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(2410), 30.0, "Unlocks The Personal Quota Tracker and other Features!!", "Health Enthusiasts", "Yearly", "System" }
                 });
 
             migrationBuilder.InsertData(
@@ -541,8 +550,8 @@ namespace NutriView.Server.Migrations
                 columns: new[] { "Id", "CreatedBy", "CustomerID", "DateCreated", "DateUpdated", "Time_Stamp", "TotalCalories", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, "System", 1, new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(7465), new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(7467), "22 Jan 2024", 22.0, "System" },
-                    { 2, "System", 2, new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(7469), new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(7470), "1 Jan 2024", 34.0, "System" }
+                    { 1, "System", 1, new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5942), new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5943), "22 Jan 2024", 22.0, "System" },
+                    { 2, "System", 2, new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5945), new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5945), "1 Jan 2024", 34.0, "System" }
                 });
 
             migrationBuilder.InsertData(
@@ -550,8 +559,8 @@ namespace NutriView.Server.Migrations
                 columns: new[] { "Id", "CreatedBy", "CustomerID", "DateCreated", "DateUpdated", "TargetBMI", "TargetCalorieDaily", "TargetCarbDaily", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, "System", 1, new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(8135), new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(8137), 19.0, 2000.0, 300.0, "System" },
-                    { 2, "System", 2, new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(8140), new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(8140), 21.0, 2000.0, 290.0, "System" }
+                    { 1, "System", 1, new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(6527), new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(6528), 19.0, 2000.0, 300.0, "System" },
+                    { 2, "System", 2, new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(6530), new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(6530), 21.0, 2000.0, 290.0, "System" }
                 });
 
             migrationBuilder.InsertData(
@@ -559,17 +568,17 @@ namespace NutriView.Server.Migrations
                 columns: new[] { "Id", "CompanyId", "CreatedBy", "DateCreated", "DateUpdated", "Email", "ImagePathStaff", "ManagerID", "Password", "PhoneNumber", "Role", "UpdatedBy", "UserName" },
                 values: new object[,]
                 {
-                    { 1, 1, "System", new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(5399), new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(5400), "ngchunlim04@gmail.com", "-", 1, "Chun11", 87993192, "Manager", "System", "ChunLim" },
-                    { 2, 1, "System", new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(5403), new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(5404), "Test04@gmail.com", "-", 2, "Lim12", 87993192, "Manager", "System", "Kenneth" }
+                    { 1, 1, "System", new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(3414), new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(3416), "ngchunlim04@gmail.com", "-", 1, "Chun11", 87993192, "Manager", "System", "ChunLim" },
+                    { 2, 1, "System", new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(3417), new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(3418), "Test04@gmail.com", "-", 2, "Lim12", 87993192, "Manager", "System", "Kenneth" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Subscriptions",
-                columns: new[] { "Id", "Cost", "CreatedBy", "CustomerID", "DateCreated", "DateEnd", "DateStart", "DateUpdated", "UpdatedBy" },
+                columns: new[] { "Id", "Cost", "CreatedBy", "CustomerID", "DateCreated", "DateEnd", "DateStart", "DateUpdated", "SubInfoID", "SubscriptionInfoId", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, 0.0, "System", 1, new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(7183), new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(7183), new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(7180), new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(7184), "System" },
-                    { 2, 0.0, "System", 2, new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(7187), new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(7187), new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(7186), new DateTime(2024, 1, 16, 15, 51, 45, 517, DateTimeKind.Local).AddTicks(7188), "System" }
+                    { 1, 0.0, "System", 1, new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5743), new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5741), new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5741), new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5743), 0, null, "System" },
+                    { 2, 0.0, "System", 2, new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5745), new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5745), new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5744), new DateTime(2024, 1, 19, 22, 39, 49, 176, DateTimeKind.Local).AddTicks(5746), 0, null, "System" }
                 });
 
             migrationBuilder.InsertData(
@@ -577,8 +586,8 @@ namespace NutriView.Server.Migrations
                 columns: new[] { "Id", "Calories", "Carbohydrates", "CreatedBy", "DateCreated", "DateUpdated", "Fats", "FoodDesc", "FoodEntryID", "ImagePath", "Name", "ServingSize", "StaffId", "UpdatedBy", "Vitamins" },
                 values: new object[,]
                 {
-                    { 1, 25.0, 6.0, "System", new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4900), new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4902), 0.10000000000000001, "Carrots Contains 25 Calories and 6g of Carbohydrates , etc", 1, "-", "Carrots", 61.0, 1, "System", "A,C,K" },
-                    { 2, 165.0, 0.0, "System", new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4905), new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4905), 3.6000000000000001, "Chicken Contains 165 Calories per 100 grams and does not have any Carbohydrates , etc", 2, "-", "Chicken", 100.0, 2, "System", "A, B6, C, D, E" }
+                    { 1, 25.0, 6.0, "System", new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(3059), new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(3060), 0.10000000000000001, "Carrots Contains 25 Calories and 6g of Carbohydrates , etc", 1, "-", "Carrots", 61.0, 1, "System", "A,C,K" },
+                    { 2, 165.0, 0.0, "System", new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(3062), new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(3062), 3.6000000000000001, "Chicken Contains 165 Calories per 100 grams and does not have any Carbohydrates , etc", 2, "-", "Chicken", 100.0, 2, "System", "A, B6, C, D, E" }
                 });
 
             migrationBuilder.InsertData(
@@ -586,8 +595,8 @@ namespace NutriView.Server.Migrations
                 columns: new[] { "Id", "Calories", "CreatedBy", "DateCreated", "DateUpdated", "FoodEntryID", "Name", "PortionSize", "TimePeriod", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, null, "System", new DateTime(2024, 1, 16, 7, 51, 45, 517, DateTimeKind.Utc).AddTicks(7787), new DateTime(2024, 1, 16, 7, 51, 45, 517, DateTimeKind.Utc).AddTicks(7787), 1, "Carrots", 1.0, "Morning", "System" },
-                    { 2, null, "System", new DateTime(2024, 1, 16, 7, 51, 45, 517, DateTimeKind.Utc).AddTicks(7790), new DateTime(2024, 1, 16, 7, 51, 45, 517, DateTimeKind.Utc).AddTicks(7790), 2, "ChickenRice", 1.0, "Morning", "System" }
+                    { 1, null, "System", new DateTime(2024, 1, 19, 14, 39, 49, 176, DateTimeKind.Utc).AddTicks(6276), new DateTime(2024, 1, 19, 14, 39, 49, 176, DateTimeKind.Utc).AddTicks(6281), 1, "Carrots", 1.0, "Morning", "System" },
+                    { 2, null, "System", new DateTime(2024, 1, 19, 14, 39, 49, 176, DateTimeKind.Utc).AddTicks(6282), new DateTime(2024, 1, 19, 14, 39, 49, 176, DateTimeKind.Utc).AddTicks(6283), 2, "ChickenRice", 1.0, "Morning", "System" }
                 });
 
             migrationBuilder.InsertData(
@@ -595,17 +604,8 @@ namespace NutriView.Server.Migrations
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "NutritionDescription", "NutritionImagePath", "NutritionName", "StaffId", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, "System", new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4663), new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4664), "Essential for vision, immune function, and skin health.", "-", "Vitamin A", 1, "System" },
-                    { 2, "System", new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4666), new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4667), "Supports bone health, immune system, and overall well-being.", "-", "Vitamin D", 2, "System" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "SubscriptionInfos",
-                columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "SubCost", "SubDescription", "SubTierName", "SubType", "SubscriptionID", "UpdatedBy" },
-                values: new object[,]
-                {
-                    { 1, "System", new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4023), new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4032), 5.0, "Unlocks The Personal Quota Tracker", "Health Enthusiasts", "Monthly", 1, "System" },
-                    { 2, "System", new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4035), new DateTime(2024, 1, 16, 15, 51, 45, 256, DateTimeKind.Local).AddTicks(4036), 30.0, "Unlocks The Personal Quota Tracker and other Features!!", "Health Enthusiasts", "Yearly", 2, "System" }
+                    { 1, "System", new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(2898), new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(2898), "Essential for vision, immune function, and skin health.", "-", "Vitamin A", 1, "System" },
+                    { 2, "System", new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(2900), new DateTime(2024, 1, 19, 22, 39, 48, 987, DateTimeKind.Local).AddTicks(2900), "Supports bone health, immune system, and overall well-being.", "-", "Vitamin D", 2, "System" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -719,14 +719,14 @@ namespace NutriView.Server.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubscriptionInfos_SubscriptionID",
-                table: "SubscriptionInfos",
-                column: "SubscriptionID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Subscriptions_CustomerID",
                 table: "Subscriptions",
                 column: "CustomerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subscriptions_SubscriptionInfoId",
+                table: "Subscriptions",
+                column: "SubscriptionInfoId");
         }
 
         /// <inheritdoc />
@@ -769,7 +769,7 @@ namespace NutriView.Server.Migrations
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
-                name: "SubscriptionInfos");
+                name: "Subscriptions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -784,13 +784,13 @@ namespace NutriView.Server.Migrations
                 name: "Staffs");
 
             migrationBuilder.DropTable(
-                name: "Subscriptions");
-
-            migrationBuilder.DropTable(
-                name: "Companies");
+                name: "SubscriptionInfos");
 
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "Companies");
         }
     }
 }

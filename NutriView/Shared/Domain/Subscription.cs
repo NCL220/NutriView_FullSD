@@ -15,6 +15,9 @@ namespace NutriView.Shared.Domain
         public DateTime DateEnd { get; set; }
 
         public int CustomerID { get; set; }
+        
+        public int SubInfoID { get; set; }
+        public virtual SubscriptionInfo? SubscriptionInfo { get; set; }
 
         public virtual Customer? Customer { get; set; }
     }

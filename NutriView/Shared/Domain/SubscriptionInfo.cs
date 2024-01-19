@@ -16,8 +16,5 @@ namespace NutriView.Shared.Domain
 
         public string? SubType {  get; set; }
 
-        public int SubscriptionID {  get; set; }
-        public virtual Subscription? Subscription { get; set; }
-
     }
 }

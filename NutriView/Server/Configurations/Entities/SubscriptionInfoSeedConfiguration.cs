@@ -13,7 +13,6 @@ namespace NutriView.Server.Configurations.Entities
              new SubscriptionInfo
              {
                  Id = 1,
-                 SubscriptionID = 1,
                  SubDescription = "Unlocks The Personal Quota Tracker",
                  SubCost = 5.0,
                  SubTierName="Health Enthusiasts",
@@ -26,7 +25,6 @@ namespace NutriView.Server.Configurations.Entities
              new SubscriptionInfo
              {
                  Id = 2,
-                 SubscriptionID = 2,
                  SubDescription = "Unlocks The Personal Quota Tracker and other Features!!",
                  SubCost = 30.0,
                  SubTierName = "Health Enthusiasts",

@@ -1,16 +1,18 @@
-﻿@page "/nutritionalquota"
-@inject HttpClient Http
-@inject NavigationManager NavigationManager
-@inject IJSRuntime JSRuntime
+﻿@page "/nutritionalquotas"
+@inject HttpClient _client
+@inject IJSRuntime js
 @using NutriView.Shared.Domain
 
 <h3>Nutritional Quotas Configuration</h3>
-
-@if (nutritionalQuotas is null)
+<a href="/subscriptions/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Subscriptions
+</a>
+@if (NutritionalQuotas is null)
 {
     <p><em>Loading...</em></p>
 }
-else if (nutritionalQuotas.Count == 0)
+else if (NutritionalQuotas.Count == 0)
 {
     <p>No nutritional quotas found.</p>
 }
@@ -27,7 +29,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var quota in nutritionalQuotas)
+            @foreach (var quota in NutritionalQuotas)
             {
                 <tr>
                     <td>@quota.CustomerID</td>
@@ -35,8 +37,8 @@ else
                     <td>@quota.TargetCarbDaily</td>
                     <td>@quota.TargetBMI</td>
                     <td>
-                        <button class="btn btn-primary" @onclick="() => EditNutritionalQuota(quota.Id)">Edit</button>
-                        <button class="btn btn-danger" @onclick="() => DeleteNutritionalQuota(quota.Id)">Delete</button>
+                        <a href="/nutritionalQuotas/edit/@quota.Id" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-danger" @onclick="() => Delete(quota.Id)">Delete</button>
                     </td>
                 </tr>
             }
@@ -45,33 +47,43 @@ else
 }
 
 @code {
-    private List<NutritionalQuota>? nutritionalQuotas;
+    private List<NutritionalQuota>? NutritionalQuotas;
 
     protected override async Task OnInitializedAsync()
     {
-        nutritionalQuotas = await Http.GetFromJsonAsync<List<NutritionalQuota>>("api/NutritionalQuotas");
-    }
-
-    private void EditNutritionalQuota(int quotaId)
-    {
-        NavigationManager.NavigateTo($"/edit-nutritional-quota/{quotaId}");
-    }
-
-    private async Task DeleteNutritionalQuota(int quotaId)
-    {
-        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete this nutritional quota?");
-        if (confirmed)
+        try
         {
-            var response = await Http.DeleteAsync($"api/NutritionalQuotas/{quotaId}");
-            if (response.IsSuccessStatusCode)
+            NutritionalQuotas = await _client.GetFromJsonAsync<List<NutritionalQuota>>("api/NutritionalQuotas");
+            if (NutritionalQuotas is null)
             {
-                nutritionalQuotas = nutritionalQuotas.Where(nq => nq.Id != quotaId).ToList();
-                StateHasChanged();
+                NutritionalQuotas = new List<NutritionalQuota>(); // Initialize to an empty list if null is returned
             }
-            else
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+        }
+    }
+
+    async Task Delete(int NutritionalQuotaId)
+    {
+        if (NutritionalQuotas is null) return; // Guard clause for null 'NutritionalQuotas'
+
+        var NutritionalQuota = NutritionalQuotas.FirstOrDefault(c => c.Id == NutritionalQuotaId);
+        if (NutritionalQuota != null && await js.InvokeAsync<bool>("confirm", $"Do you want to delete {NutritionalQuota.Id}?"))
+        {
+            try
             {
-                // Handle error here
+                await _client.DeleteAsync($"api/NutritionalQuotas/{NutritionalQuotaId}");
+                NutritionalQuotas.Remove(NutritionalQuota);
+                StateHasChanged(); // Refresh the UI
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting NutritionalQuota: {ex.Message}");
+                // Handle the error, e.g., show a message to the user
             }
         }
     }
 }
+
