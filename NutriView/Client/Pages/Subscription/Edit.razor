@@ -4,7 +4,7 @@
 
 <h3>Edit Subscription</h3>
 
-<FormComponent ButtonText="Update" OnValidSubmit="EditSubscription" subscription="subscription" />
+<SubscriptionFormComponent ButtonText="Update" OnValidSubmit="EditSubscription" subscription="subscription" />
 @code {
     [Parameter] public int id { get; set; }
     Subscription? subscription = new Subscription();
