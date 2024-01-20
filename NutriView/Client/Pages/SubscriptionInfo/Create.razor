@@ -1,4 +1,4 @@
-﻿@* @page  "/subscriptioninfos/create/"
+﻿@page  "/subscriptioninfos/create/"
 @using NutriView.Shared.Domain;
 @inject HttpClient _client
 @inject NavigationManager _navManager
@@ -7,25 +7,14 @@
 <hr />
 <br />
 
-<FormComponent ButtonText="Create Subscription" subscriptioninfo="subscriptioninfo" OnValidSubmit="@CreateSubscriptioninfo" />
+<FormComponent ButtonText="Create Subscriptioninfo" subscriptioninfo="subscriptioninfo" OnValidSubmit="@CreateSubscriptioninfo" />
 @code {
     SubscriptionInfo subscriptioninfo = new SubscriptionInfo();
 
-    private IList<Subscription>? Subscriptions;
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        Subscriptions = await _client.GetFromJsonAsync<List<Subscription>>($"{Endpoints.SubscriptionsEndpoint}");
-
-        // Initialize the subscriptioninfo object if needed
-    }
-
-    private async Task CreateSubscription()
+    private async Task CreateSubscriptioninfo()
     {
         await _client.PostAsJsonAsync(Endpoints.SubscriptionInfosEndpoint, subscriptioninfo);
         _navManager.NavigateTo("/subscriptioninfoinfos/");
     }
 }
 
- *@

@@ -1,39 +1,17 @@
 ﻿@using NutriView.Shared.Domain;
 @inject HttpClient _client
 
-<EditForm Model="@subscriptioninfo" OnValidSubmit="@OnValidSubmit">
+<EditForm Model="@subscriptionInfo" OnValidSubmit="@OnValidSubmit">
 	<DataAnnotationsValidator />
     <ValidationSummary />
     <fieldset disabled="@Disabled">
 	<div class="form-group">
-		<label>Subscription Tier Name: </label>
+		<label>Tier Name: </label>
 		<div>
-			<InputNumber @bind-Value="subscriptioninfo.SubTierName" class="form-control" />
-				<ValidationMessage For="@(() => subscriptioninfo.SubTierName)" />
+			<InputText @bind-Value="subscriptionInfo.SubTierName" class="form-control" />
+			<ValidationMessage For="@(() => subscriptionInfo.SubTierName)" />
 		</div>
 	</div>
-
-	<div class="form-group">
-		<label>Subscription Type: </label>
-		<div>
-			<InputText @bind-Value="subscriptioninfo.SubType" class="form-control" />
-				<ValidationMessage For="@(() => subscriptioninfo.SubType)" />
-		</div>
-	</div>
-	<div class="form-group">
-		<label>Subscription Cost: </label>
-		<div>
-			<InputNumber @bind-Value="subscriptioninfo.SubCost" class="form-control" />
-				<ValidationMessage For="@(() => subscriptioninfo.SubCost)" />
-		</div>
-	</div>
-		<div class="form-group">
-			<label>Subscription Information: </label>
-			<div>
-				<InputText @bind-Value="subscriptioninfo.SubDescription" class="form-control" />
-				<ValidationMessage For="@(() => subscriptioninfo.SubDescription)" />
-			</div>
-		</div>
     </fieldset>
 	@if (!Disabled)
 	{
@@ -42,11 +20,12 @@
 		</button>
 	}
 	
-	<BackToList Target="subscriptioninfos" />
+	<BackToList Target="subscriptionInfos" />
 </EditForm>
 @code {
 		[Parameter] public bool Disabled { get; set; } = false;
-        [Parameter] public SubscriptionInfo? subscriptioninfo { get; set; }
+        [Parameter] public SubscriptionInfo? subscriptionInfo { get; set; }
         [Parameter] public string ButtonText { get; set; } = "Save";
         [Parameter] public EventCallback OnValidSubmit { get; set; }
+    
 }
