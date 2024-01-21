@@ -1,4 +1,5 @@
 ﻿@inject NavigationManager Navigation
+
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">NutriView</a>
@@ -18,7 +19,7 @@
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="#" @onclick="BeginLogOut" Match="NavLinkMatch.All">
+                    <NavLink class="nav-link" href="#" Match="NavLinkMatch.All" @onclick="BeginLogOut">
                         <span class="oi oi-account-logout" aria-hidden="true"></span> Log out
                     </NavLink>
                 </div>
@@ -71,7 +72,7 @@
                 <span class="oi oi-dollar" aria-hidden="true"></span> Subscriptions
             </NavLink>
         </div>
-        <!-- Existing NavLinks -->
+        <!-- Add other NavLinks as needed -->
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="ConfigPage">
                 <span class="oi oi-briefcase" aria-hidden="true"></span> Config Page
@@ -82,16 +83,14 @@
 
 @code {
     private bool collapseNavMenu = true;
-
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
-
     private void BeginLogOut(MouseEventArgs args)
     {
-        Navigation.NavigateTo("authentication/logout", forceLoad: true);
+    Navigation.NavigateToLogout("authentication/logout", "/");
     }
 }
