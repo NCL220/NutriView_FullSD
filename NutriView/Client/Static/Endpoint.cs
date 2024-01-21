@@ -5,7 +5,6 @@ namespace NutriView.Client.Static
     public static class Endpoints
     {
         private static readonly string Prefix = "api";
-
         public static readonly string CompaniesEndpoint = $"{Prefix}/companies";
         public static readonly string FoodsEndpoint = $"{Prefix}/foods";
         public static readonly string FoodEntriesEndpoint = $"{Prefix}/foodentries";
