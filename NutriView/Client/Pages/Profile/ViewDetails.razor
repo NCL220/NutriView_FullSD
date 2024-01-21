@@ -1,0 +1,251 @@
+﻿@page "/profile/view/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@using NutriView.Client.Pages.Customers
+@layout NoMenuLayout
+<head>
+    <style>
+        body {
+            background-color: #10889E;
+            font-family: Verdana;
+        }
+
+        #container {
+            display: flex;
+            height:98%;
+            width: 98%;
+            margin: auto;
+            background-color: #E1F1F2;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            color: #445566;
+            font-family: Georgia, Times, Serif;
+            font-weight: normal;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #445566;
+            padding: 0px;
+        }
+
+        h3 {
+            color: #445566;
+            margin: 0px;
+        }
+
+        nav {
+            background-color: #45bcd2;
+            height: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        aside {
+            margin:auto;
+            width: 300px;
+            height:100%;
+            border: 1px solid #10889E;
+            float: left;
+            margin-left: 30px;
+            padding: 5px;
+        }
+
+
+        #main {
+            width: 650px;
+            float: right;
+            margin-right: 30px;
+            line-height: 20px;
+        }
+        table{
+          width:100%;
+          table-layout: fixed;
+        }
+        .tbl-header{
+          background-color: aqua;
+         }
+        .tbl-content{
+          height:300px;
+          overflow-x:auto;
+          margin-top: 0px;
+          border: 2px solid aqua;
+          
+        }
+        th{
+          padding: 20px 15px;
+          text-align: left;
+          font-weight: 500;
+          font-size: 12px;
+          color: black;
+          text-transform: uppercase;
+        }
+        td{
+          padding: 15px;
+          text-align: left;
+          vertical-align:middle;
+          font-weight: 300;
+          font-size: 12px;
+          color: forestgreen;
+          border: 2px solid aqua;
+        }
+
+
+    </style>
+</head>
+<body>
+    @if (customer is not null)
+    {
+        <div id='container'>
+            <aside>
+
+                <h3>
+                    Profile : @customer.UserName
+                    </h3>
+
+                    @if(subscriptions is not null)
+                    {
+                        foreach (var subscribe in subscriptions.Where(s => s.CustomerID == customer.Id).OrderByDescending(s => s.DateCreated).Take(1))
+                        {
+                            if(subscriptioninfos is not null)
+                            {
+                                foreach (var subinfo in subscriptioninfos.Where(si => si.Id == subscribe.SubInfoID))
+                                {
+                                    @subinfo.SubTierName
+                                }
+                            }
+                        }
+                    }
+                <img src="Images/Defaultimg.jpg" class="card-img" alt="Image">
+                <ul>
+                    <li>Age: @customer.Age</li>
+                    <li>Height : @customer.Height</li>
+                    <li>Gender: @customer.Gender</li>
+                    <li>Acc Created: @customer.DateCreated</li>
+                    <li>Email: @customer.Email</li>
+                    @if(nutritionalquotas is not null)
+                    {
+                        @foreach (var nutquota in nutritionalquotas.Where(nq => nq.CustomerID == customer.Id).OrderByDescending(nq => nq.DateUpdated).Take(1))
+                        {
+                            <li>Target BMI : @nutquota.TargetBMI</li>
+                            <li>Target Daily Intake Calories : @nutquota.TargetCalorieDaily</li>
+                            <li>Target Daily Intake Carbohydrates : @nutquota.TargetCarbDaily</li>
+                        }
+                    }
+                </ul>
+            </aside>
+
+            <section id='main'>
+                <h1>Food Entries by @customer.UserName</h1>
+                 <div class="tbl-header">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <thead>
+                        <tr>
+                          <th>Time Stamp</th>
+                          <th>Total Calories</th>
+                          @* <th>Meals</th>
+                          <th>PortionSizes</th>
+                          <th>Time Periods</th> *@
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+                @if(foodEntries is not null)
+                {
+                    <div class="tbl-content">
+                        <table cellpadding="0" cellspacing="0" border="0">
+                          <tbody>
+                            <tr>          
+                    @foreach (var foodentry in foodEntries.Where(FoodEntry => FoodEntry.CustomerID == customer.Id))
+                    {
+                        <td>@foodentry.Time_Stamp</td>
+                        <td>@foodentry.TotalCalories</td>
+                        @if(Meals is not null)
+                        {
+                            @* @foreach (var meal in Meals.Where(M => M.FoodEntryID == foodentry.Id))
+                            {
+                                 var meallist = @meal.Name 
+                            } *@
+                        }
+                    }
+                            </tr>
+                           </tbody>
+                        </table>
+                    </div>
+                }
+            </section>
+
+        </div> <!-- /.container -->
+    }
+</body>
+
+@* <body>
+    <div class="custom-container">
+        <p>Food Entries by @customer.UserName</p>
+        @foreach (var foodentry in foodEntries.Where(FoodEntry => FoodEntry.CustomerID == customer.Id))
+        {
+            <p>@foodentry.Time_Stamp : @foodentry.TotalCalories</p>
+            @foreach (var meal in Meals.Where(M => M.FoodEntryID == foodentry.Id))
+            {
+                <p>@meal.Name</p>
+            }
+        }
+        }
+    </div>
+</body> *@
+@code {
+    [Parameter] public int id { get; set; }
+    Customer? customer = new Customer();
+    private List<Meal>? Meals;
+    private List<Customer>? customers;
+    private List<FoodEntry>? foodEntries;
+    private List<NutritionalQuota>? nutritionalquotas;
+    private List<Subscription>? subscriptions;
+    private List<SubscriptionInfo>? subscriptioninfos;
+    protected async override Task OnInitializedAsync()
+    {
+        customer = await
+        _client.GetFromJsonAsync<Customer>($"{Endpoints.CustomersEndpoint}/{id}");
+        try
+        {
+            subscriptioninfos = await _client.GetFromJsonAsync<List<SubscriptionInfo>>("api/SubscriptionInfos");
+            if (subscriptioninfos is null)
+            {
+                subscriptioninfos = new List<SubscriptionInfo>(); // Initialize to an empty list if null is returned
+            }
+            subscriptions = await _client.GetFromJsonAsync<List<Subscription>>("api/Subscriptions");
+            if (subscriptions is null)
+            {
+                subscriptions = new List<Subscription>(); // Initialize to an empty list if null is returned
+            }
+            customers = await _client.GetFromJsonAsync<List<Customer>>("api/Customers");
+            if (customers is null)
+            {
+                customers = new List<Customer>(); // Initialize to an empty list if null is returned
+            }
+            Meals = await _client.GetFromJsonAsync<List<Meal>>("api/Meals");
+            if (Meals is null)
+            {
+                Meals = new List<Meal>(); // Initialize to an empty list if null is returned
+            }
+            foodEntries = await _client.GetFromJsonAsync<List<FoodEntry>>("api/FoodEntries");
+            if (foodEntries is null)
+            {
+                foodEntries = new List<FoodEntry>(); // Initialize to an empty list if null is returned
+            }
+            nutritionalquotas = await _client.GetFromJsonAsync<List<NutritionalQuota>>("api/NutritionalQuotas");
+            if (nutritionalquotas is null)
+            {
+                nutritionalquotas = new List<NutritionalQuota>(); // Initialize to an empty list if null is returned
+            }
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+        }
+    }
+}

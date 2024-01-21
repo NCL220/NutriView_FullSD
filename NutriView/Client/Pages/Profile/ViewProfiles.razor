@@ -1,0 +1,70 @@
+﻿@page "/viewprofiles"
+@inject HttpClient _client
+@inject IJSRuntime js
+@using NutriView.Shared.Domain
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color-Changing Background</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(to right, #3498db, #e74c3c);
+            display: flex;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 2em;
+        }
+
+        .container {
+            width: 200px;
+            height: 100px;
+            border: 5px solid #fff;
+            padding: 20px;
+            margin:20px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8); /* semi-transparent white background */
+            border-radius: 10px; /* rounded corners */
+        }
+        .customerborder{
+            border-block-color:aliceblue;
+            padding:20px;
+        }
+    </style>
+    <h1 class="align-content-center">Customer Database</h1>
+</head>
+
+<body>
+    
+    @foreach (var customer in Customers)
+    {
+        <div class="container">
+            <a href="/profile/view/@customer.Id">
+                <span class="oi oi-eye"></span>
+                View @customer.UserName
+            </a>
+        </div>
+    }
+</body>
+
+@code{
+    private List<Customer>? Customers;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Customers = await _client.GetFromJsonAsync<List<Customer>>("api/Customers");
+            if (Customers is null)
+            {
+                Customers = new List<Customer>(); // Initialize to an empty list if null is returned
+            }
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+        }
+    }
+}

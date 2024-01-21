@@ -1,0 +1,59 @@
+﻿@inject HttpClient _client
+@inject IJSRuntime js
+@using NutriView.Shared.Domain
+<body>
+    <div class="Customer Database">
+        <h1>Click on the Customers Name to view their information</h1>
+    </div>
+    <div class="Customers_container">
+        @foreach (var customer in Customers)
+        {
+            <div class="subscription_card">
+                <button class="view_profile">@customer.UserName</button>
+                <p>Food Entries by @customer.UserName</p>
+                @foreach (var foodentry in foodEntries.Where(FoodEntry => FoodEntry.CustomerID == customer.Id))
+                {
+                    <p>@foodentry.Time_Stamp : @foodentry.TotalCalories</p>
+                    @foreach (var meal in Meals.Where(M => M.FoodEntryID == foodentry.Id))
+                    {
+                        <p>@meal.Name</p>
+                    }
+                }
+            </div>
+        }
+    </div>
+</body>
+@code {
+    private List<Customer>? Customers;
+    private List<Meal> Meals;
+    private List<FoodEntry>? foodEntries;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Meals = await _client.GetFromJsonAsync<List<Meal>>("api/Meals");
+            if (Meals is null)
+            {
+                Meals = new List<Meal>(); // Initialize to an empty list if null is returned
+            }
+            foodEntries = await _client.GetFromJsonAsync<List<FoodEntry>>("api/FoodEntries");
+            if (foodEntries is null)
+            {
+                foodEntries = new List<FoodEntry>(); // Initialize to an empty list if null is returned
+            }
+            Customers = await _client.GetFromJsonAsync<List<Customer>>("api/Customers");
+            if (Customers is null)
+            {
+                Customers = new List<Customer>(); // Initialize to an empty list if null is returned
+            }
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+        }
+    }
+}
+
+@code {
+
+}

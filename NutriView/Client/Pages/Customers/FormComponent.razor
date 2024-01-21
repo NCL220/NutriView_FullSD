@@ -4,46 +4,49 @@
 <EditForm Model="@customer" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label for="userName">Username:</label>
+            <InputTextArea id="userName" class="form-control" @bind-Value="customer.UserName" />
+            <ValidationMessage For="@(() => customer.UserName)" />
+        </div
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <InputNumber id="age" class="form-control" @bind-Value="customer.Age" />
+            <ValidationMessage For="@(() => customer.Age)" />
+        </div>
 
-    <div class="form-group">
-        <label for="userName">Username:</label>
-        <InputTextArea id="userName" class="form-control" @bind-Value="customer.UserName" />
-        <ValidationMessage For="@(() => customer.UserName)" />
-    </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <InputText id="email" class="form-control" @bind-Value="customer.Email" />
+            <ValidationMessage For="@(() => customer.Email)" />
+        </div>
+        <div class="form-group">
+            <label for="height">Height (cm):</label>
+            <InputNumber id="height" class="form-control" @bind-Value="customer.Height" />
+            <ValidationMessage For="@(() => customer.Height)" />
+        </div>
 
-    <div class="form-group">
-        <label for="age">Age:</label>
-        <InputNumber id="age" class="form-control" @bind-Value="customer.Age" />
-        <ValidationMessage For="@(() => customer.Age)" />
-    </div>
+        <div class="form-group">
+            <label for="weight">Weight (kg):</label>
+            <InputNumber id="weight" class="form-control" @bind-Value="customer.Weight" />
+            <ValidationMessage For="@(() => customer.Weight)" />
+        </div>
 
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <InputText id="email" class="form-control" @bind-Value="customer.Email" />
-        <ValidationMessage For="@(() => customer.Email)" />
-    </div>
-    <div class="form-group">
-        <label for="height">Height (cm):</label>
-        <InputNumber id="height" class="form-control" @bind-Value="customer.Height" />
-        <ValidationMessage For="@(() => customer.Height)" />
-    </div>
-
-    <div class="form-group">
-        <label for="weight">Weight (kg):</label>
-        <InputNumber id="weight" class="form-control" @bind-Value="customer.Weight" />
-        <ValidationMessage For="@(() => customer.Weight)" />
-    </div>
-
-    <div class="form-group">
-        <label for="gender">Gender:</label>
-        <InputSelect id="gender" class="form-control" @bind-Value="customer.Gender">
-        <option value="">-- Select Gender --</option>
-        <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-        </InputSelect>
-    </div>
+        <div class="form-group">
+            <label for="gender">Gender:</label>
+            <InputSelect id="gender" class="form-control" @bind-Value="customer.Gender">
+            <option value="">-- Select Gender --</option>
+            <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </InputSelect>
+        </div>
+    </fieldset>
+    @if(!Disabled){
     <button type="submit" class="btn btn-success">@ButtonText</button>
+    }
+    
 </EditForm>
 
 
