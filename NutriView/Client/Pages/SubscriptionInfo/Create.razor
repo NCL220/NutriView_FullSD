@@ -7,14 +7,14 @@
 <hr />
 <br />
 
-<FormComponent ButtonText="Create Subscriptioninfo" subscriptioninfo="subscriptioninfo" OnValidSubmit="@CreateSubscriptioninfo" />
+<FormComponent ButtonText="Create Subscriptioninfo" subscriptionInfo="subscriptioninfo" OnValidSubmit="@CreateSubscriptioninfo" />
 @code {
     SubscriptionInfo subscriptioninfo = new SubscriptionInfo();
 
     private async Task CreateSubscriptioninfo()
     {
         await _client.PostAsJsonAsync(Endpoints.SubscriptionInfosEndpoint, subscriptioninfo);
-        _navManager.NavigateTo("/subscriptioninfoinfos/");
+        _navManager.NavigateTo("/subscriptioninfos/");
     }
 }
 

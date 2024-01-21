@@ -1,0 +1,31 @@
+﻿@page "/meals/create"
+@using NutriView.Shared.Domain
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 Create New Meal</h3>
+<hr />
+<br />
+<FormComponent ButtonText="Create Meal" meal="meal" OnValidSubmit="@CreateMeal" />
+@code {
+    private Meal meal = new Meal();
+    private IList<FoodEntry> Entries;
+    protected override async Task OnInitializedAsync()
+    {
+        Entries = await _client.GetFromJsonAsync<List<FoodEntry>>($"{Endpoints.FoodEntriesEndpoint}");
+    }
+
+    private async Task CreateMeal()
+    {
+        var response = await _client.PostAsJsonAsync("api/meals/", meal);
+
+        if (response.IsSuccessStatusCode)
+        {
+            _navManager.NavigateTo("/meals/");
+        }
+        else
+        {
+            // Handle errors here
+        }
+    }
+}
