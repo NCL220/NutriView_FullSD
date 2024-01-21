@@ -10,7 +10,6 @@
   <ItemGroup>
     <None Include="Pages\SubscriptionInfo\Create.razor" />
     <None Include="Pages\SubscriptionInfo\Edit.razor" />
-    <None Include="Pages\SubscriptionInfo\FormComponent.razor" />
     <None Include="Pages\SubscriptionInfo\Index.razor" />
   </ItemGroup>
 
