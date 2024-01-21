@@ -10,11 +10,11 @@ namespace NutriView.Shared.Domain
     {
         public double TotalCalories { get; set; }
 
-        public string? Time_Stamp { get; set; }
+        public DateTime Time_Stamp { get; set; }
 
         public int CustomerID { get; set; }
 
-        public virtual List<Food>? Foods { get; set; }
+        public virtual List<EntryLinkFood>? EntryLinkFood { get; set; }
 
         public virtual List<Meal>? Meals { get; set; }
 

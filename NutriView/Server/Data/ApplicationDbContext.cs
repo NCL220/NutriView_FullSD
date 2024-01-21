@@ -28,11 +28,11 @@ namespace NutriView.Server.Data
         public DbSet<SubscriptionInfo> SubscriptionInfos { get; set; }
 
         public DbSet<Customer> Customers { get; set; }
-
+        public DbSet<EntryLinkFood> EntryLinkFoods { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
+            builder.ApplyConfiguration(new EntryLinkFoodSeedConfiguration());
             builder.ApplyConfiguration(new SubscriptionInfoSeedConfiguration());
             builder.ApplyConfiguration(new CompanySeedConfiguration());
             builder.ApplyConfiguration(new NutritionInfoSeedConfiguration());

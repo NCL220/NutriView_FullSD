@@ -57,7 +57,7 @@
 
 
         #main {
-            width: 650px;
+            width: 75%;
             float: right;
             margin-right: 30px;
             line-height: 20px;
@@ -147,9 +147,10 @@
                         <tr>
                           <th>Time Stamp</th>
                           <th>Total Calories</th>
-                          @* <th>Meals</th>
+                          <th>Foods</th>
+                          <th>Meals</th>
                           <th>PortionSizes</th>
-                          <th>Time Periods</th> *@
+                          <th>Time Periods</th>
                         </tr>
                       </thead>
                     </table>
@@ -164,6 +165,23 @@
                     {
                         <td>@foodentry.Time_Stamp</td>
                         <td>@foodentry.TotalCalories</td>
+                        @if(entrylinkfoods is not null)
+                        {
+                            <td>
+                            @foreach(var foodinfoodentries in entrylinkfoods.Where(ffe=>ffe.FoodEntryID == foodentry.Id))
+                             {
+
+                                                @if(foods is not null)
+                                                {
+                                                    @foreach(var food in foods.Where(fd => fd.Id==foodinfoodentries.FoodID))
+                                                    {
+                                                        <li>@food.Name</li>
+                                                    }
+                                                    }
+                                                
+                                            }
+                              </td>
+                        }
                         @if(Meals is not null)
                         {
                             @* @foreach (var meal in Meals.Where(M => M.FoodEntryID == foodentry.Id))
@@ -171,6 +189,10 @@
                                  var meallist = @meal.Name 
                             } *@
                         }
+                                        <td>NOT YET AVAILABLE</td>
+                                        <td>NOT YET AVAILABLE</td>
+                                        <td>NOT YET AVAILABLE</td>
+
                     }
                             </tr>
                            </tbody>
@@ -206,12 +228,24 @@
     private List<NutritionalQuota>? nutritionalquotas;
     private List<Subscription>? subscriptions;
     private List<SubscriptionInfo>? subscriptioninfos;
+    private List<EntryLinkFood>? entrylinkfoods;
+    private List<Food>? foods;
     protected async override Task OnInitializedAsync()
     {
         customer = await
         _client.GetFromJsonAsync<Customer>($"{Endpoints.CustomersEndpoint}/{id}");
         try
         {
+            foods = await _client.GetFromJsonAsync<List<Food>>("api/Foods");
+            if (foods is null)
+            {
+                foods = new List<Food>(); // Initialize to an empty list if null is returned
+            }
+            entrylinkfoods = await _client.GetFromJsonAsync<List<EntryLinkFood>>("api/EntryLinkFoods");
+            if (entrylinkfoods is null)
+            {
+                entrylinkfoods = new List<EntryLinkFood>(); // Initialize to an empty list if null is returned
+            }
             subscriptioninfos = await _client.GetFromJsonAsync<List<SubscriptionInfo>>("api/SubscriptionInfos");
             if (subscriptioninfos is null)
             {

@@ -12,7 +12,6 @@ namespace NutriView.Server.Configurations.Entities
              new Food
              {
                  Id=1,
-                 FoodEntryID = 1,
                  StaffId=1,
                  Name="Carrots",
                  Calories = 25,
@@ -30,7 +29,6 @@ namespace NutriView.Server.Configurations.Entities
              new Food
              {
                  Id=2,
-                 FoodEntryID = 2,
                  StaffId=2,
                  Name = "Chicken",
                  Calories = 165,

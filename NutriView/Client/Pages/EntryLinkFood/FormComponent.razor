@@ -1,0 +1,71 @@
+﻿@using NutriView.Shared.Domain;
+@inject HttpClient _client
+
+<EditForm Model="@entryLinkFood" OnValidSubmit="@OnValidSubmit">
+	<DataAnnotationsValidator />
+    <ValidationSummary />
+    <fieldset disabled="@Disabled">
+	<div class="form-group">
+		<label>
+			FoodEntries (Customer)(TimeStamp):
+		</label>
+		<div>
+			<InputSelect @bind-Value="entryLinkFood.FoodEntryID" class="form-control">
+				<option value="">--Select Food Entry--</option>
+					@if (FoodEntries != null)
+					{
+						@foreach (var foodentry in FoodEntries)
+						{
+							<option value="@foodentry.Id">@foodentry.Id</option>
+							@* @foreach (var customer in Customers.Where(c => c.Id == foodentry.CustomerID))
+							{
+								<option value="@foodentry.Id">@foodentry.Time_Stamp</option>
+							} *@
+						}
+					}
+			</InputSelect>
+		</div>
+	</div>
+		<div class="form-group">
+			<label>
+				Food (FoodName):
+			</label>
+			<div>
+				<InputSelect @bind-Value="entryLinkFood.FoodID" class="form-control">
+					<option value="">--Select Food--</option>
+					@if (Foods != null)
+					{
+						@foreach (var food in Foods)
+						{
+							<option value="@food.Id">@food.Name</option>
+						}
+					}
+				</InputSelect>
+			</div>
+		</div>
+    </fieldset>
+	@if (!Disabled)
+	{
+		<button type="submit" class="btn btn-success btn-block">
+			@ButtonText
+		</button>
+	}
+	
+	<BackToList Target="entryLinkFoods" />
+</EditForm>
+@code {
+	[Parameter] public bool Disabled { get; set; } = false;
+	[Parameter] public EntryLinkFood? entryLinkFood { get; set; }
+	[Parameter] public string ButtonText { get; set; } = "Save";
+	[Parameter] public EventCallback OnValidSubmit { get; set; }
+
+	private IList<Food>? Foods;
+	private IList<FoodEntry>? FoodEntries;
+	private IList<Customer>? Customers;
+	protected async override Task OnInitializedAsync()
+    {
+		FoodEntries = await _client.GetFromJsonAsync<List<FoodEntry>>($"{Endpoints.FoodEntriesEndpoint}");
+		Foods = await _client.GetFromJsonAsync<List<Food>>($"{Endpoints.FoodsEndpoint}");
+    }
+    
+}

@@ -16,5 +16,6 @@ namespace NutriView.Client.Static
         public static readonly string SubscriptionsEndpoint = $"{Prefix}/subscriptions";
         public static readonly string SubscriptionInfosEndpoint = $"{Prefix}/subscriptioninfos";
         public static readonly string CustomersEndpoint = $"{Prefix}/customers";
+        public static readonly string EntryLinkFoodsEndpoint = $"{Prefix}/entrylinkfoods";
     }
 }

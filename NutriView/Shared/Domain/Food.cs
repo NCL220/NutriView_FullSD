@@ -21,14 +21,11 @@ namespace NutriView.Shared.Domain
 
         public string? ImagePath { get; set; }
 
-        public int FoodEntryID { get; set; }
-
         public int StaffId { get; set; }
 
         public string? FoodDesc { get; set; }
 
-        public virtual FoodEntry? FoodEntry { get; set; }
-
+        public virtual List<EntryLinkFood>? EntryLinkFood {  get; set; }
         public virtual Staff? Staff { get; set; }
     }
 }
