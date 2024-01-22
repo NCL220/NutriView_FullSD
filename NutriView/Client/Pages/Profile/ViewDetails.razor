@@ -5,34 +5,7 @@
 @layout NoMenuLayout
 <head>
     <style>
-        @@-webkit-keyframes colorChange {
-            0% {
-                background-color: #ff0000; /* Red */
-            }
-
-            25% {
-                background-color: #00ff00; /* Green */
-            }
-
-            50% {
-                background-color: #0000ff; /* Blue */
-            }
-
-            75% {
-                background-color: #ffff00; /* Yellow */
-            }
-
-            100% {
-                background-color: #ff00ff; /* Magenta */
-            }
-        }
-
-        .background-colorchange {
-            animation: colorChange 10s linear infinite; /* Slower speed, now 10 seconds */
-        }
-
         body {
-            animation: colorChange 10s linear infinite;
             background-color: #10889E;
             font-family: Verdana;
         }
@@ -129,6 +102,7 @@
     {
         <div id='container'>
             <aside>
+
                 <h3>
                     Profile : @customer.UserName
                     </h3>
