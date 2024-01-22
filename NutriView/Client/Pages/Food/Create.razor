@@ -1,15 +1,27 @@
 ﻿@page "/foods/create"
 @using NutriView.Shared.Domain
+@using System.IO
+@using Microsoft.AspNetCore.Components.Forms
 @inject HttpClient _client
 @inject NavigationManager _navManager
 
-<h3 Create New Food</h3>
+<h3>Create New Food</h3>
 <hr />
 <br />
+
+<InputFile OnChange="LoadFile" />
+<br />
+<button @onclick="ProcessFile" class="btn btn-primary" disabled="@(!fileLoaded)">Create Foods from File</button>
+<br />
+<br />
+
 <FormComponent ButtonText="Create Food" food="food" OnValidSubmit="@CreateFood" />
 @code {
     private Food food = new Food();
     private IList<FoodEntry> Entries;
+    private bool fileLoaded = false;
+    private List<Food> foodsFromFile = new List<Food>();
+
     protected override async Task OnInitializedAsync()
     {
         Entries = await _client.GetFromJsonAsync<List<FoodEntry>>($"{Endpoints.FoodEntriesEndpoint}");
@@ -27,5 +39,48 @@
         {
             // Handle errors here
         }
+    }
+
+    private async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            try
+            {
+                using var stream = file.OpenReadStream(maxAllowedSize: 1024 * 1024); // Limit size to 1MB, adjust as needed
+                using var reader = new StreamReader(stream);
+                string? content = await reader.ReadToEndAsync();
+
+                foodsFromFile = System.Text.Json.JsonSerializer.Deserialize<List<Food>>(content) ?? new List<Food>();
+                if (foodsFromFile.Any())
+                {
+                    fileLoaded = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle the error
+            }
+        }
+    }
+
+    private async Task ProcessFile()
+    {
+        foreach (var foodItem in foodsFromFile)
+        {
+            await CreateFoodFromFile(foodItem);
+        }
+
+        // Reset the flag and clear the list after processing
+        fileLoaded = false;
+        foodsFromFile.Clear();
+
+        _navManager.NavigateTo("/foods/");
+    }
+
+    private async Task CreateFoodFromFile(Food newFood)
+    {
+        var response = await _client.PostAsJsonAsync("api/foods/", newFood);
     }
 }
