@@ -1,22 +1,29 @@
 ﻿@inject HttpClient _client
-@inject IJSRuntime js
+@inject NavigationManager _navManager
 @using NutriView.Shared.Domain
-<body>
-    <div class="SubscriptionHeader">
-        <h1>Be A Subscriber And Support Us!</h1>
-    </div>
-    <div class="Subscription_container">
-    @foreach(var SubscriptionInfo in SubscriptionInfos)
+
+<div class="SubscriptionHeader">
+    <h1>Be A Subscriber And Support Us!</h1>
+</div>
+<div class="Subscription_container">
+    @if (SubscriptionInfos != null)
     {
+        @foreach (var subscriptionInfo in SubscriptionInfos)
+        {
             <div class="subscription_card">
-            <h1>Be A @SubscriptionInfo.SubTierName !!!</h1>
-            <p>Benefits: @SubscriptionInfo.SubDescription</p>
-            <p>Cost: @SubscriptionInfo.SubCost</p>
-            <button class="subscription_button" @onclick=" ()=> ShowPurchase(SubscriptionInfo.Id)">Purchase</button>
-        </div>
+                <h1>Be A @subscriptionInfo.SubTierName !!!</h1>
+                <p>Benefits: @subscriptionInfo.SubDescription</p>
+                <p>Cost: @subscriptionInfo.SubCost.ToString("C")</p>
+                <button class="subscription_button" @onclick="() => ShowPurchase(subscriptionInfo)">Purchase</button>
+            </div>
+        }
     }
-    </div>
-</body>
+    else
+    {
+        <p>No subscription information available.</p>
+    }
+</div>
+
 @code {
     private List<SubscriptionInfo>? SubscriptionInfos;
 
@@ -35,8 +42,12 @@
             ex.Redirect();
         }
     }
-    private void ShowPurchase(int SubId)
+
+    private void ShowPurchase(SubscriptionInfo subscriptionInfo)
     {
-        Console.WriteLine("You Are Subscribed");
+        // Here you would usually navigate to a purchase page or handle the purchase logic
+        // For example, let's navigate to a purchase confirmation page with the subscription ID
+        _navManager.NavigateTo($"/subscriptionpage/purchaseconfirmation/{subscriptionInfo.Id}");
+
     }
 }

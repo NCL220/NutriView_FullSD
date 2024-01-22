@@ -1,0 +1,57 @@
+﻿@page "/subscriptionpage/purchaseconfirmation/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@using NutriView.Shared.Domain
+
+<h3>Purchase Confirmation</h3>
+<hr />
+
+
+@if (subscriptionInfo == null)
+{
+    <p>Loading subscription details...</p>
+}
+else
+{
+    <div class="subscription_card">
+        <h2>Confirm Your Subscription</h2>
+        <p>Tier: @subscriptionInfo.SubTierName</p>
+        <p>Description: @subscriptionInfo.SubDescription</p>
+        <p>Cost: @subscriptionInfo.SubCost.ToString("C")</p>
+        <button class="btn btn-success" @onclick="CompleteSubscription">Confirm Subscription</button>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private SubscriptionInfo? subscriptionInfo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            subscriptionInfo = await _client.GetFromJsonAsync<SubscriptionInfo>($"{Endpoints.SubscriptionInfosEndpoint}/{Id}");
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"An error occurred while fetching subscription data: {ex.Message}");
+            // Optionally, you could set an error message to display to the user
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+            // Optionally, you could set an error message to display to the user
+        }
+    }
+
+    private async Task CompleteSubscription()
+    {
+        // Implement the logic for the user to complete the subscription.
+        // This might include payment processing and updating the database.
+        // Then, redirect to a thank-you page or display a confirmation message.
+        _navManager.NavigateTo($"/thank-you");
+    }
+}
