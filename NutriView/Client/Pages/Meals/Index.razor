@@ -1,5 +1,5 @@
 ﻿@page "/meals"
-@inject HttpClient Http
+@inject HttpClient _client
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 @using NutriView.Shared.Domain
@@ -54,7 +54,18 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        meals = await Http.GetFromJsonAsync<List<Meal>>("api/meals");
+        try
+        {
+            meals = await _client.GetFromJsonAsync<List<Meal>>("api/Meals");
+            if (meals is null)
+            {
+                meals = new List<Meal>(); // Initialize to an empty list if null is returned
+            }
+        }
+        catch (AccessTokenNotAvailableException ex)
+        {
+            ex.Redirect();
+        }
     }
 
     private void EditMeal(int mealId)
@@ -67,7 +78,7 @@ else
         var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete this meal?");
         if (confirmed)
         {
-            var response = await Http.DeleteAsync($"api/meals/{mealId}");
+            var response = await _client.DeleteAsync($"api/meals/{mealId}");
             if (response.IsSuccessStatusCode)
             {
                 meals = meals.Where(m => m.Id != mealId).ToList();

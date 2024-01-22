@@ -1,31 +1,30 @@
-﻿@page "/meals/create"
-@using NutriView.Shared.Domain
+﻿@page "/meals/create/"
+@using NutriView.Shared.Domain;
 @inject HttpClient _client
 @inject NavigationManager _navManager
 
-<h3 Create New Meal</h3>
+<h3 class="card-title">Create New Meal</h3>
 <hr />
 <br />
+
 <FormComponent ButtonText="Create Meal" meal="meal" OnValidSubmit="@CreateMeal" />
 @code {
-    private Meal meal = new Meal();
-    private IList<FoodEntry> Entries;
+    Meal meal = new Meal();
+
+    private IList<Company>? Companies;
+
+
     protected override async Task OnInitializedAsync()
     {
-        Entries = await _client.GetFromJsonAsync<List<FoodEntry>>($"{Endpoints.FoodEntriesEndpoint}");
+        Companies = await _client.GetFromJsonAsync<List<Company>>($"{Endpoints.CompaniesEndpoint}");
+
+        // Initialize the meal object if needed
     }
 
     private async Task CreateMeal()
     {
-        var response = await _client.PostAsJsonAsync("api/meals/", meal);
-
-        if (response.IsSuccessStatusCode)
-        {
-            _navManager.NavigateTo("/meals/");
-        }
-        else
-        {
-            // Handle errors here
-        }
+        await _client.PostAsJsonAsync(Endpoints.MealsEndpoint, meal);
+        _navManager.NavigateTo("/meals/");
     }
 }
+
