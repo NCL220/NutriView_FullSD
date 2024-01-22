@@ -7,20 +7,78 @@
 <hr />
 
 
-@if (subscriptionInfo == null)
-{
-    <p>Loading subscription details...</p>
-}
-else
-{
-    <div class="subscription_card">
-        <h2>Confirm Your Subscription</h2>
-        <p>Tier: @subscriptionInfo.SubTierName</p>
-        <p>Description: @subscriptionInfo.SubDescription</p>
-        <p>Cost: @subscriptionInfo.SubCost.ToString("C")</p>
-        <button class="btn btn-success" @onclick="CompleteSubscription">Confirm Subscription</button>
-    </div>
-}
+<style>
+    .subscription-container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .subscription-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+
+    .btn-success {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #28a745;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .loading-message {
+        text-align: center;
+        font-size: 18px;
+    }
+</style>
+
+<div class="subscription-container">
+    <h3 class="subscription-header">Purchase Confirmation</h3>
+    @if (subscriptionInfo == null || customers == null)
+    {
+        <p class="loading-message">Loading subscription details...</p>
+    }
+    else
+    {
+        <div>
+            <h2>@subscriptionInfo.SubTierName</h2>
+            <p>@subscriptionInfo.SubDescription</p>
+            <p>@subscriptionInfo.SubCost.ToString("C")</p>
+
+            <select @bind="selectedCustomerId" class="form-select">
+                <option value="">-- Select Customer --</option>
+                @foreach (var customer in customers)
+                {
+                    <option value="@customer.Id">@customer.UserName</option>
+                }
+            </select>
+
+            <button class="btn btn-success" @onclick="CompleteSubscription">
+                Confirm Subscription
+            </button>
+        </div>
+    }
+</div>
 
 
 @code {
@@ -28,30 +86,40 @@ else
     public int Id { get; set; }
 
     private SubscriptionInfo? subscriptionInfo;
+    private List<Customer>? customers;
+    private int selectedCustomerId;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             subscriptionInfo = await _client.GetFromJsonAsync<SubscriptionInfo>($"{Endpoints.SubscriptionInfosEndpoint}/{Id}");
+            customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
         }
         catch (HttpRequestException ex)
         {
-            Console.WriteLine($"An error occurred while fetching subscription data: {ex.Message}");
-            // Optionally, you could set an error message to display to the user
+            Console.WriteLine($"An error occurred while fetching data: {ex.Message}");
         }
         catch (Exception ex)
         {
             Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-            // Optionally, you could set an error message to display to the user
         }
     }
 
     private async Task CompleteSubscription()
     {
-        // Implement the logic for the user to complete the subscription.
-        // This might include payment processing and updating the database.
-        // Then, redirect to a thank-you page or display a confirmation message.
+        if (selectedCustomerId == 0)
+        {
+            Console.WriteLine("Please select a customer before confirming the subscription.");
+            return;
+        }
+
+        // Here you would implement the logic to process the subscription for the selected customer.
+        // This could involve creating a new subscription record in the database with the `SubscriptionId` and `selectedCustomerId`.
+
+        Console.WriteLine($"Subscription {Id} confirmed for customer {selectedCustomerId}");
+
+        // Redirect to a thank-you page or display a confirmation message.
         _navManager.NavigateTo($"/thank-you");
     }
 }
