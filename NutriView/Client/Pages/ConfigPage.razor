@@ -2,9 +2,6 @@
 
 <head>
     <style>
-        body{
-            background-color:brown;
-        }
         h1{
             text-align: center;
             align-content:center;
@@ -25,6 +22,24 @@
             border: none;
             border-radius: 55px;
             margin: 5px;
+        }
+
+        @@-webkit-keyframes colorChange {
+            0% {
+                background-color: #0000FF; /* Blue */
+            }
+
+            50% {
+                background-color: #00FF00; /* Lime */
+            }
+
+            100% {
+                background-color: #0000FF; /* Blue */
+            }
+        }
+
+        body {
+            animation: colorChange 10s linear infinite; /* Slower speed, now 10 seconds */
         }
     </style>
 </head>

@@ -1,5 +1,104 @@
 ﻿@page "/submitfoodentry"
-@using NutriView.Shared.Domain
+
+@page "/myrazorcomponent"
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyframes in Razor</title>
+    <style>
+        @@-webkit-keyframes colorChange {
+            0% {
+                background-color: #ff0000; /* Red */
+            }
+
+            25% {
+                background-color: #00ff00; /* Green */
+            }
+
+            50% {
+                background-color: #0000ff; /* Blue */
+            }
+
+            75% {
+                background-color: #ffff00; /* Yellow */
+            }
+
+            100% {
+                background-color: #ff00ff; /* Magenta */
+            }
+        }
+
+        body{
+            animation: colorChange 10s linear infinite; /* Slower speed, now 10 seconds */
+        }
+
+        #foodContainer {
+            width: 300px;
+            height: 300px;
+            border: 2px solid #ccc;
+            padding: 10px;
+        }
+
+        .draggable {
+            width: 100px;
+            height: 50px;
+            background-color: #ffcc00;
+            margin: 10px;
+            padding: 10px;
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+
+    <h3>Drag and Drop Example</h3>
+
+    <div id="foodContainer" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+        Drop your food here!
+    </div>
+
+    <div id="apple" class="draggable" draggable="true" ondragstart="drag(event)">Apple</div>
+    <div id="banana" class="draggable" draggable="true" ondragstart="drag(event)">Banana</div>
+    <div id="orange" class="draggable" draggable="true" ondragstart="drag(event)">Orange</div>
+
+    <script>
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            var data = event.dataTransfer.getData("text");
+            var draggedElement = document.getElementById(data);
+
+            // Check if the drop target is the food container
+            if (event.target.id === "foodContainer") {
+                event.target.appendChild(draggedElement);
+            }
+        }
+
+        function dragEnter(event) {
+            event.preventDefault();
+            // Add a visual cue when dragging over the drop container
+            document.getElementById("foodContainer").style.border = "2px dashed #000";
+        }
+
+        function dragLeave(event) {
+            event.preventDefault();
+            // Remove the visual cue when leaving the drop container
+            document.getElementById("foodContainer").style.border = "2px solid #ccc";
+        }
+    </script>
+    </body>
+
+@* @using NutriView.Shared.Domain
 @inject HttpClient _client
 @inject NavigationManager _navManager
 <h3>Create New Food Entry</h3>
@@ -33,3 +132,4 @@
         }
     }
 }
+ *@
