@@ -95,6 +95,9 @@
         {
             subscriptionInfo = await _client.GetFromJsonAsync<SubscriptionInfo>($"{Endpoints.SubscriptionInfosEndpoint}/{Id}");
             customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
+            
+            // After the above line, check if subscriptionInfo has the correct SubscriptionInfoId
+            Console.WriteLine($"Retrieved subscription info ID: {subscriptionInfo?.Id}");
         }
         catch (HttpRequestException ex)
         {
@@ -114,12 +117,26 @@
             return;
         }
 
-        // Here you would implement the logic to process the subscription for the selected customer.
-        // This could involve creating a new subscription record in the database with the `SubscriptionId` and `selectedCustomerId`.
+        // Assuming the Subscription object on the server expects a CustomerId and SubscriptionInfoId
+        var newSubscription = new Subscription
+            {
+                CustomerID = selectedCustomerId,
+                SubInfoID = Id, // The Id from the route parameter
+                                         // Set other properties if required by your server-side model
+            };
 
-        Console.WriteLine($"Subscription {Id} confirmed for customer {selectedCustomerId}");
+        var response = await _client.PostAsJsonAsync($"{Endpoints.SubscriptionsEndpoint}", newSubscription);
 
-        // Redirect to a thank-you page or display a confirmation message.
-        _navManager.NavigateTo($"/thank-you");
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine($"Subscription {Id} confirmed for customer {selectedCustomerId}");
+            _navManager.NavigateTo($"/thank-you");
+        }
+        else
+        {
+            // Handle errors here
+            Console.WriteLine("Failed to assign subscription to customer.");
+        }
     }
 }
+    

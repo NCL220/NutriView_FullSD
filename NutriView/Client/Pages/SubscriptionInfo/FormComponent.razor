@@ -12,6 +12,7 @@
                 <ValidationMessage For="@(() => subscriptionInfo.SubDescription)" />
             </div>
         </div>
+
         <div class="form-group">
             <label>Cost: </label>
             <div>
@@ -48,4 +49,9 @@
     [Parameter] public SubscriptionInfo? subscriptionInfo { get; set; }
     [Parameter] public string ButtonText { get; set; } = "Save";
     [Parameter] public EventCallback OnValidSubmit { get; set; }
+    private IList<Staff>? Staff;
+    protected async override Task OnInitializedAsync()
+    {
+        Staff = await _client.GetFromJsonAsync<List<Staff>>($"{Endpoints.StaffsEndpoint}");
+    }
 }

@@ -1,0 +1,52 @@
+﻿@page "/thank-you"
+
+<style>
+    .thank-you-page {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #fafafa;
+        text-align: center;
+    }
+
+    .thank-you-message {
+        background-color: #ffffff;
+        padding: 50px;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        color: #4CAF50;
+        margin-bottom: 20px;
+    }
+
+    p {
+        color: #555555;
+        margin-bottom: 30px;
+    }
+
+    a {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: #ffffff;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+        a:hover {
+            background-color: #45a049;
+        }
+</style>
+
+<div class="thank-you-page">
+    <div class="thank-you-message">
+        <h1>Thank You for Your Purchase!</h1>
+        <p>Your transaction has been completed, and a receipt for your purchase has been emailed to you. You may log in to your account at www.paypal.com to view details of this transaction.</p>
+        <a href="/">Return to Home</a>
+    </div>
+</div>
