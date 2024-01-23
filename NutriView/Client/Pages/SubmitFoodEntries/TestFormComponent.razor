@@ -2,7 +2,7 @@
 @inject HttpClient _client
 @using System.Collections;
 
-<EditForm Model="@meal" OnValidSubmit="@OnValidSubmit">
+<EditForm Model="@meal">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -29,10 +29,11 @@
         <InputText id="timePeriod" class="form-control" @bind-Value="meal.TimePeriod" />
         <ValidationMessage For="@(() => meal.TimePeriod)" />
     </div>
+
     @if (SubmitDataThroughForm)
     {
         @* Console.WriteLine(meal.FoodEntryID);
-    Console.WriteLine($"Meal.FEID in child component: {meal.FoodEntryID}"); *@
+        Console.WriteLine($"Meal.FEID in child component: {meal.FoodEntryID}"); *@
     }
     else
     {
@@ -54,10 +55,10 @@
             </div>
         </div>
     }
-
+    
     @if (SubmitDataThroughForm)
     {
-
+        
     }
     else
     {
@@ -70,11 +71,14 @@
     [Parameter] public string ButtonText { get; set; } = "Save";
     [Parameter] public EventCallback OnValidSubmit { get; set; }
     [Parameter] public bool Disabled { get; set; } = false;
-    [Parameter] public bool SubmitDataThroughForm { get; set; }
 
+
+    [Parameter] public bool SubmitDataThroughForm { get; set; }
+    [Parameter] public int FoodEntryIdInForms { get; set; }
 
     private IList<FoodEntry>? FoodEntries;
 
+    
     protected override async Task OnInitializedAsync()
     {
         FoodEntries = await _client.GetFromJsonAsync<List<FoodEntry>>($"{Endpoints.FoodEntriesEndpoint}");

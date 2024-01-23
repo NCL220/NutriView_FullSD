@@ -1,8 +1,9 @@
 ﻿@page "/profile/view/{id:int}"
 @inject HttpClient _client
 @inject NavigationManager _navManager
-@using NutriView.Client.Pages.Customers
+@using NutriView.Shared.Domain;
 @layout NoMenuLayout
+
 <head>
     <style>
         body {
@@ -15,7 +16,7 @@
             height:98%;
             width: 98%;
             margin: auto;
-            background-color: #E1F1F2;
+            background-color: antiquewhite;
         }
 
         h1 {
@@ -65,6 +66,7 @@
         table{
           width:100%;
           table-layout: fixed;
+          background-color:black;
         }
         .tbl-header{
           background-color: aqua;
@@ -81,7 +83,7 @@
           text-align: left;
           font-weight: 500;
           font-size: 12px;
-          color: black;
+          color: ghostwhite;
           text-transform: uppercase;
         }
         td{
@@ -97,6 +99,7 @@
 
     </style>
 </head>
+
 <body>
     @if (customer is not null)
     {
@@ -105,21 +108,21 @@
 
                 <h3>
                     Profile : @customer.UserName
-                    </h3>
+                </h3>
 
-                    @if(subscriptions is not null)
+                @if (subscriptions is not null)
+                {
+                    foreach (var subscribe in subscriptions.Where(s => s.CustomerID == customer.Id).OrderByDescending(s => s.DateCreated).Take(1))
                     {
-                        foreach (var subscribe in subscriptions.Where(s => s.CustomerID == customer.Id).OrderByDescending(s => s.DateCreated).Take(1))
+                        if (subscriptioninfos is not null)
                         {
-                            if(subscriptioninfos is not null)
+                            foreach (var subinfo in subscriptioninfos.Where(si => si.Id == subscribe.SubInfoID))
                             {
-                                foreach (var subinfo in subscriptioninfos.Where(si => si.Id == subscribe.SubInfoID))
-                                {
-                                    @subinfo.SubTierName
-                                }
+                                @subinfo.SubTierName
                             }
                         }
                     }
+                }
                 <img src="Images/Defaultimg.jpg" class="card-img" alt="Image">
                 <ul>
                     <li>Age: @customer.Age</li>
@@ -127,7 +130,7 @@
                     <li>Gender: @customer.Gender</li>
                     <li>Acc Created: @customer.DateCreated</li>
                     <li>Email: @customer.Email</li>
-                    @if(nutritionalquotas is not null)
+                    @if (nutritionalquotas is not null)
                     {
                         @foreach (var nutquota in nutritionalquotas.Where(nq => nq.CustomerID == customer.Id).OrderByDescending(nq => nq.DateUpdated).Take(1))
                         {
@@ -141,88 +144,75 @@
 
             <section id='main'>
                 <h1>Food Entries by @customer.UserName</h1>
-                 <div class="tbl-header">
+                <div class="tbl-header">
                     <table cellpadding="0" cellspacing="0" border="0">
-                      <thead>
-                        <tr>
-                          <th>Time Stamp</th>
-                          <th>Total Calories</th>
-                          <th>Foods</th>
-                          <th>Meals</th>
-                          <th>PortionSizes</th>
-                          <th>Time Periods</th>
-                        </tr>
-                      </thead>
+                        <thead>
+                            <tr>
+                                <th>Time Stamp</th>
+                                <th>Total Calories</th>
+                                <th>Foods</th>
+                                <th>Meals</th>
+                                <th>PortionSizes</th>
+                                <th>Time Periods</th>
+                            </tr>
+                        </thead>
                     </table>
-                  </div>
-                @if(foodEntries is not null)
+                </div>
+                @if (foodEntries is not null)
                 {
                     <div class="tbl-content">
                         <table cellpadding="0" cellspacing="0" border="0">
-                          <tbody>
-                            <tr>          
-                    @foreach (var foodentry in foodEntries.Where(FoodEntry => FoodEntry.CustomerID == customer.Id))
-                    {
-                        <td>@foodentry.Time_Stamp</td>
-                        <td>@foodentry.TotalCalories</td>
-                        @if(entrylinkfoods is not null)
-                        {
-                            <td>
-                            @foreach(var foodinfoodentries in entrylinkfoods.Where(ffe=>ffe.FoodEntryID == foodentry.Id))
-                             {
-
-                                                @if(foods is not null)
+                            <tbody>
+                                @foreach (var foodentry in foodEntries.Where(FoodEntry => FoodEntry.CustomerID == customer.Id))
+                                {
+                                    <tr>  
+                                        <td>@foodentry.Time_Stamp</td>
+                                        <td>@foodentry.TotalCalories</td>
+                                        @if (entrylinkfoods is not null)
+                                        {
+                                            <td>
+                                                @foreach (var foodinfoodentries in entrylinkfoods.Where(ffe => ffe.FoodEntryID == foodentry.Id))
                                                 {
-                                                    @foreach(var food in foods.Where(fd => fd.Id==foodinfoodentries.FoodID))
+                                                    @if (foods is not null)
                                                     {
-                                                        <li>@food.Name</li>
+                                                        @foreach (var food in foods.Where(fd => fd.Id == foodinfoodentries.FoodID))
+                                                        {
+                                                            <li>@food.Name</li>
+                                                        }
                                                     }
-                                                    }
-                                                
+                                                }
+                                            </td>
+                                        }
+                                        @if(meals is not null)
+                                        {
+                                                @foreach (var meal in meals.Where(m => m.FoodEntryID == foodentry.Id))
+                                                {
+                                                    <td>@meal.Name</td>
+                                                    <td>@meal.PortionSize</td>
+                                                    <td>@meal.TimePeriod</td>
                                             }
-                              </td>
-                        }
-                        @if(Meals is not null)
-                        {
-                            @* @foreach (var meal in Meals.Where(M => M.FoodEntryID == foodentry.Id))
-                            {
-                                 var meallist = @meal.Name 
-                            } *@
-                        }
-                                        <td>NOT YET AVAILABLE</td>
-                                        <td>NOT YET AVAILABLE</td>
-                                        <td>NOT YET AVAILABLE</td>
+                                        }
+                                        
 
-                    }
-                            </tr>
-                           </tbody>
+
+
+
+                                    </tr>
+                                }
+                            </tbody>
                         </table>
                     </div>
                 }
             </section>
-
-        </div> <!-- /.container -->
-    }
+        </div>
+     }
 </body>
 
-@* <body>
-    <div class="custom-container">
-        <p>Food Entries by @customer.UserName</p>
-        @foreach (var foodentry in foodEntries.Where(FoodEntry => FoodEntry.CustomerID == customer.Id))
-        {
-            <p>@foodentry.Time_Stamp : @foodentry.TotalCalories</p>
-            @foreach (var meal in Meals.Where(M => M.FoodEntryID == foodentry.Id))
-            {
-                <p>@meal.Name</p>
-            }
-        }
-        }
-    </div>
-</body> *@
+
 @code {
     [Parameter] public int id { get; set; }
     Customer? customer = new Customer();
-    private List<Meal>? Meals;
+    private List<Meal>? meals;
     private List<Customer>? customers;
     private List<FoodEntry>? foodEntries;
     private List<NutritionalQuota>? nutritionalquotas;
@@ -261,10 +251,10 @@
             {
                 customers = new List<Customer>(); // Initialize to an empty list if null is returned
             }
-            Meals = await _client.GetFromJsonAsync<List<Meal>>("api/Meals");
-            if (Meals is null)
+            meals = await _client.GetFromJsonAsync<List<Meal>>("api/Meals");
+            if (meals is null)
             {
-                Meals = new List<Meal>(); // Initialize to an empty list if null is returned
+                meals = new List<Meal>(); // Initialize to an empty list if null is returned
             }
             foodEntries = await _client.GetFromJsonAsync<List<FoodEntry>>("api/FoodEntries");
             if (foodEntries is null)
