@@ -1,0 +1,211 @@
+﻿@page "/submitfoodentries"
+@using NutriView.Shared.Domain;
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@using NutriView.Client.Pages.FoodEntries;
+@using NutriView.Client.Pages.Meals;
+@using NutriView.Client.Pages.EntryLinkFood_CRUD;
+@layout NoMenuLayout
+<head>
+    <style>
+        body{
+            background-color:grey;
+        }
+
+        .top-container {
+            display: flex;
+            height: 50vh;
+        }
+
+            .top-container > div {
+                flex: 1;
+                background-color: #4CAF50;
+                padding: 20px;
+                color: white;
+                text-align: center;
+                box-sizing: border-box;
+            }
+
+            .bottom-container {
+                display: flex;
+                flex-direction: column;
+                height: 50vh;
+            }
+
+            .bottom-container > div {
+                flex: 1;
+                background-color: #2196F3; /* Blue color */
+                padding: 20px;
+                color: white;
+                text-align: center;
+                box-sizing: border-box;
+            }
+
+            .Food-Container {
+                border-block:double;
+                height: 200px;
+                display: flex;
+                flex-direction: row;
+                height: 50vh; /* Adjust the height as needed */
+            }
+
+            .Selected-Container {
+                background-color:black;
+                border-block: double;
+                height: 200px;
+                display: flex;
+                flex-direction: row;
+                height: 50vh; /* Adjust the height as needed */
+            }
+
+        .FoodButton{
+            height:20%;
+            width:150px;
+            font-size:small;
+            flex-direction:row;
+        }
+    </style>
+    <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.target.appendChild(document.getElementById(data));
+        }
+    </script>
+</head>
+
+<h3 class="card-title">Create New Food Entries</h3>
+<hr />
+<br />
+<body>
+    <div class="top-container">
+        <div>
+            <EntryFormComponent ButtonText="Create Food Entry" foodEntry="foodEntry" SubmitDataThroughForm=@SubmitDataThroughForm />
+        </div>
+        <div>
+            <FormComponent ButtonText="Create Meal" meal="meal" SubmitDataThroughForm=@SubmitDataThroughForm @ref="MealComponentRef" />
+        </div>
+        <div>
+            <ELFFormComponent ButtonText="" entryLinkFood="entrylinkfood" SubmitDataThroughForm=@SubmitDataThroughForm @ref="ELFComponentRef" />
+        </div>
+    </div>
+    <div class="Food-Container">
+        @if(foods is not null)
+        {
+            @foreach (var food in foods)
+            {
+                
+                <button class="FoodButton" @onclick="()=>AddToSelected(food)">
+                    <h1>@food.Name</h1>
+                    <p>@food.Calories</p>
+                </button>
+            }
+        }
+    </div>
+
+    <div class="Selected-Container">
+        @if(foodeaten is not null)
+        {
+            @foreach (var foodeaten in foodeaten)
+            {
+                <button class="FoodButton" @onclick="() =>RemoveFromList(foodeaten)">
+                    <h1>@foodeaten.Name</h1>
+                    <p>X</p>
+                </button>
+            }
+        }
+    </div>
+    <div class="bottom-container">
+        <button class="btn btn-primary" @onclick="SubmitForm">Submit Form from Parent</button>
+    </div>
+</body>
+@code {
+    [Parameter] public bool SubmitDataThroughForm { get; set; } = true;
+    private FoodEntry foodEntry = new FoodEntry();
+    private EntryLinkFood entrylinkfood = new EntryLinkFood();
+    private IList<Customer> Customers; // Assuming you need to associate Customers with FoodEntry
+    private Meal meal = new Meal();
+    private FormComponent MealComponentRef; //FormComponentMeal
+    private ELFFormComponent ELFComponentRef;
+    private IList<Food> foods;
+    private List<Food> foodeaten = new List<Food>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
+        foods = await _client.GetFromJsonAsync<List<Food>>($"{Endpoints.FoodsEndpoint}");
+    }
+
+    private async Task SubmitForm()
+    {
+        try
+        {
+            var response = await _client.PostAsJsonAsync($"{Endpoints.FoodEntriesEndpoint}", foodEntry);
+
+            IList<int> foodeatenids = foodeaten.Select(food => food.Id).ToList();
+            if (response.IsSuccessStatusCode)
+            {
+                var createdFoodEntry = await response.Content.ReadFromJsonAsync<FoodEntry>();
+                Console.WriteLine("Selected Food Ids: " + string.Join(", ", foodeatenids));
+                if (createdFoodEntry != null)
+                {
+                    Console.WriteLine($"Created FoodEntry with ID: {createdFoodEntry.Id}");
+
+                    // Use createdFoodEntry.Id as needed
+                    int foodEntryIdfromFE = createdFoodEntry.Id;
+
+                    MealComponentRef.meal.FoodEntryID = foodEntryIdfromFE;
+
+                    await _client.PostAsJsonAsync(Endpoints.MealsEndpoint, meal);
+
+                    Console.WriteLine($"Created Meals");
+                    
+                    foreach(int IndividualFoodEatenId in foodeatenids)
+                    {
+                        ELFComponentRef.entryLinkFood.FoodEntryID = foodEntryIdfromFE;
+                        ELFComponentRef.entryLinkFood.FoodID = IndividualFoodEatenId;
+                        await _client.PostAsJsonAsync(Endpoints.EntryLinkFoodsEndpoint, entrylinkfood);
+                        Console.WriteLine($"Created FoodEntryLink For FoodId: {IndividualFoodEatenId} ");
+                    }
+                    //Navigate to the appropriate page or perform other actions
+                    _navManager.NavigateTo($"/");
+                }
+                else
+                {
+                    Console.WriteLine($"---------------------------Created FoodEntry is null");
+                    // Handle the case where the response content couldn't be parsed as FoodEntry
+                    // You might want to add error handling logic here
+                }
+            }
+            else
+            {
+                Console.WriteLine($"----------------------Response is null");
+                // Handle errors here
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log the exception
+            Console.WriteLine($"Exception during FoodEntry creation: {ex.Message}");
+        }
+    }
+    private async Task AddToSelected(Food food)
+    {
+         Console.WriteLine("Added " + food.Name);
+         foodeaten.Add(food);
+    }
+    private async Task RemoveFromList(Food food)
+    {
+        Console.WriteLine("Removed " + food.Name);
+        foodeaten.Remove(food);
+    }
+}
