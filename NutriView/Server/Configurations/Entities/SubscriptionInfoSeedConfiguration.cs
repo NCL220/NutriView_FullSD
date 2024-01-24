@@ -15,8 +15,8 @@ namespace NutriView.Server.Configurations.Entities
                  Id = 1,
                  SubDescription = "Unlocks The Personal Quota Tracker",
                  SubCost = 5.0,
-                 SubTierName="Health Enthusiasts",
-                 SubType="Monthly",
+                 SubTierName = "Health Enthusiasts",
+                 SubType = "Monthly",
                  DateCreated = DateTime.Now,
                  DateUpdated = DateTime.Now,
                  CreatedBy = "System",
@@ -34,7 +34,7 @@ namespace NutriView.Server.Configurations.Entities
                  CreatedBy = "System",
                  UpdatedBy = "System"
              }
-            );
+            ); ;
         }
     }
 }

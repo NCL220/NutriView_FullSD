@@ -16,5 +16,6 @@ namespace NutriView.Shared.Domain
 
         public string? SubType {  get; set; }
 
+        public int? SubMonthsDuration { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace NutriView.Shared.Domain
         public virtual List<NutritionInfo>? NutritionInfos { get; set; }
         public virtual List<Food>? Foods { get; set; }
 
-        public int ManagerID { get; set; }
+        public int? ManagerID { get; set; }
 
         public int CompanyId {  get; set; }
         public virtual Company? Company { get; set; }

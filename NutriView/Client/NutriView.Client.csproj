@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\SubmitFoodEntry.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Pages\SubscriptionInfo\Create.razor" />
     <None Include="Pages\SubscriptionInfo\Edit.razor" />
     <None Include="Pages\SubscriptionInfo\Index.razor" />
