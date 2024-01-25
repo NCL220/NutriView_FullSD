@@ -20,6 +20,8 @@
 						}
 					}
 				</InputSelect>
+
+
 			</div>
 		</div>
 	<div class="form-group">
@@ -46,20 +48,28 @@
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label>Date Start: </label>
-		<div>
-			<InputDate @bind-Value="subscription.DateStart" class="form-control" />
-			<ValidationMessage For="@(() => subscription.DateStart)" />
+		<div class="form-group" @oninput="HandleDateStartChanges">
+			<label>Date Start: </label>
+			<div>
+				<InputDate @bind-Value="subscription.DateStart" class="form-control"/>
+				<ValidationMessage For="@(() => subscription.DateStart)" />
+			</div>
 		</div>
-	</div>
-	<div class="form-group">
-		<label>Date End: </label>
-		<div>
-			<InputDate @bind-Value="subscription.DateEnd" class="form-control" />
-			<ValidationMessage For="@(() => subscription.DateEnd)" />
+		
+		<div class="form-group">
+			<label>Date End: </label>
+			<div>
+				@if (subscription.DateEnd != DateTime.MinValue)
+				{
+					<input class="form-control" value="@subscription.DateEnd.ToString("yyyy-MM-dd")" disabled />
+				}
+				else
+				{
+					<input class="form-control" value="Not Set" disabled />
+				}
+			</div>
 		</div>
-	</div>
+
     </fieldset>
 	@if (!Disabled)
 	{
@@ -93,6 +103,18 @@
 			if (selectedEntity != null && subscription.DateStart != null)
 			{
 				subscription.DateEnd = subscription.DateStart.AddMonths(selectedEntity.SubMonthsDuration);
+			}
+		}
+	}
+
+	private void HandleDateStartChanges(ChangeEventArgs DateStartChanges)
+	{
+		if (DateTime.TryParse(DateStartChanges.Value?.ToString(), out DateTime dateStart))
+		{
+			if (subscription.SubInfoID != null)
+			{
+				var selectedSubinfo = SubscriptionInfos.FirstOrDefault(subinfo => subinfo.Id == subscription.SubInfoID);
+				subscription.DateEnd = dateStart.AddMonths(selectedSubinfo.SubMonthsDuration);
 			}
 		}
 	}

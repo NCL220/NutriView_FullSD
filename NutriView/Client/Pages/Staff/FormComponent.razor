@@ -4,8 +4,25 @@
 <EditForm Model="@staff" OnValidSubmit="@OnValidSubmit">
 	<DataAnnotationsValidator />
     <ValidationSummary />
+	
     <fieldset disabled="@Disabled">
-	<div class="form-group">
+		<div class="form-group">
+			<label>Role:</label>
+			<InputSelect @bind-Value="staff.Role" class="form-control">
+				<option value="">-- Select Role --</option>
+				<option value="Staff">Staff</option>
+				<option value="Manager">Manager</option>
+			</InputSelect>
+		</div>
+
+		@if (staff.Role == "Manager")
+		{
+			<div class="form-group">
+				<label>Manager ID (for internal use only):</label>
+				<InputNumber @bind-Value="staff.ManagerID" class="form-control" />
+			</div>
+		}
+		<div class="form-group">
 		<label>
 			Company:
 		</label>
@@ -29,13 +46,7 @@
 			<ValidationMessage For="@(() => staff.UserName)" />
 		</div>
 	</div>
-	<div class="form-group">
-		<label>Role: </label>
-		<div>
-			<InputText @bind-Value="staff.Role" class="form-control" />
-			<ValidationMessage For="@(() => staff.Role)" />
-		</div>
-	</div>
+	
 	<div class="form-group">
 		<label>Password: </label>
 		<div>
@@ -75,11 +86,13 @@
 	<BackToList Target="staff" />
 </EditForm>
 @code {
+
 		[Parameter] public bool Disabled { get; set; } = false;
         [Parameter] public Staff? staff { get; set; }
         [Parameter] public string ButtonText { get; set; } = "Save";
         [Parameter] public EventCallback OnValidSubmit { get; set; }
 	[Parameter] public SubscriptionInfo? subscriptionInfo { get; set; }
+
 
     private IList<Company>? Companies;
 
@@ -87,5 +100,6 @@
     {
         Companies = await _client.GetFromJsonAsync<List<Company>>($"{Endpoints.CompaniesEndpoint}");
     }
+	
     
 }
