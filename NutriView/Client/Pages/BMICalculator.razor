@@ -1,17 +1,221 @@
 ﻿@page "/BMICalculator"
-
+@inject HttpClient _client
 
 <head>
     <style>
-        body {
-            background: linear-gradient(to right, #001F3F, #003366);
-            color: white;
+        body{
+            height: 100%;
+            background: linear-gradient(to right, #001f3f, #0074cc, #001f3f);
+            background-size: 200% 100%;
+            color:white;
         }
+
+        .container{
+            height:auto;
+        }
+
+        .top-container {
+            display: flex;
+            justify-content:space-between;
+        }
+            .top-container > div {
+                flex: 2;
+                margin: 10px;
+                padding: 20px;
+                border: 2px solid #000;
+            }
+
+        .buttons{
+            width:200px;
+            height:50px;
+            color:red;
+            background-color:grey;
+        }
+            
+
+        .middle-container {
+            flex: 0 0 auto;
+            padding: 20px;
+            margin: 10px;
+            border: 2px solid #000;
+        }
+
+        .bottom-container {
+            margin: 10px;
+            padding: 20px;
+            border: 2px solid #000;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 1em;
+            color: darkred;
+        }
+
+        th, td {
+            font-size:large;
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    }
     </style>
+    
 </head>
 <body>
     <h3>BMI_Calculator</h3>
+        <div class="top-container">
+                <div>
+
+                    @if (showDefault)
+                    {
+                        <div style="margin-bottom:210px" >
+                            <label>Weight (In Kilogram): </label>
+                            <InputNumber @bind-Value="WeightInKg" />
+                            <label>Height (In Centimeter): </label>
+                            <InputNumber @bind-Value="HeightInCM" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <label>Select An existing Customer Account </label>
+                            <InputSelect id="customer" class="form-control" @bind-Value="customerselectedid">
+                                <option value="">-- Select Customer --</option>
+                                @if (Customers != null)
+                                {
+                                    foreach (var customer in Customers)
+                                    {
+                                        <option value="@customer.Id">@customer.UserName</option>
+                                    }
+                                }
+                            </InputSelect>                                    
+
+                            @if (customerselectedid != null)
+                            {
+                                var selectedCustomer = Customers.FirstOrDefault(c => c.Id == customerselectedid);
+                                if (selectedCustomer != null)
+                                {
+                                    HeightInCM = selectedCustomer.Height;
+                                    WeightInKg = selectedCustomer.Weight;
+                                    <div style="margin-bottom:210px">
+
+                                    <label>Weight (In Kilogram): </label>
+                                    <input type="text" @bind="WeightInKg" readonly />
+                                    <label>Height (In cm): </label>
+                                    <input type="text" @bind="HeightInCM" readonly />
+                                    </div>
+                                }   
+                            }
+                        </div>
+                    }
+            <button class="buttons" @onclick="togglebetweendiv" style="float:right">
+                    @if (TextForDefault)
+                    {
+                        <p>Already A Customer? Switch to Another input</p>
+                    }
+                    else
+                    {
+                        <p>Go Back to Type In Mode</p>
+                    }
+
+                </button>
+            <button type="submit" @onclick="CalculateBMI" class="buttons" style="float:right">
+                        Calculate
+                    </button>
+                </div>
+
+            
+        </div>
+        
+        <div class="middle-container">
+            <label for="output">Result:</label>
+            <input type="text" @bind="output" readonly />
+        </div>
+        <div class="bottom-container">
+            <table class="BMI Table">
+                <thead>
+                    <tr>
+                        <th>BMI Range</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="@Highlight(output,0,18.5,false)">
+                        <td>0 - 18.4</td>
+                        <td>Underweight</td>
+                    </tr>
+                    <tr class="@Highlight(output,18.5,25,false)">
+                        <td>18.5 - 24.9</td>
+                        <td>Normal</td>
+                    </tr>
+                    <tr class="@Highlight(output,25,40,false)">
+                        <td>25.0 - 39.9</td>
+                        <td>Overweight</td>
+                    </tr>
+                    <tr class="@Highlight(output,40,100,true)">
+                        <td>More than 40</td>
+                        <td>Obese</td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
 </body>
 @code {
+    private bool showDefault = true;
+    private double? WeightInKg;
+    private double? HeightInCM;
+    private double? output;
+    private IList<Customer>? Customers;
+    private int customerselectedid;
+    private bool TextForDefault = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
+    }
+    private void CalculateBMI()
+    {
+        output = WeightInKg / ((HeightInCM / 100) * (HeightInCM / 100));
+    }
+
+    private string Highlight(double? output, double rangefrom , double rangeto,bool finalrange)
+    {
+        if(finalrange is false)
+        {
+            if ((output >= rangefrom)&& (output < rangeto))
+            {
+                return "text-primary";
+            }
+            else
+            {
+                return "text-success";
+            }
+        }
+        else
+        {
+            if(output >= rangefrom)
+            {
+                return "text-primary";
+            }
+            else
+            {
+                return "text-success";
+            }
+        }
+    }
+
+    private void togglebetweendiv(){
+        TextForDefault = !TextForDefault;
+        showDefault = !showDefault;
+    }
 
 }

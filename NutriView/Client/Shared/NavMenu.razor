@@ -9,7 +9,7 @@
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu" @onmouseover="ShowSidebar" @onmouseout="HideSidebar">
     <nav class="flex-column">
         <AuthorizeView>
             <Authorized>
@@ -84,7 +84,7 @@
 @code {
     private bool collapseNavMenu = true;
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
+    bool isSidebarVisible = false;
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
@@ -92,5 +92,14 @@
     private void BeginLogOut(MouseEventArgs args)
     {
     Navigation.NavigateToLogout("authentication/logout", "/");
+    }
+    void ShowSidebar()
+    {
+        isSidebarVisible = true;
+    }
+
+    void HideSidebar()
+    {
+        isSidebarVisible = false;
     }
 }
