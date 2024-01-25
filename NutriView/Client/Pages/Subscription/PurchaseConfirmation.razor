@@ -145,7 +145,7 @@
 
         // Set the DateStart property with the current date
         subscription.DateStart = DateTime.Now;
-
+        subscription.DateEnd = DateTime.Now.AddMonths(subscriptionInfo.SubMonthsDuration);
         var response = await _client.PostAsJsonAsync($"{Endpoints.SubscriptionsEndpoint}", subscription);
 
         if (response.IsSuccessStatusCode)
