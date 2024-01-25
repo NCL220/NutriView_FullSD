@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using NutriView.Server.Data;
 using NutriView.Shared.Domain;
 
+
 namespace NutriView.Server.Controllers
 {
     [Route("api/[controller]")]
