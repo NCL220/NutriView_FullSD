@@ -50,30 +50,18 @@
             {
                 using var stream = file.OpenReadStream(maxAllowedSize: 1024 * 1024); // Limit size to 1MB, adjust as needed
                 using var reader = new StreamReader(stream);
-                var content = await reader.ReadToEndAsync();
+                string? content = await reader.ReadToEndAsync();
 
-                Console.WriteLine("File content received");
-                foodsFromFile = System.Text.Json.JsonSerializer.Deserialize<List<Food>>(content);
-
-                if (foodsFromFile != null && foodsFromFile.Count > 0)
+                foodsFromFile = System.Text.Json.JsonSerializer.Deserialize<List<Food>>(content) ?? new List<Food>();
+                if (foodsFromFile.Any())
                 {
                     fileLoaded = true;
-                    Console.WriteLine("File loaded and deserialized with " + foodsFromFile.Count + " items.");
-                }
-                else
-                {
-                    Console.WriteLine("File is empty or not in the correct format.");
                 }
             }
-            
             catch (Exception ex)
             {
-                Console.WriteLine("Error reading file: " + ex.Message);
-                // You may want to set fileLoaded to false here.
+                // Handle the error
             }
-
-            // Force the UI to update
-            StateHasChanged();
         }
     }
 
