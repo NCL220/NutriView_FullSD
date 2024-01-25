@@ -12,7 +12,13 @@
                 <ValidationMessage For="@(() => subscriptionInfo.SubDescription)" />
             </div>
         </div>
-
+        <div class="form-group">
+            <label>Subscription Duration (Months): </label>
+            <div>
+                <InputNumber @bind-Value="subscriptionInfo.SubMonthsDuration" class="form-control" />
+                <ValidationMessage For="@(() => subscriptionInfo.SubMonthsDuration)" />
+            </div>
+        </div>
         <div class="form-group">
             <label>Cost: </label>
             <div>
@@ -34,6 +40,7 @@
                 <ValidationMessage For="@(() => subscriptionInfo.SubType)" />
             </div>
         </div>
+
     </fieldset>
     @if (!Disabled)
     {

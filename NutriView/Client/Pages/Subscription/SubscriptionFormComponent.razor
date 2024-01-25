@@ -10,7 +10,7 @@
 				SubTier:
 			</label>
 			<div>
-				<InputSelect @bind-Value="subscription.SubInfoID" class="form-control">
+				<InputSelect @bind-Value="subscription.SubInfoID" @onchange="OnSubInfoIDChanged" class="form-control">
 					<option value="">--Select Subscription Info--</option>
 					@if (SubscriptionInfos != null)
 					{
@@ -20,6 +20,8 @@
 						}
 					}
 				</InputSelect>
+
+
 			</div>
 		</div>
 	<div class="form-group">
@@ -46,20 +48,31 @@
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label>Date Start: </label>
-		<div>
-			<InputDate @bind-Value="subscription.DateStart" class="form-control" />
-			<ValidationMessage For="@(() => subscription.DateStart)" />
+		<div class="form-group">
+			<label>Date Start: </label>
+			<div>
+				<InputDate @bind-Value="subscription.DateStart"
+				@bind-Value:event="oninput"
+						   class="form-control"
+				@onchange="CalculateEndDate" />
+				<ValidationMessage For="@(() => subscription.DateStart)" />
+			</div>
 		</div>
-	</div>
-	<div class="form-group">
-		<label>Date End: </label>
-		<div>
-			<InputDate @bind-Value="subscription.DateEnd" class="form-control" />
-			<ValidationMessage For="@(() => subscription.DateEnd)" />
+		
+		<div class="form-group">
+			<label>Date End: </label>
+			<div>
+				@if (subscription.DateEnd != DateTime.MinValue)
+				{
+					<input class="form-control" value="@subscription.DateEnd.ToString("yyyy-MM-dd")" disabled />
+				}
+				else
+				{
+					<input class="form-control" value="Not Set" disabled />
+				}
+			</div>
 		</div>
-	</div>
+
     </fieldset>
 	@if (!Disabled)
 	{
@@ -77,6 +90,34 @@
     [Parameter] public EventCallback OnValidSubmit { get; set; }
 	private IList<Customer>? Customers;
 	private IList<SubscriptionInfo>? SubscriptionInfos;
+
+	private void CalculateEndDate()
+	{
+		if (subscription != null && subscription.DateStart != DateTime.MinValue && subscription.SubInfoID>0)
+		{
+			var subInfo = SubscriptionInfos?.FirstOrDefault(si => si.Id == subscription.SubInfoID);
+			if (subInfo != null && subInfo.SubMonthsDuration.HasValue)
+			{
+				subscription.DateEnd = subscription.DateStart.AddMonths(subInfo.SubMonthsDuration.Value);
+				Console.WriteLine($"New DateEnd calculated: {subscription.DateEnd:yyyy-MM-dd}");
+			}
+		}
+	}
+
+
+	// Method to handle changes in the SubInfoID dropdown
+	private void OnSubInfoIDChanged(ChangeEventArgs e)
+	{
+		Console.WriteLine($"Yes");
+		if (int.TryParse(e.Value?.ToString(), out var subInfoId))
+		{
+			subscription.SubInfoID = subInfoId;
+			CalculateEndDate();
+		}
+	}
+
+
+
 
 	protected async override Task OnInitializedAsync()
 	{

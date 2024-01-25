@@ -24,12 +24,13 @@ else
                 <th>subTierName</th>
                 <th>Subscription Desc</th>
                 <th>Subscription Cost</th>
+                <th>Subscription Duration</th>
                 <th>Subscription</th>
                 <th>id</th>
                 <th>Date created</th>
                 <th>Date updated</th>
                 <th>Updated By</th>
-                <th>Created By</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -39,11 +40,12 @@ else
                     <td>@SubscriptionInfo.SubTierName</td>
                     <td>@SubscriptionInfo.SubDescription</td>
                     <td>@SubscriptionInfo.SubCost</td>
+                    <td>@SubscriptionInfo.SubMonthsDuration</td>
                     <td>@SubscriptionInfo.Id</td>
                     <td>@SubscriptionInfo.DateCreated</td>
                     <td>@SubscriptionInfo.DateUpdated</td>
                     <td>@SubscriptionInfo.UpdatedBy</td>
-                    <td>@SubscriptionInfo.CreatedBy</td>
+                    
                     <td>
                         <a href="/SubscriptionInfos/edit/@SubscriptionInfo.Id" class="btn btn-primary">Edit</a>
                         <button class="btn btn-danger" @onclick="() => Delete(SubscriptionInfo.Id)">Delete</button>
