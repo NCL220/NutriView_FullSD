@@ -10,7 +10,7 @@
 				SubTier:
 			</label>
 			<div>
-				<InputSelect @bind-Value="subscription.SubInfoID" class="form-control">
+				<InputSelect @bind-Value="subscription.SubInfoID" class="form-control" @oninput="HandleSubInfoChanges">
 					<option value="">--Select Subscription Info--</option>
 					@if (SubscriptionInfos != null)
 					{
@@ -71,10 +71,10 @@
 	<BackToList Target="subscriptions" />
 </EditForm>
 @code {
-	[Parameter] public bool Disabled { get; set; } = false;
-	[Parameter] public Subscription? subscription { get; set; }
-	[Parameter] public string ButtonText { get; set; } = "Save";
-    [Parameter] public EventCallback OnValidSubmit { get; set; }
+		[Parameter] public bool Disabled { get; set; } = false;
+		[Parameter] public Subscription? subscription { get; set; }
+		[Parameter] public string ButtonText { get; set; } = "Save";
+		[Parameter] public EventCallback OnValidSubmit { get; set; }
 	private IList<Customer>? Customers;
 	private IList<SubscriptionInfo>? SubscriptionInfos;
 
@@ -82,5 +82,18 @@
 	{
 		Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
 		SubscriptionInfos = await _client.GetFromJsonAsync<List<SubscriptionInfo>>($"{Endpoints.SubscriptionInfosEndpoint}");
+	}
+
+	private void HandleSubInfoChanges(ChangeEventArgs OnChangeSubInfoID)
+	{
+		if (OnChangeSubInfoID.Value != null && int.TryParse(OnChangeSubInfoID.Value.ToString(), out int CurrentSubInfoId))
+		{
+			var selectedEntity = SubscriptionInfos.FirstOrDefault(sI => sI.Id == CurrentSubInfoId);
+
+			if (selectedEntity != null && subscription.DateStart != null)
+			{
+				subscription.DateEnd = subscription.DateStart.AddMonths(selectedEntity.SubMonthsDuration);
+			}
+		}
 	}
 }
