@@ -73,13 +73,26 @@
                 }
             </select>
 
+            <div class="form-group">
+                <label>Date Start:</label>
+                <div>
+                    <input class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" disabled />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Date End:</label>
+                <div>
+                    <input class="form-control" value="@CalculateEndDate(subscriptionInfo.SubMonthsDuration).ToString("yyyy-MM-dd")" disabled />
+                </div>
+            </div>
+
             <button class="btn btn-success" @onclick="CompleteSubscription">
                 Confirm Subscription
             </button>
         </div>
     }
 </div>
-
 
 @code {
     [Parameter]
@@ -88,6 +101,7 @@
     private SubscriptionInfo? subscriptionInfo;
     private List<Customer>? customers;
     private int selectedCustomerId;
+    private Subscription subscription = new Subscription(); // Initialize the subscription object
 
     protected override async Task OnInitializedAsync()
     {
@@ -95,7 +109,7 @@
         {
             subscriptionInfo = await _client.GetFromJsonAsync<SubscriptionInfo>($"{Endpoints.SubscriptionInfosEndpoint}/{Id}");
             customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
-            
+
             // After the above line, check if subscriptionInfo has the correct SubscriptionInfoId
             Console.WriteLine($"Retrieved subscription info ID: {subscriptionInfo?.Id}");
         }
@@ -109,6 +123,12 @@
         }
     }
 
+    private DateTime CalculateEndDate(int subMonthsDuration)
+    {
+        // Calculate the end date based on the subscription plan
+        return DateTime.Now.AddMonths(subMonthsDuration);
+    }
+
     private async Task CompleteSubscription()
     {
         if (selectedCustomerId == 0)
@@ -117,15 +137,16 @@
             return;
         }
 
-        // Assuming the Subscription object on the server expects a CustomerId and SubscriptionInfoId
-        var newSubscription = new Subscription
-            {
-                CustomerID = selectedCustomerId,
-                SubInfoID = Id, // The Id from the route parameter
-                                         // Set other properties if required by your server-side model
-            };
+        // Set the SubscriptionInfoId
+        subscription.SubInfoID = Id;
 
-        var response = await _client.PostAsJsonAsync($"{Endpoints.SubscriptionsEndpoint}", newSubscription);
+        // Set the CustomerId
+        subscription.CustomerID = selectedCustomerId;
+
+        // Set the DateStart property with the current date
+        subscription.DateStart = DateTime.Now;
+
+        var response = await _client.PostAsJsonAsync($"{Endpoints.SubscriptionsEndpoint}", subscription);
 
         if (response.IsSuccessStatusCode)
         {
@@ -139,4 +160,3 @@
         }
     }
 }
-    
