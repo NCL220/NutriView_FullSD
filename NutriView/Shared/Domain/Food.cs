@@ -19,7 +19,7 @@ namespace NutriView.Shared.Domain
         public double Fats { get; set; }
         public double ServingSize { get; set; }
 
-        public string? ImagePath { get; set; }
+        public byte[]? Imagebytes { get; set; }
 
         public int StaffId { get; set; }
 

@@ -5,6 +5,7 @@
 @using NutriView.Client.Pages.FoodEntries;
 @using NutriView.Client.Pages.Meals;
 @using NutriView.Client.Pages.EntryLinkFood_CRUD;
+@using System.IO;
 @layout NoMenuLayout
 <head>
     <style>
@@ -62,8 +63,8 @@
         .search-container{
         }
         .FoodButton{
-            height:50%;
-            width:30%;
+            height:390px;
+            width:200px;
             font-size:small;
             flex-direction:row;
             margin:20px;
@@ -107,10 +108,19 @@
                 
                 <button class="FoodButton" @onclick="()=>AddToSelected(food)">
                     <h1>@food.Name</h1>
+                        @if (food.Imagebytes != null && food.Imagebytes.Length > 0)
+                        {
+                            <img src="@($"data:image/png;base64,{Convert.ToBase64String(food.Imagebytes)}")" alt="Image" width="150" height="150" />
+                        }
+                        else
+                        {
+                            <p>No image available</p>
+                        }
                     <p>Calories : @food.Calories</p>
                     <p>Carbs : @food.Carbohydrates</p>
                     <p>Fats : @food.Fats</p>
                     <p>Food Desc : @food.FoodDesc</p>
+
                 </button>
             }
         }
