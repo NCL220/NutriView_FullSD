@@ -1,0 +1,24 @@
+﻿@page "/nutritioninfos/edit/{id:int}"
+@using NutriView.Shared.Domain
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Edit Nutrition Info</h3>
+<FormComponent ButtonText="Update" OnValidSubmit="EditInfo" nutritionInfo="nutritionInfo"></FormComponent>
+
+@code {
+    [Parameter] public int id { get; set; }
+    private NutritionInfo? nutritionInfo = new NutritionInfo();
+
+    protected override async Task OnInitializedAsync()
+    {
+        nutritionInfo = await _client.GetFromJsonAsync<NutritionInfo>($"{Endpoints.NutritionInfosEndpoint}/{id}");
+    }
+
+    async Task EditInfo()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.NutritionInfosEndpoint}/{id}", nutritionInfo);
+        _navManager.NavigateTo("/nutritioninfos/");
+    }
+}
+

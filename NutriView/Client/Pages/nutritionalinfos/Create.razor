@@ -1,0 +1,81 @@
+﻿@page "/nutritioninfos/create/"
+@using NutriView.Shared.Domain
+@using Microsoft.AspNetCore.Components.Forms
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Create New Nutrition Info</h3>
+<hr />
+<br />
+
+<InputFile OnChange="LoadFile" />
+<br />
+<button @onclick="ProcessFile" class="btn btn-primary" disabled="@(!fileLoaded)">Create Infos from File</button>
+<br />
+<br />
+
+<!-- Your existing form component for creating a single entry -->
+<FormComponent ButtonText="Create Info" nutritionInfo="nutritionInfo" OnValidSubmit="@CreateInfo" />
+
+@code {
+    private NutritionInfo nutritionInfo = new NutritionInfo();
+    private IList<Staff>? Staff;
+    private bool fileLoaded = false;
+    private List<NutritionInfo> nutritionInfosFromFile = new List<NutritionInfo>();
+
+    // Load existing staff information and any other initialization logic
+    protected override async Task OnInitializedAsync()
+    {
+        Staff = await _client.GetFromJsonAsync<List<Staff>>($"{Endpoints.StaffsEndpoint}");
+    }
+
+    // Handle the individual creation of NutritionInfo via the form
+    private async Task CreateInfo()
+    {
+        var response = await _client.PostAsJsonAsync(Endpoints.NutritionInfosEndpoint, nutritionInfo);
+        if (response.IsSuccessStatusCode)
+        {
+            _navManager.NavigateTo("/nutritioninfos/");
+        }
+        else
+        {
+            // Handle errors here
+        }
+    }
+
+    // Load file and process its contents
+    private async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            try
+            {
+                using var stream = file.OpenReadStream(maxAllowedSize: 1024 * 1024); // Limit size to 1MB
+                using var reader = new StreamReader(stream);
+                string? content = await reader.ReadToEndAsync();
+
+                nutritionInfosFromFile = System.Text.Json.JsonSerializer.Deserialize<List<NutritionInfo>>(content) ?? new List<NutritionInfo>();
+                fileLoaded = nutritionInfosFromFile.Any();
+            }
+            catch (Exception ex)
+            {
+                // Handle the error
+            }
+        }
+    }
+
+    // Process and create multiple NutritionInfo entries from the loaded file
+    private async Task ProcessFile()
+    {
+        foreach (var info in nutritionInfosFromFile)
+        {
+            await _client.PostAsJsonAsync(Endpoints.NutritionInfosEndpoint, info);
+            // Check response and handle errors
+        }
+
+        fileLoaded = false;
+        nutritionInfosFromFile.Clear();
+        _navManager.NavigateTo("/nutritioninfos/");
+    }
+}

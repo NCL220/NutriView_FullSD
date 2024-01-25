@@ -1,0 +1,54 @@
+﻿@using NutriView.Shared.Domain
+@inject HttpClient _client
+
+<EditForm Model="@nutritionInfo" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="nutritionName">Nutrition Name:</label>
+        <InputText id="nutritionName" class="form-control" @bind-Value="nutritionInfo.NutritionName" />
+        <ValidationMessage For="@(() => nutritionInfo.NutritionName)" />
+    </div>
+
+    <div class="form-group">
+        <label for="nutritionDescription">Nutrition Description:</label>
+        <InputTextArea id="nutritionDescription" class="form-control" @bind-Value="nutritionInfo.NutritionDescription" />
+        <ValidationMessage For="@(() => nutritionInfo.NutritionDescription)" />
+    </div>
+
+    <div class="form-group">
+        <label for="nutritionImagePath">Nutrition Image Path:</label>
+        <InputText id="nutritionImagePath" class="form-control" @bind-Value="nutritionInfo.NutritionImagePath" />
+        <ValidationMessage For="@(() => nutritionInfo.NutritionImagePath)" />
+    </div>
+
+    <div class="form-group">
+        <label for="staff">Staff:</label>
+        <InputSelect id="staff" class="form-control" @bind-Value="nutritionInfo.StaffId">
+            <option value="">--Select Staff--</option>
+            @if (StaffList != null)
+            {
+                foreach (var staffMember in StaffList)
+                {
+                    <option value="@staffMember.Id">@staffMember.UserName</option>
+                }
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() => nutritionInfo.StaffId)" />
+    </div>
+
+    <button type="submit" class="btn btn-success">@ButtonText</button>
+</EditForm>
+
+@code {
+    [Parameter] public NutritionInfo? nutritionInfo { get; set; } = new NutritionInfo();
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    private IList<Staff>? StaffList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        StaffList = await _client.GetFromJsonAsync<List<Staff>>($"{Endpoints.StaffsEndpoint}");
+    }
+}

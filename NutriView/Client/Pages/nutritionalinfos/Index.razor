@@ -5,7 +5,10 @@
 @using NutriView.Shared.Domain
 
 <h3>Nutrition Information</h3>
-
+<a href="/nutritioninfos/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Nutrition Info
+</a>
 @if (nutritionInfos is null)
 {
     <p><em>Loading...</em></p>
@@ -54,7 +57,7 @@ else
 
     private void EditNutritionInfo(int infoId)
     {
-        NavigationManager.NavigateTo($"/edit-nutrition-info/{infoId}");
+        NavigationManager.NavigateTo($"/nutritioninfos/edit/{infoId}");
     }
 
     private async Task DeleteNutritionInfo(int infoId)
