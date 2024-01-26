@@ -84,10 +84,10 @@
             <button type="submit"><span class="oi oi-magnifying-glass"></span></button>
         </div>       
         <div>
-            <EntryFormComponent ButtonText="Create Food Entry" foodEntry="foodEntry" SubmitDataThroughForm=@SubmitDataThroughForm @ref="FoodEntriesComponentRef"/>
+            <EntryFormComponent ButtonText="" foodEntry="foodEntry" SubmitDataThroughForm=@SubmitDataThroughForm @ref="FoodEntriesComponentRef"/>
         </div>
         <div>
-            <FormComponent ButtonText="Create Meal" meal="meal" SubmitDataThroughForm=@SubmitDataThroughForm @ref="MealComponentRef" OnInputChange="HandleMealcaloriechanges" />
+            <FormComponent ButtonText="" meal="meal" SubmitDataThroughForm=@SubmitDataThroughForm @ref="MealComponentRef" OnInputChange="HandleMealcaloriechanges" />
         </div>
         <hidden>
             <ELFFormComponent ButtonText="" entryLinkFood="entrylinkfood" SubmitDataThroughForm=@SubmitDataThroughForm @ref="ELFComponentRef" />
@@ -138,7 +138,7 @@
         }
         </div>
         <button class="btn btn-primary" @onclick ="checkTotalCalories">Check total Calories</button>
-        <button class="btn btn-success" @onclick="SubmitForm">Submit Form from Parent</button>
+        <button class="btn btn-success" @onclick="SubmitForm">Submit Form </button>
     </div>
 </body>
 @code {

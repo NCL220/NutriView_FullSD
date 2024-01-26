@@ -12,8 +12,7 @@ namespace NutriView.Shared.Domain
 
         public string? CompanyDescription { get; set; }
 
-        public string? CompanyImagePath { get; set; }
-
+        public byte[]? CompanyImageByte { get; set; }
         public string? CompanyName { get; set; }
 
         public virtual List<Staff>? Staffs { get; set;}

@@ -24,13 +24,10 @@
     </div>
 
     <div class="form-group">
-        <label for="imagePath">Image Path:</label>
-        <InputText id="imagePath" class="form-control" @bind-Value="company.CompanyImagePath" />
-        <ValidationMessage For="@(() => company.CompanyImagePath)" />
+        <label for="CompanyImage">Insert Company Image : </label>
+        <InputFile id="images" class="file-input" OnChange="HandleFileSelection" />
     </div>
 
-    
-    
     <button type="submit" class="btn btn-success">@ButtonText</button>
 </EditForm>
 
@@ -44,5 +41,19 @@
     protected async override Task OnInitializedAsync()
     {
         Staffs = await _client.GetFromJsonAsync<List<Staff>>($"{Endpoints.StaffsEndpoint}");
+    }
+
+    private async Task HandleFileSelection(InputFileChangeEventArgs e)
+    {
+        var imgfile = e.GetMultipleFiles().FirstOrDefault();
+        if (imgfile != null)
+        {
+            var buffer = new byte[imgfile.Size];
+            using (var stream = imgfile.OpenReadStream())
+            {
+                await stream.ReadAsync(buffer, 0, buffer.Length);
+            }
+            company.CompanyImageByte = buffer;
+        }
     }
 }

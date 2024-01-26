@@ -1,9 +1,93 @@
 ﻿@using NutriView.Shared.Domain;
 @inject HttpClient _client
+<head>
+    <style>
+        .rounded-div {
+            margin-top:5%;
+            width: 80%;
+            height: 60%;
+            margin-left:10%;
+            border-radius: 15px; /* Adjust the value for more or less rounded corners */
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Shadow effect */
+            border:2px solid black;
+            padding:20px;
+            display:flex;
+            flex-direction:row;
+        }
+        
+        .rounded-normaldiv{
+            flex: 3;
+            width: 20%;
+            height: 30%;
+            border: 2px solid black;
+            border-radius: 20px;
+            margin:auto;
+            padding:20px;
+        }
+
+        .rounded-imagediv{
+            flex : 1;
+            width:auto;
+            height:auto;
+            border:2px solid black;
+            border-radius:20px;
+            flex-direction: column;
+        }
+        .rounded-imagesubdiv1{
+            width:90%;
+            height:auto;
+            border:2px solid black;
+            border-radius:20px;
+            margin:auto;
+        }
+        .rounded-imagesubdiv2{
+            width:auto;
+            height:auto;
+            bottom:0;
+            display: flex;
+            align-items: flex-end;
+        }
+        .rounded-imagediv img {
+                margin:auto;
+                left: 50%;
+                width: 90%;
+                height: 200px;
+                border-radius: 15px; /* Match the border-radius to the outer container */
+                object-fit: cover;
+            }
+    </style>
+</head>
 <EditForm Model="@customer" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <fieldset disabled="@Disabled">
+<div class="rounded-div">
+    <div class="rounded-imagediv">
+        <div class="rounded-imagesubdiv1">
+        @if (customer.ImageBytes != null && customer.ImageBytes.Length > 0)
+                    {
+                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(customer.ImageBytes)}")" alt="Image">
+                    }
+                    else
+                    {
+                        <img src="Images/Defaultimg.jpg" class="card-img" alt="Image">
+                    }
+        </div>
+        <div class="rounded-imagesubdiv2">
+            <div class="form-group">
+			    <label for="CustomerImage">Insert Customer Image : </label>
+			    <InputFile id="images" class="file-input" OnChange="HandleFileSelection" />
+		    </div>
+        </div>    
+        
+        @if(!Disabled){
+        <div class="bottom-container">
+            <button type="submit" class="btn btn-success">@ButtonText</button>
+        </div>
+    }
+    </div>
+    <div class="rounded-normaldiv">
         <div class="form-group">
             <label for="userName">Username:</label>
             <InputTextArea id="userName" class="form-control" @bind-Value="customer.UserName" />
@@ -41,20 +125,15 @@
                 <option value="Other">Other</option>
             </InputSelect>
         </div>
-
-        <div class="form-group">
-			<label for="foodDesc">Insert Customer Image : </label>
-			<InputFile id="images" class="file-input" OnChange="HandleFileSelection" />
-		</div>
-
-
+    </div>
+</div>
     </fieldset>
-    @if(!Disabled){
-    <button type="submit" class="btn btn-success">@ButtonText</button>
-    }
+    
+
+    
+
     
 </EditForm>
-
 
 @code {
         [Parameter] public Customer? customer { get; set; } = new Customer();
@@ -69,7 +148,7 @@
             Entries = await _client.GetFromJsonAsync<List<FoodEntry>>($"{Endpoints.FoodEntriesEndpoint}");
         }
         private async Task HandleFileSelection(InputFileChangeEventArgs e)
-	{
+	    {
 		var imgfile = e.GetMultipleFiles().FirstOrDefault();
 		if (imgfile != null)
 		{

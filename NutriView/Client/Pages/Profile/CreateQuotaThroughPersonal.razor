@@ -1,0 +1,38 @@
+﻿@page "/PersonalNutritionalQuotas/create/"
+@using NutriView.Shared.Domain;
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@using NutriView.Client.Pages.NutritionalQuotas;
+
+<h3 class="card-title">Create New NutritionalQuota for Custid @custid</h3>
+<hr />
+<br />
+
+<FormComponent ButtonText="Create NutritionalQuota" nutritionalQuota="nutritionalQuota" OnValidSubmit="@CreateNutritionalQuota"/>
+@code {
+    
+    NutritionalQuota nutritionalQuota = new NutritionalQuota();
+    private string custidinstring = "";
+    private int custid = 0;
+    private async Task CreateNutritionalQuota()
+    {
+        await _client.PostAsJsonAsync(Endpoints.NutritionalQuotasEndpoint, nutritionalQuota);
+        _navManager.NavigateTo("/nutritionalQuotas/");
+    }
+
+    // protected override void OnInitialized()
+    // {
+    //     base.OnInitialized();
+
+    //     var uri = _navManager.ToAbsoluteUri(_navManager.Uri);
+    //     var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+    //     custidinstring = uri.Query.TrimStart('?');
+    //     if (int.TryParse(custidinstring, out int transformedcustidinint))
+    //     {
+    //         custid = transformedcustidinint;
+    //     }
+    //     Console.WriteLine($"Successfully passed the customer id of {custid}");
+    // }
+
+}
+

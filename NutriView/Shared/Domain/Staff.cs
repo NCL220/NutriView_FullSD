@@ -19,8 +19,6 @@ namespace NutriView.Shared.Domain
 
         public int? PhoneNumber { get; set; }
 
-        public string? ImagePathStaff { get; set; }
-
         public byte[]? ImageByte { get; set; }
         public virtual List<NutritionInfo>? NutritionInfos { get; set; }
         public virtual List<Food>? Foods { get; set; }
@@ -29,7 +27,5 @@ namespace NutriView.Shared.Domain
 
         public int CompanyId {  get; set; }
         public virtual Company? Company { get; set; }
-
-        
     }
 }

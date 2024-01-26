@@ -162,12 +162,27 @@
                     <li>Email: @customer.Email</li>
                     @if (nutritionalquotas is not null)
                     {
-                        @foreach (var nutquota in nutritionalquotas.Where(nq => nq.CustomerID == customer.Id).OrderByDescending(nq => nq.DateUpdated).Take(1))
+                        var currentnutquota = nutritionalquotas.Where(nq => nq.CustomerID == customer.Id).OrderByDescending(nq => nq.DateUpdated).Take(1);
+                        if(currentnutquota.Any())
                         {
-                            <li>Target BMI : @nutquota.TargetBMI</li>
-                            <li>Target Daily Intake Calories : @nutquota.TargetCalorieDaily</li>
-                            <li>Target Daily Intake Carbohydrates : @nutquota.TargetCarbDaily</li>
+                            foreach(var nutquota in currentnutquota)
+                            {
+                                <li>Target BMI : @nutquota.TargetBMI</li>
+                                <li>Target Daily Intake Calories : @nutquota.TargetCalorieDaily</li>
+                                <li>Target Daily Intake Carbohydrates : @nutquota.TargetCarbDaily</li>
+                                <a href="/PersonalNutritionalQuotas/edit/@nutquota.Id" class="btn btn-primary">Edit Quota</a>
+                            }
+
                         }
+                        else
+                        {
+                            @* <button class="btn btn-primary" @onclick="NavigateToCreatePage">Create Quota</button> *@
+                        }
+
+                    }
+                    else
+                    {
+                        
                     }
                 </ul>
             </div>
@@ -246,6 +261,8 @@
     private List<SubscriptionInfo>? subscriptioninfos;
     private List<EntryLinkFood>? entrylinkfoods;
     private List<Food>? foods;
+    [Parameter] public EventCallback<double> OnInputChange { get; set; }
+
     protected async override Task OnInitializedAsync()
     {
         customer = await
@@ -298,4 +315,12 @@
             ex.Redirect();
         }
     }
+
+    // private void NavigateToCreatePage()
+    // {
+
+    //     // Pass data as a query parameter in the URL
+    //     _navManager.NavigateTo($"/PersonalNutritionalQuotas/create?custid={id}");
+    // }
+
 }

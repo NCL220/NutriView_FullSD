@@ -1,0 +1,22 @@
+﻿@page "/PersonalNutritionalQuotas/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+@using NutriView.Client.Pages.NutritionalQuotas;
+
+<FormComponent ButtonText="Update" OnValidSubmit="EditNutritionalQuota" EditQuotaThroughPersonalProfile="@EditQuotaThroughPersonalProfile" nutritionalQuota="nutritionalQuota" />
+@code {
+    [Parameter] public bool EditQuotaThroughPersonalProfile { get; set; } = true;
+    [Parameter] public int id { get; set; }
+    NutritionalQuota? nutritionalQuota = new NutritionalQuota();
+    protected async override Task OnParametersSetAsync()
+    {
+        nutritionalQuota = await
+        _client.GetFromJsonAsync<NutritionalQuota>($"{Endpoints.NutritionalQuotasEndpoint}/{id}");
+    }
+    async Task EditNutritionalQuota()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.NutritionalQuotasEndpoint}/{id}",
+        nutritionalQuota);
+        _navManager.NavigateTo("/nutritionalQuotas/");
+    }
+}
