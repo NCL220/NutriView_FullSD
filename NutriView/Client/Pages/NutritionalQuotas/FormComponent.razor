@@ -11,7 +11,13 @@
 		}
 		else
 		{
-			<div class="form-group">
+			if (CreatingQuotaThroughProfile)
+			{
+				
+			}
+			else
+			{
+							<div class="form-group">
 				<label>
 					Customer:
 				</label>
@@ -28,6 +34,8 @@
 					</InputSelect>
 				</div>
 			</div>
+			}
+
 		}
 		
 	<div class="form-group">
@@ -63,11 +71,12 @@
 	<BackToList Target="nutritionalQuotas" />
 </EditForm>
 @code {
-		[Parameter] public bool Disabled { get; set; } = false;
-        [Parameter] public NutritionalQuota? nutritionalQuota { get; set; }
-        [Parameter] public string ButtonText { get; set; } = "Save";
-        [Parameter] public EventCallback OnValidSubmit { get; set; }
-		[Parameter] public bool EditQuotaThroughPersonalProfile { get; set; }
+	[Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public NutritionalQuota? nutritionalQuota { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+	[Parameter] public bool EditQuotaThroughPersonalProfile { get; set; }
+	[Parameter] public bool CreatingQuotaThroughProfile { get; set; }
 
 	private IList<Customer>? Customers;
 

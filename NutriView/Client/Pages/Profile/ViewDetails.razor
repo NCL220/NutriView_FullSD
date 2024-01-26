@@ -176,7 +176,7 @@
                         }
                         else
                         {
-                            @* <button class="btn btn-primary" @onclick="NavigateToCreatePage">Create Quota</button> *@
+                            <button class="btn btn-primary" @onclick="NavigateToCreatePage">Create Quota</button>
                         }
 
                     }
@@ -316,11 +316,12 @@
         }
     }
 
-    // private void NavigateToCreatePage()
-    // {
 
-    //     // Pass data as a query parameter in the URL
-    //     _navManager.NavigateTo($"/PersonalNutritionalQuotas/create?custid={id}");
-    // }
+    private void NavigateToCreatePage()
+    {
+
+        // Pass data as a query parameter in the URL
+        _navManager.NavigateTo($"/PersonalNutritionalQuotas/create/{id}");
+    }
 
 }

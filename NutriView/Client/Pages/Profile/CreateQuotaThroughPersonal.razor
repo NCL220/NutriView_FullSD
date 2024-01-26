@@ -1,38 +1,27 @@
-﻿@page "/PersonalNutritionalQuotas/create/"
+﻿@page "/PersonalNutritionalQuotas/create/{custid:int}"
 @using NutriView.Shared.Domain;
 @inject HttpClient _client
 @inject NavigationManager _navManager
 @using NutriView.Client.Pages.NutritionalQuotas;
 
-<h3 class="card-title">Create New NutritionalQuota for Custid @custid</h3>
+<h3 class="card-title">Create New NutritionalQuota for @custid</h3>
 <hr />
 <br />
 
-<FormComponent ButtonText="Create NutritionalQuota" nutritionalQuota="nutritionalQuota" OnValidSubmit="@CreateNutritionalQuota"/>
+<FormComponent ButtonText="Create NutritionalQuota" nutritionalQuota="nutritionalQuota" OnValidSubmit="@CreateNutritionalQuota" @ref="NutriQuotaComponentRef" CreatingQuotaThroughProfile="@CreatingQuotaThroughProfile"/>
 @code {
-    
+    [Parameter] public bool CreatingQuotaThroughProfile { get; set; } = true;
     NutritionalQuota nutritionalQuota = new NutritionalQuota();
-    private string custidinstring = "";
-    private int custid = 0;
+    [Parameter] public int custid { get; set; }
+
+    private FormComponent NutriQuotaComponentRef;
+
     private async Task CreateNutritionalQuota()
     {
+        NutriQuotaComponentRef.nutritionalQuota.CustomerID = custid;
         await _client.PostAsJsonAsync(Endpoints.NutritionalQuotasEndpoint, nutritionalQuota);
-        _navManager.NavigateTo("/nutritionalQuotas/");
+        _navManager.NavigateTo($"/profile/view/{custid}");
     }
-
-    // protected override void OnInitialized()
-    // {
-    //     base.OnInitialized();
-
-    //     var uri = _navManager.ToAbsoluteUri(_navManager.Uri);
-    //     var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
-    //     custidinstring = uri.Query.TrimStart('?');
-    //     if (int.TryParse(custidinstring, out int transformedcustidinint))
-    //     {
-    //         custid = transformedcustidinint;
-    //     }
-    //     Console.WriteLine($"Successfully passed the customer id of {custid}");
-    // }
 
 }
 
