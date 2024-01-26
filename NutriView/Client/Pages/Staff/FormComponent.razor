@@ -75,6 +75,10 @@
 			<ValidationMessage For="@(() => staff.ImagePathStaff)" />
 		</div>
         </div>
+		<div class="form-group">
+			<label for="foodDesc">Insert Staff Image : </label>
+			<InputFile id="images" class="file-input" OnChange="HandleFileSelection" />
+		</div>
     </fieldset>
 	@if (!Disabled)
 	{
@@ -100,6 +104,18 @@
     {
         Companies = await _client.GetFromJsonAsync<List<Company>>($"{Endpoints.CompaniesEndpoint}");
     }
-	
+	private async Task HandleFileSelection(InputFileChangeEventArgs e)
+	{
+		var imgfile = e.GetMultipleFiles().FirstOrDefault();
+		if (imgfile != null)
+		{
+			var buffer = new byte[imgfile.Size];
+			using (var stream = imgfile.OpenReadStream())
+			{
+				await stream.ReadAsync(buffer, 0, buffer.Length);
+			}
+			staff.ImageByte = buffer;
+		}
+	}
     
 }

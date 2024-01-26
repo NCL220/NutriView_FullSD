@@ -7,18 +7,36 @@
 <head>
     <style>
         body {
+            margin: 0;
             background-color: #10889E;
             font-family: Verdana;
+            flex-direction:column;
         }
 
-        #container {
+        .container {
+            margin-top:4%;
             display: flex;
             height:98%;
             width: 98%;
-            margin: auto;
             background-color: antiquewhite;
         }
+        .left-column{
+            flex: 1;
+            padding: 50px;
+            border: 1px solid #ccc;
+        }
 
+            .left-column img {
+                width: 100%;
+                height: auto;
+                border-radius: 15px; /* Match the border-radius to the outer container */
+                object-fit: cover;
+            }
+        .right-column {
+            flex: 3;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
         h1 {
             text-align: center;
             font-size: 3em;
@@ -96,19 +114,24 @@
           border: 2px solid aqua;
         }
 
+        .card-img{
+            width:270px;
+            height:280px;
+        }
 
     </style>
 </head>
 
 <body>
+
     @if (customer is not null)
     {
-        <div id='container'>
-            <aside>
+        <div class='container'>
+            <div class="left-column">
 
-                <h3>
+                <h1>
                     Profile : @customer.UserName
-                </h3>
+                </h1>
 
                 @if (subscriptions is not null)
                 {
@@ -123,7 +146,14 @@
                         }
                     }
                 }
-                <img src="Images/Defaultimg.jpg" class="card-img" alt="Image">
+                @if (customer.ImageBytes != null && customer.ImageBytes.Length > 0)
+                {
+                    <img src="@($"data:image/png;base64,{Convert.ToBase64String(customer.ImageBytes)}")" alt="Image">
+                }
+                else
+                {
+                    <img src="Images/Defaultimg.jpg" class="card-img" alt="Image">
+                }
                 <ul>
                     <li>Age: @customer.Age</li>
                     <li>Height : @customer.Height</li>
@@ -140,10 +170,10 @@
                         }
                     }
                 </ul>
-            </aside>
+            </div>
 
-            <section id='main'>
-                <h1>Food Entries by @customer.UserName</h1>
+            <div class="right-column">
+                <h1>Food Entries</h1>
                 <div class="tbl-header">
                     <table cellpadding="0" cellspacing="0" border="0">
                         <thead>
@@ -158,6 +188,7 @@
                         </thead>
                     </table>
                 </div>
+                
                 @if (foodEntries is not null)
                 {
                     <div class="tbl-content">
@@ -192,18 +223,13 @@
                                                     <td>@meal.TimePeriod</td>
                                             }
                                         }
-                                        
-
-
-
-
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
                 }
-            </section>
+        </div>
         </div>
      }
 </body>

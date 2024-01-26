@@ -1,0 +1,33 @@
+﻿@page "/CreateCustomerAccount"
+@using NutriView.Shared.Domain
+@using NutriView.Client.Pages.Customers;
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 Create New Customer</h3>
+
+<FormComponent ButtonText="Create Customer" customer="customer" OnValidSubmit="@CreateCustomer" />
+@code {
+    private Customer customer = new Customer();
+    private IList<FoodEntry> Entries;
+    protected override async Task OnInitializedAsync()
+    {
+        Entries = await _client.GetFromJsonAsync<List<FoodEntry>>($"{Endpoints.FoodEntriesEndpoint}");
+    }
+
+    private async Task CreateCustomer()
+    {
+        var response = await _client.PostAsJsonAsync("api/customers", customer);
+
+        if (response.IsSuccessStatusCode)
+        
+        {
+            var createdCustomer = await response.Content.ReadFromJsonAsync<Customer>();
+            _navManager.NavigateTo($"/profile/view/{createdCustomer.Id}");
+        }
+        else
+        {
+            // Handle errors here
+        }
+    }
+}

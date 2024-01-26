@@ -12,9 +12,7 @@
         
 
         body{
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            
             margin: 0;
             background-color: white; /* Adjust background color as needed */
         }
@@ -86,10 +84,10 @@
             <button type="submit"><span class="oi oi-magnifying-glass"></span></button>
         </div>       
         <div>
-            <EntryFormComponent ButtonText="Create Food Entry" foodEntry="foodEntry" SubmitDataThroughForm=@SubmitDataThroughForm />
+            <EntryFormComponent ButtonText="Create Food Entry" foodEntry="foodEntry" SubmitDataThroughForm=@SubmitDataThroughForm @ref="FoodEntriesComponentRef"/>
         </div>
         <div>
-            <FormComponent ButtonText="Create Meal" meal="meal" SubmitDataThroughForm=@SubmitDataThroughForm @ref="MealComponentRef" />
+            <FormComponent ButtonText="Create Meal" meal="meal" SubmitDataThroughForm=@SubmitDataThroughForm @ref="MealComponentRef" OnInputChange="HandleMealcaloriechanges" />
         </div>
         <hidden>
             <ELFFormComponent ButtonText="" entryLinkFood="entrylinkfood" SubmitDataThroughForm=@SubmitDataThroughForm @ref="ELFComponentRef" />
@@ -105,8 +103,8 @@
         {
             @foreach (var food in filteredfoods)
             {
-                
-                <button class="FoodButton" @onclick="()=>AddToSelected(food)">
+
+                    <button class="FoodButton" @onclick="()=>AddToSelected(food)">
                     <h1>@food.Name</h1>
                         @if (food.Imagebytes != null && food.Imagebytes.Length > 0)
                         {
@@ -121,7 +119,7 @@
                     <p>Fats : @food.Fats</p>
                     <p>Food Desc : @food.FoodDesc</p>
 
-                </button>
+                    </button>
             }
         }
     </div>
@@ -139,8 +137,8 @@
             }
         }
         </div>
-    
-        <button class="btn btn-primary" @onclick="SubmitForm">Submit Form from Parent</button>
+        <button class="btn btn-primary" @onclick ="checkTotalCalories">Check total Calories</button>
+        <button class="btn btn-success" @onclick="SubmitForm">Submit Form from Parent</button>
     </div>
 </body>
 @code {
@@ -150,10 +148,14 @@
     private IList<Customer> Customers;
     private Meal meal = new Meal();
     private FormComponent MealComponentRef;
+    private EntryFormComponent FoodEntriesComponentRef;
     private ELFFormComponent ELFComponentRef;
     private IList<Food> foods;
     private List<Food> foodeaten = new List<Food>();
     private string searchTerm = "";
+    private double totalCalinFood = 0;
+    private double MealCalorieValues =0;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -167,11 +169,10 @@
         {
             IList<int> foodeatenids = foodeaten.Select(food => food.Id).ToList();
 
-            
 
             var response = await _client.PostAsJsonAsync($"{Endpoints.FoodEntriesEndpoint}", foodEntry);
 
-            
+
             if (response.IsSuccessStatusCode)
             {
                 var createdFoodEntry = await response.Content.ReadFromJsonAsync<FoodEntry>();
@@ -188,7 +189,7 @@
                     await _client.PostAsJsonAsync(Endpoints.MealsEndpoint, meal);
 
                     Console.WriteLine($"Created Meals");
-                    
+
                     foreach(int IndividualFoodEatenId in foodeatenids)
                     {
                         ELFComponentRef.entryLinkFood.FoodEntryID = foodEntryIdfromFE;
@@ -220,13 +221,17 @@
     }
     private async Task AddToSelected(Food food)
     {
-         Console.WriteLine("Added " + food.Name);
-         foodeaten.Add(food);
+        Console.WriteLine("Added " + food.Name);
+        foodeaten.Add(food);
+
+        checkTotalCalories();
     }
     private async Task RemoveFromList(Food food)
     {
         Console.WriteLine("Removed " + food.Name);
         foodeaten.Remove(food);
+
+        checkTotalCalories();
     }
 
     private List<Food> filteredfoods
@@ -236,4 +241,41 @@
             return foods.Where(food => food.Name.ToLower().Contains(searchTerm.ToLower())).ToList();
         }
     }
+
+    private void HandleCheckTotalCalories(ChangeEventArgs ChangeInputs)
+    {
+        if(double.TryParse(ChangeInputs.Value?.ToString(),out double mealkcal)){
+            totalCalinFood = 0;
+            IList<double> foodchosenCals = foodeaten.Select(food => food.Calories).ToList();
+            foreach (var foodcal in foodchosenCals)
+            {
+                totalCalinFood = totalCalinFood + foodcal;
+            }
+            totalCalinFood = totalCalinFood + MealCalorieValues;
+
+            FoodEntriesComponentRef.foodEntry.TotalCalories = totalCalinFood;
+        }
+    }
+    private async Task checkTotalCalories()
+    {
+        totalCalinFood = 0;
+        IList<double> foodchosenCals = foodeaten.Select(food => food.Calories).ToList();
+        foreach (var foodcal in foodchosenCals)
+        {
+            totalCalinFood = totalCalinFood + foodcal;
+        }
+        totalCalinFood = totalCalinFood + MealCalorieValues;
+
+        FoodEntriesComponentRef.foodEntry.TotalCalories = totalCalinFood;
+
+    }
+
+    private void HandleMealcaloriechanges(double inputmealcalValue)
+    {
+        MealCalorieValues = inputmealcalValue;
+        // Do any other logic you need when the input changes in the child component
+
+        checkTotalCalories();
+    }
+
 }

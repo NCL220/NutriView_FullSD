@@ -1,4 +1,4 @@
-﻿@page "/NutritionsINFO"
+﻿@page "/NutritionsINFOs"
 @using NutriView.Shared.Domain
 @inject HttpClient _client
 
@@ -121,7 +121,14 @@
                     {
                         <div class="food-item">
                             <h3>@food.Name</h3>
-                            <img src="@food.ImagePath" alt="Image of @food.Name" /> <!-- Display the image -->
+                            @if (food.Imagebytes != null && food.Imagebytes.Length > 0)
+                            {
+                                <img src="@($"data:image/png;base64,{Convert.ToBase64String(food.Imagebytes)}")" alt="Image" width="150" height="150" />
+                            }
+                            else
+                            {
+                                <p>No image available</p>
+                            }
                             <p>Calories: @food.Calories kcal</p>
                             <p>Carbohydrates: @food.Carbohydrates g</p>
                             <p>Fats: @food.Fats g</p>

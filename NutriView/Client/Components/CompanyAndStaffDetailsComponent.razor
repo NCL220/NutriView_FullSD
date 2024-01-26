@@ -23,7 +23,14 @@
                 @foreach (var Staff in Staffs)
                 {
                     <h1>Name : @Staff.UserName Role: @Staff.Role</h1>
-                    <img src="@Staff.ImagePathStaff" style="align-items:center" />
+                    @if (Staff.ImageByte != null && Staff.ImageByte.Length > 0)
+                    {
+                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(Staff.ImageByte)}")" alt="Image" width="150" height="150" />
+                    }
+                    else
+                    {
+                        <p>No image available</p>
+                    }
 
                 }
             }

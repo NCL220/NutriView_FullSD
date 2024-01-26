@@ -21,6 +21,7 @@ namespace NutriView.Shared.Domain
 
         public string? ImagePathStaff { get; set; }
 
+        public byte[]? ImageByte { get; set; }
         public virtual List<NutritionInfo>? NutritionInfos { get; set; }
         public virtual List<Food>? Foods { get; set; }
 

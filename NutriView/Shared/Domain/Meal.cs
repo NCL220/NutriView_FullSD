@@ -10,7 +10,7 @@ namespace NutriView.Shared.Domain
     {
         public string? Name { get; set; }
 
-        public int? Calories { get; set; }
+        public double Calories { get; set; }
 
         public double? PortionSize { get; set; }
 
