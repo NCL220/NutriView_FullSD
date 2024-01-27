@@ -20,7 +20,8 @@ namespace NutriView.Server.IRepository
         IGenericRepository<Subscription> Subscriptions { get; }
         IGenericRepository<SubscriptionInfo> SubscriptionInfos { get; }
 
-
+        IGenericRepository<ServiceLinkSubInfo> ServiceLinkSubInfos { get; }
+        IGenericRepository<Service> Services { get; }
         IGenericRepository<Customer> Customers { get; }
     }
 }

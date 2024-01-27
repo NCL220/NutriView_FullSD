@@ -27,7 +27,8 @@ namespace NutriView.Server.Repository
         private IGenericRepository<Subscription> _subscriptions;
         private IGenericRepository<SubscriptionInfo> _subscriptioninfos;
         private IGenericRepository<Customer> _customers;
-
+        private IGenericRepository<Service> _services;
+        private IGenericRepository<ServiceLinkSubInfo> _servicelinksubinfos;
         private UserManager<ApplicationUser> _userManager;
 
         public UnitOfWork(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
@@ -35,7 +36,8 @@ namespace NutriView.Server.Repository
             _context = context;
             _userManager = userManager;
         }
-
+        public IGenericRepository<Service> Services
+            => _services ??= new GenericRepository<Service>(_context);
         public IGenericRepository<Company> Companies
             => _companies ??= new GenericRepository<Company>(_context);
         public IGenericRepository<Food> Foods
@@ -56,6 +58,9 @@ namespace NutriView.Server.Repository
             => _subscriptioninfos ??= new GenericRepository<SubscriptionInfo>(_context);
         public IGenericRepository<Customer> Customers
             => _customers ??= new GenericRepository<Customer>(_context);
+
+        public IGenericRepository<ServiceLinkSubInfo> ServiceLinkSubInfos
+            => _servicelinksubinfos ??= new GenericRepository<ServiceLinkSubInfo>(_context);
         public void Dispose()
         {
             _context.Dispose();

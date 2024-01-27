@@ -29,9 +29,14 @@ namespace NutriView.Server.Data
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<EntryLinkFood> EntryLinkFoods { get; set; }
+
+        public DbSet<Service> Services { get; set; }
+
+        public DbSet<ServiceLinkSubInfo> ServiceLinkSubInfos { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new ServiceSeedConfiguration());
             builder.ApplyConfiguration(new EntryLinkFoodSeedConfiguration());
             builder.ApplyConfiguration(new SubscriptionInfoSeedConfiguration());
             builder.ApplyConfiguration(new CompanySeedConfiguration());
@@ -46,6 +51,8 @@ namespace NutriView.Server.Data
             builder.ApplyConfiguration(new FoodEntrySeedConfiguration());
             builder.ApplyConfiguration(new MealSeedConfiguration());
             builder.ApplyConfiguration(new NutritionalQuotaSeedConfiguration());
+            builder.ApplyConfiguration(new ServiceLinkSubInfoSeedConfiguration());
+            
         }
 
 

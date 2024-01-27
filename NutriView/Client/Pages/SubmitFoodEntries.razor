@@ -84,7 +84,7 @@
             <button type="submit"><span class="oi oi-magnifying-glass"></span></button>
         </div>       
         <div>
-            <EntryFormComponent ButtonText="" foodEntry="foodEntry" SubmitDataThroughForm=@SubmitDataThroughForm @ref="FoodEntriesComponentRef"/>
+            <EntryFormComponent ButtonText="" foodEntry="foodEntry" SubmitDataThroughForm=@SubmitDataThroughForm @ref="FoodEntriesComponentRef" />
         </div>
         <div>
             <FormComponent ButtonText="" meal="meal" SubmitDataThroughForm=@SubmitDataThroughForm @ref="MealComponentRef" OnInputChange="HandleMealcaloriechanges" />
@@ -137,11 +137,11 @@
             }
         }
         </div>
-        <button class="btn btn-primary" @onclick ="checkTotalCalories">Check total Calories</button>
         <button class="btn btn-success" @onclick="SubmitForm">Submit Form </button>
     </div>
 </body>
 @code {
+    [Parameter] public bool ApplyCustomerServiceFilter { get; set; } = true;
     [Parameter] public bool SubmitDataThroughForm { get; set; } = true;
     private FoodEntry foodEntry = new FoodEntry();
     private EntryLinkFood entrylinkfood = new EntryLinkFood();
@@ -155,6 +155,7 @@
     private string searchTerm = "";
     private double totalCalinFood = 0;
     private double MealCalorieValues =0;
+    
 
 
     protected override async Task OnInitializedAsync()
@@ -167,6 +168,8 @@
     {
         try
         {
+
+
             IList<int> foodeatenids = foodeaten.Select(food => food.Id).ToList();
 
 

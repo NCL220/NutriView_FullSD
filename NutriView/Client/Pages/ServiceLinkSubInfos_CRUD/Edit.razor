@@ -1,0 +1,22 @@
+﻿@page "/ServiceLinkSubInfos/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Edit SubInfo Link Services</h3>
+
+<SLSIFormComponent ButtonText="Update" OnValidSubmit="EditSLSI" serviceLinkSubInfo="serviceLinkSubInfo" />
+@code {
+    [Parameter] public int id { get; set; }
+    ServiceLinkSubInfo? serviceLinkSubInfo = new ServiceLinkSubInfo();
+    protected async override Task OnParametersSetAsync()
+    {
+        serviceLinkSubInfo = await
+        _client.GetFromJsonAsync<ServiceLinkSubInfo>($"{Endpoints.ServiceLinkSubInfosEndpoint}/{id}");
+    }
+    async Task EditSLSI()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.ServiceLinkSubInfosEndpoint}/{id}",
+        serviceLinkSubInfo);
+        _navManager.NavigateTo("/ServiceLinkSubInfos/");
+    }
+}

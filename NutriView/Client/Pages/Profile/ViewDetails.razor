@@ -3,7 +3,6 @@
 @inject NavigationManager _navManager
 @using NutriView.Shared.Domain;
 @layout NoMenuLayout
-
 <head>
     <style>
         body {
@@ -120,6 +119,11 @@
         }
 
     </style>
+    <script>
+        function NoPass() {
+            alert("Subscribe to unlock this feature");
+        }
+    </script>
 </head>
 
 <body>
@@ -141,7 +145,7 @@
                         {
                             foreach (var subinfo in subscriptioninfos.Where(si => si.Id == subscribe.SubInfoID))
                             {
-                                @subinfo.SubTierName
+                                <p>Subscriber: @subinfo.SubTierName</p>
                             }
                         }
                     }
@@ -176,7 +180,7 @@
                         }
                         else
                         {
-                            <button class="btn btn-primary" @onclick="NavigateToCreatePage">Create Quota</button>
+                            <button class="btn btn-primary" @onclick="ServiceIDCheckForNutriQuota">Create Quota</button>
                         }
 
                     }
@@ -261,6 +265,10 @@
     private List<SubscriptionInfo>? subscriptioninfos;
     private List<EntryLinkFood>? entrylinkfoods;
     private List<Food>? foods;
+    private List<ServiceLinkSubInfo>? servicelinksubinfos;
+    private List<Service>? services;
+    public int ServiceIDForNutriQuota = 2; //Service ID is 2 (Which allow User to use NutriQuota) (Adminstrator Only)
+
     [Parameter] public EventCallback<double> OnInputChange { get; set; }
 
     protected async override Task OnInitializedAsync()
@@ -269,42 +277,54 @@
         _client.GetFromJsonAsync<Customer>($"{Endpoints.CustomersEndpoint}/{id}");
         try
         {
-            foods = await _client.GetFromJsonAsync<List<Food>>("api/Foods");
+            servicelinksubinfos = await _client.GetFromJsonAsync<List<ServiceLinkSubInfo>>($"{Endpoints.ServicesEndpoint}");
+            if (servicelinksubinfos is null)
+            {
+                servicelinksubinfos = new List<ServiceLinkSubInfo>(); // Initialize to an empty list if null is returned
+            }
+            services = await _client.GetFromJsonAsync<List<Service>>($"{Endpoints.ServicesEndpoint}");
+            if (services is null)
+            {
+                services = new List<Service>(); // Initialize to an empty list if null is returned
+            }
+
+
+            foods = await _client.GetFromJsonAsync<List<Food>>($"{Endpoints.FoodsEndpoint}");
             if (foods is null)
             {
                 foods = new List<Food>(); // Initialize to an empty list if null is returned
             }
-            entrylinkfoods = await _client.GetFromJsonAsync<List<EntryLinkFood>>("api/EntryLinkFoods");
+            entrylinkfoods = await _client.GetFromJsonAsync<List<EntryLinkFood>>($"{Endpoints.EntryLinkFoodsEndpoint}");
             if (entrylinkfoods is null)
             {
                 entrylinkfoods = new List<EntryLinkFood>(); // Initialize to an empty list if null is returned
             }
-            subscriptioninfos = await _client.GetFromJsonAsync<List<SubscriptionInfo>>("api/SubscriptionInfos");
+            subscriptioninfos = await _client.GetFromJsonAsync<List<SubscriptionInfo>>($"{Endpoints.SubscriptionInfosEndpoint}");
             if (subscriptioninfos is null)
             {
                 subscriptioninfos = new List<SubscriptionInfo>(); // Initialize to an empty list if null is returned
             }
-            subscriptions = await _client.GetFromJsonAsync<List<Subscription>>("api/Subscriptions");
+            subscriptions = await _client.GetFromJsonAsync<List<Subscription>>($"{Endpoints.SubscriptionsEndpoint}");
             if (subscriptions is null)
             {
                 subscriptions = new List<Subscription>(); // Initialize to an empty list if null is returned
             }
-            customers = await _client.GetFromJsonAsync<List<Customer>>("api/Customers");
+            customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
             if (customers is null)
             {
                 customers = new List<Customer>(); // Initialize to an empty list if null is returned
             }
-            meals = await _client.GetFromJsonAsync<List<Meal>>("api/Meals");
+            meals = await _client.GetFromJsonAsync<List<Meal>>($"{Endpoints.MealsEndpoint}");
             if (meals is null)
             {
                 meals = new List<Meal>(); // Initialize to an empty list if null is returned
             }
-            foodEntries = await _client.GetFromJsonAsync<List<FoodEntry>>("api/FoodEntries");
+            foodEntries = await _client.GetFromJsonAsync<List<FoodEntry>>($"{Endpoints.FoodEntriesEndpoint}");
             if (foodEntries is null)
             {
                 foodEntries = new List<FoodEntry>(); // Initialize to an empty list if null is returned
             }
-            nutritionalquotas = await _client.GetFromJsonAsync<List<NutritionalQuota>>("api/NutritionalQuotas");
+            nutritionalquotas = await _client.GetFromJsonAsync<List<NutritionalQuota>>($"{Endpoints.NutritionalQuotasEndpoint}");
             if (nutritionalquotas is null)
             {
                 nutritionalquotas = new List<NutritionalQuota>(); // Initialize to an empty list if null is returned
@@ -317,11 +337,43 @@
     }
 
 
-    private void NavigateToCreatePage()
+    // private void NavigateToCreatePage()
+    // {
+    //     ServiceIDCheckForNutriQuota();
+    //     // Pass data as a query parameter in the URL
+    //     _navManager.NavigateTo($"/PersonalNutritionalQuotas/create/{id}");
+    // }
+
+    private void ServiceIDCheckForNutriQuota()
     {
 
-        // Pass data as a query parameter in the URL
-        _navManager.NavigateTo($"/PersonalNutritionalQuotas/create/{id}");
+        if (customer is not null)
+        {
+
+            var subscription = subscriptions.Where(s => s.CustomerID == customer.Id).OrderByDescending(s => s.DateCreated).FirstOrDefault();
+            if (subscription is not null)
+            {
+                var sinfo = subscriptioninfos.Where(si => si.Id == subscription.SubInfoID).FirstOrDefault();
+                if (sinfo is not null)
+                {
+                    var LinkServSubInfo = servicelinksubinfos.Where(sl => sl.SubscriptionInfoID == sinfo.Id).ToList(); // ToList() to materialize the collection
+
+                    if (LinkServSubInfo is not null)
+                    {
+                        foreach (var l in LinkServSubInfo)
+                        {
+                            if (ServiceIDForNutriQuota == l.ServiceID)
+                            {
+                                _navManager.NavigateTo($"/PersonalNutritionalQuotas/create/{id}");
+                            }
+                        }
+                        }
+                    }
+                }
+            
+        }
+
+
     }
 
 }
