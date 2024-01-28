@@ -188,6 +188,8 @@
                     {
                         
                     }
+
+
                 </ul>
             </div>
 
@@ -203,6 +205,7 @@
                                 <th>Meals</th>
                                 <th>PortionSizes</th>
                                 <th>Time Periods</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                     </table>
@@ -229,8 +232,11 @@
                                                         {
                                                             <li>@food.Name</li>
                                                         }
+                                                        
+
                                                     }
                                                 }
+
                                             </td>
                                         }
                                         @if(meals is not null)
@@ -240,6 +246,9 @@
                                                     <td>@meal.Name</td>
                                                     <td>@meal.PortionSize</td>
                                                     <td>@meal.TimePeriod</td>
+                                                    <td>
+                                                        <button class="btn btn-primary" @onclick="() => EditMeal(meal.Id)">Edit Meal</button>
+                                                    </td>
                                             }
                                         }
                                     </tr>
@@ -247,8 +256,13 @@
                             </tbody>
                         </table>
                     </div>
+                    <a href="/entryLinkFoods/create" class="btn btn-secondary">
+                                                Add More Food
+                                            </a>
                 }
+
         </div>
+
         </div>
      }
 </body>
@@ -343,6 +357,10 @@
     //     // Pass data as a query parameter in the URL
     //     _navManager.NavigateTo($"/PersonalNutritionalQuotas/create/{id}");
     // }
+    private void EditMeal(int mealId)
+    {
+        _navManager.NavigateTo($"/meals/edit/{mealId}");
+    }
 
     private void ServiceIDCheckForNutriQuota()
     {
