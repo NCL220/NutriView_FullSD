@@ -4,22 +4,28 @@
 @inject NavigationManager _navManager
 
 <h3>Create New Gender</h3>
-<hr />
-<br />
-<FormComponent ButtonText="Create Gender" OnValidSubmit="@CreateGender" />
+
+<GenderForm ButtonText="Create Gender" gender="gender" OnValidSubmit="@CreateGender" />
+
 @code {
     private Gender gender = new Gender();
+    private IList<Customer> Customers;
 
+    protected override async Task OnInitializedAsync()
+    {
+        Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
+    }
     private async Task CreateGender()
     {
-        var response = await _client.PostAsJsonAsync(Endpoints.genderEndpoint, gender);
+        var response = await _client.PostAsJsonAsync($"{Endpoints.genderEndpoint}", gender);
+
         if (response.IsSuccessStatusCode)
         {
             _navManager.NavigateTo("/genders/");
         }
         else
         {
-            // Handle errors here, for example, by showing an error message to the user.
+            // Handle errors here
         }
     }
 }

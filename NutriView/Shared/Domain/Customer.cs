@@ -18,7 +18,9 @@ namespace NutriView.Shared.Domain
         public string? Gender { get; set; }
 
         public byte[]? ImageBytes { get; set; }
+
         public virtual List<FoodEntry>? Entries { get; set; }
 
+        
     }
 }

@@ -1,0 +1,30 @@
+﻿@page "/genders/edit/{id:int}"
+@using NutriView.Shared.Domain
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Edit Gender</h3>
+<GenderForm ButtonText="Create Gender" gender="gender" OnValidSubmit="@EditGender" />
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private Gender gender = new Gender();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        gender = await _client.GetFromJsonAsync<Gender>($"api/genders/{Id}");
+    }
+
+    private async Task EditGender()
+    {
+        var response = await _client.PutAsJsonAsync($"api/genders/{Id}", gender);
+        if (response.IsSuccessStatusCode)
+        {
+            _navManager.NavigateTo("/genders/");
+        }
+        else
+        {
+            // Handle errors here, such as displaying an error message
+        }
+    }
+}
