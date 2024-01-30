@@ -281,8 +281,9 @@
     private List<Food>? foods;
     private List<ServiceLinkSubInfo>? servicelinksubinfos;
     private List<Service>? services;
+    private List<Food>? foodlist;
     public int ServiceIDForNutriQuota = 2; //Service ID is 2 (Which allow User to use NutriQuota) (Adminstrator Only)
-
+    public double TotalCaloriesCheck = 0;
     [Parameter] public EventCallback<double> OnInputChange { get; set; }
 
     protected async override Task OnInitializedAsync()
@@ -348,6 +349,8 @@
         {
             ex.Redirect();
         }
+
+        await checkTotalCaloriesOnChange();
     }
 
 
@@ -361,7 +364,53 @@
     {
         _navManager.NavigateTo($"/meals/edit/{mealId}");
     }
+    private async Task checkTotalCaloriesOnChange()
+    {
+        if(customer is not null)
+        {
+            var foodentriesCustomer = foodEntries.Where(fe => fe.CustomerID == customer.Id).ToList();
+            if(foodentriesCustomer is not null)
+            {
+                foreach(var foodentryCustomer in foodentriesCustomer)
+                {
+                    var foodlinksineachentry = entrylinkfoods.Where(e => e.FoodEntryID==foodentryCustomer.Id).ToList();
+                    if(foodlinksineachentry is not null)
+                    {
+                        foreach(var foodlinkineachentry in foodlinksineachentry)
+                        {
+                            var foodsinlinks = foods.Where(f=>f.Id == foodlinkineachentry.FoodID);
+                            if(foodsinlinks is not null)
+                            {
+                                foreach(var f in foodsinlinks)
+                                {
+                                    TotalCaloriesCheck = f.Calories + TotalCaloriesCheck;
+                                }
 
+                            }
+                        }
+                    }
+                    var meal = meals.Where(m=>m.FoodEntryID==foodentryCustomer.Id).FirstOrDefault();
+                    if(meal is not null)
+                    {
+                        TotalCaloriesCheck = meal.Calories + TotalCaloriesCheck;
+                    }
+                    if(foodentryCustomer.TotalCalories != TotalCaloriesCheck)
+                    {
+                        var response = await _client.PutAsJsonAsync($"{Endpoints.FoodEntriesEndpoint}/{foodentryCustomer.Id}", foodentryCustomer);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            _navManager.NavigateTo("/foodentries/");
+                        }
+                        else
+                        {
+                            // Handle errors here
+                        }
+                    }
+                }
+            }
+            Console.WriteLine($"Total Calories Check Through Method {TotalCaloriesCheck}");
+        }
+    }
     private void ServiceIDCheckForNutriQuota()
     {
 
@@ -385,10 +434,10 @@
                                 _navManager.NavigateTo($"/PersonalNutritionalQuotas/create/{id}");
                             }
                         }
-                        }
                     }
                 }
-            
+            }
+
         }
 
 
