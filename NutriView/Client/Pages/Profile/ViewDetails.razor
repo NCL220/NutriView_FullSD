@@ -275,12 +275,14 @@
     private List<SubscriptionInfo>? subscriptioninfos;
     private List<EntryLinkFood>? entrylinkfoods;
     private List<Food>? foods;
-    private IList<ServiceLinkSubInfo>? servicelinksubinfos;
-    private IList<Service>? services;
+    private List<ServiceLinkSubInfo>? servicelinksubinfos;
+    private List<Service>? services;
     private List<Food>? foodlist;
-    public string NutriQuotaServiceCode = "4I${wHZ"; //Service ID is 4I${wHZ (Which allow User to use NutriQuota) (Adminstrator Only)
+    public string ServiceCodeForNutriQuota = "4I${wHZ" ; //Service ID is 4I${wHZ (Which allow User to use NutriQuota) (Adminstrator Only)
     public double TotalCaloriesCheck = 0;
-    [Parameter] public bool AllowNutriQuota { get; set; } = false;
+
+
+
 
     protected async override Task OnInitializedAsync()
     {
@@ -290,8 +292,16 @@
 
         try
         {
-            servicelinksubinfos = await _client.GetFromJsonAsync<List<ServiceLinkSubInfo>>($"{Endpoints.ServiceLinkSubInfosEndpoint}");
+            servicelinksubinfos = await _client.GetFromJsonAsync<List<ServiceLinkSubInfo>>($"{Endpoints.ServicesEndpoint}");
+            if (servicelinksubinfos is null)
+            {
+                servicelinksubinfos = new List<ServiceLinkSubInfo>(); // Initialize to an empty list if null is returned
+            }
             services = await _client.GetFromJsonAsync<List<Service>>($"{Endpoints.ServicesEndpoint}");
+            if (services is null)
+            {
+                services = new List<Service>(); // Initialize to an empty list if null is returned
+            }
 
 
             foods = await _client.GetFromJsonAsync<List<Food>>($"{Endpoints.FoodsEndpoint}");
@@ -340,16 +350,20 @@
             ex.Redirect();
         }
 
-
         await checkTotalCaloriesOnChange();
-
-
     }
+
+
+    // private void NavigateToCreatePage()
+    // {
+    //     ServiceIDCheckForNutriQuota();
+    //     // Pass data as a query parameter in the URL
+    //     _navManager.NavigateTo($"/PersonalNutritionalQuotas/create/{id}");
+    // }
     private void EditMeal(int mealId)
     {
         _navManager.NavigateTo($"/meals/edit/{mealId}");
     }
-
     private async Task checkTotalCaloriesOnChange()
     {
         if(customer is not null)
@@ -419,29 +433,41 @@
     }
     private void ServiceIDCheckForNutriQuota()
     {
-        var subscription = subscriptions.Where(s => s.CustomerID == customer.Id).OrderByDescending(s => s.DateCreated).FirstOrDefault();
-        if (subscription is not null)
-        {
-            var sinfo = subscriptioninfos.Where(si => si.Id == subscription.SubInfoID).FirstOrDefault();
-            if (sinfo is not null){
-                var LinkServiceSubInfos = servicelinksubinfos.Where(sl => sl.SubscriptionInfoID == sinfo.Id).ToList(); // ToList() to materialize the collection
 
-                if (LinkServiceSubInfos is not null)
+        if (customers is not null)
+        {
+            foreach (var c in customers)
+            {
+                var subscription = subscriptions.Where(s => s.CustomerID == c.Id).OrderByDescending(s => s.DateCreated).FirstOrDefault();
+                if (subscription is not null)
                 {
-                    foreach (var le in LinkServiceSubInfos)
+                    var sinfo = subscriptioninfos.Where(si => si.Id == subscription.SubInfoID).FirstOrDefault();
+                    if (sinfo is not null)
                     {
-                        var servicings = services.Where(ser => ser.Id == le.ServiceID).ToList();
-                        foreach (var eachservice in servicings)
+                        var LinkServSubInfo = servicelinksubinfos.Where(sl => sl.SubscriptionInfoID == sinfo.Id).ToList(); // ToList() to materialize the collection
+
+                        if (LinkServSubInfo is not null)
                         {
-                            if (eachservice.ServiceCode == NutriQuotaServiceCode)
+                            foreach (var l in LinkServSubInfo)
                             {
-                                _navManager.NavigateTo($"/PersonalNutritionalQuotas/create/");
+                                var Servicing = services.Where(ser => ser.Id == l.ServiceID).ToList();
+                                foreach(var eachservice in Servicing)
+                                {
+                                    if (ServiceCodeForNutriQuota ==eachservice.ServiceCode)
+                                    {
+                                        Console.WriteLine($"Service Matched");
+                                        _navManager.NavigateTo($"/nutritionalQuotas/create/");
+                                    } 
+                                    Console.WriteLine($"Service UnMatched");
+                                }
+
+                            }
                             }
                         }
                     }
-
                 }
             }
         }
-    }
+
+
     }
