@@ -29,6 +29,7 @@ namespace NutriView.Server.Repository
         private IGenericRepository<Customer> _customers;
         private IGenericRepository<Service> _services;
         private IGenericRepository<ServiceLinkSubInfo> _servicelinksubinfos;
+        private IGenericRepository<Gender> _genders;
         private UserManager<ApplicationUser> _userManager;
 
         public UnitOfWork(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
@@ -58,6 +59,8 @@ namespace NutriView.Server.Repository
             => _subscriptioninfos ??= new GenericRepository<SubscriptionInfo>(_context);
         public IGenericRepository<Customer> Customers
             => _customers ??= new GenericRepository<Customer>(_context);
+        public IGenericRepository<Gender> Genders
+            => _genders ??= new GenericRepository<Gender>(_context);
 
         public IGenericRepository<ServiceLinkSubInfo> ServiceLinkSubInfos
             => _servicelinksubinfos ??= new GenericRepository<ServiceLinkSubInfo>(_context);

@@ -1,0 +1,27 @@
+﻿@using NutriView.Shared.Domain
+@inject HttpClient _client
+
+<EditForm Model="@gender" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <InputText id="name" class="form-control" @bind-Value="gender.Name" />
+        <ValidationMessage For="@(() => gender.Name)" />
+    </div>
+
+    <button type="submit" class="btn btn-success" disabled="@Disabled">
+        @ButtonText
+    </button>
+</EditForm>
+
+@code {
+    [Parameter] public Gender? gender { get; set; } = new Gender();
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public bool Disabled { get; set; } = false;
+
+    // Additional code for initialization or other component logic
+    // Depending on your specific requirements, you may need to implement further logic here.
+}

@@ -1,0 +1,78 @@
+﻿@page "/genders"
+@inject HttpClient _client
+@inject IJSRuntime js
+@using NutriView.Shared.Domain
+
+<h3>Genders</h3>
+<a href="/genders/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Gender
+</a>
+<br />
+<br />
+@if (genders is null)
+{
+    <div>Loading genders...</div>
+}
+else if (!genders.Any())
+{
+    <div>No genders found.</div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var gender in genders)
+            {
+                <tr>
+                    <td>@gender.Name</td>
+                    <td>
+                        <a href="/genders/edit/@gender.Id" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-danger" @onclick="() => DeleteGender(gender.Id)">Delete</button>
+                        <a href="/genders/view/@gender.Id" class="btn btn-primary">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Gender>? genders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        genders = await _client.GetFromJsonAsync<List<Gender>>("api/genders");
+        if (genders is null)
+        {
+            genders = new List<Gender>();
+        }
+    }
+
+    private async Task DeleteGender(int genderId)
+    {
+        var confirmed = await js.InvokeAsync<bool>("confirm", "Are you sure you want to delete this gender?");
+        if (!confirmed)
+        {
+            return;
+        }
+
+        var response = await _client.DeleteAsync($"api/genders/{genderId}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            genders = genders.Where(g => g.Id != genderId).ToList();
+            StateHasChanged();
+        }
+        else
+        {
+            // Handle the error, e.g., show an error message
+        }
+    }
+}
