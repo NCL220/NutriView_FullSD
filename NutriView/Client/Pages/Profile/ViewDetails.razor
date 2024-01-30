@@ -119,11 +119,7 @@
         }
 
     </style>
-    <script>
-        function NoPass() {
-            alert("Subscribe to unlock this feature");
-        }
-    </script>
+    
 </head>
 
 <body>
@@ -284,12 +280,16 @@
     private List<Food>? foodlist;
     public int ServiceIDForNutriQuota = 2; //Service ID is 2 (Which allow User to use NutriQuota) (Adminstrator Only)
     public double TotalCaloriesCheck = 0;
-    [Parameter] public EventCallback<double> OnInputChange { get; set; }
+
+
+    
 
     protected async override Task OnInitializedAsync()
     {
         customer = await
         _client.GetFromJsonAsync<Customer>($"{Endpoints.CustomersEndpoint}/{id}");
+
+
         try
         {
             servicelinksubinfos = await _client.GetFromJsonAsync<List<ServiceLinkSubInfo>>($"{Endpoints.ServicesEndpoint}");
@@ -373,6 +373,9 @@
             {
                 foreach(var foodentryCustomer in foodentriesCustomer)
                 {
+                    TotalCaloriesCheck = 0;
+                    double currentCalories = foodentryCustomer.TotalCalories;
+
                     var foodlinksineachentry = entrylinkfoods.Where(e => e.FoodEntryID==foodentryCustomer.Id).ToList();
                     if(foodlinksineachentry is not null)
                     {
@@ -393,22 +396,39 @@
                     if(meal is not null)
                     {
                         TotalCaloriesCheck = meal.Calories + TotalCaloriesCheck;
-                    }
-                    if(foodentryCustomer.TotalCalories != TotalCaloriesCheck)
-                    {
-                        var response = await _client.PutAsJsonAsync($"{Endpoints.FoodEntriesEndpoint}/{foodentryCustomer.Id}", foodentryCustomer);
-                        if (response.IsSuccessStatusCode)
+
+                        if (currentCalories != TotalCaloriesCheck)
                         {
-                            _navManager.NavigateTo("/foodentries/");
+                            Console.WriteLine("Successfully dynamucally changed total calories");
+                            var updatedEntry = new FoodEntry
+                                {
+                                    Id = foodentryCustomer.Id,
+                                    TotalCalories = TotalCaloriesCheck,
+                                    CustomerID = foodentryCustomer.CustomerID,
+                                    Time_Stamp = foodentryCustomer.Time_Stamp
+                                };
+                            var response = await _client.PutAsJsonAsync($"{Endpoints.FoodEntriesEndpoint}/{foodentryCustomer.Id}", updatedEntry);
+                            if (response.IsSuccessStatusCode)
+                            {
+                                Console.WriteLine("Successfully dynamically changed total calories");
+                                
+                            }
+                            else
+                            {
+                                // Handle errors here
+                            }
                         }
                         else
                         {
-                            // Handle errors here
+                            Console.WriteLine($"Not working");
                         }
                     }
                 }
+
+
             }
             Console.WriteLine($"Total Calories Check Through Method {TotalCaloriesCheck}");
+
         }
     }
     private void ServiceIDCheckForNutriQuota()
