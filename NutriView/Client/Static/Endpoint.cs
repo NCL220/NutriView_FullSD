@@ -18,5 +18,6 @@ namespace NutriView.Client.Static
         public static readonly string EntryLinkFoodsEndpoint = $"{Prefix}/entrylinkfoods";
         public static readonly string ServicesEndpoint = $"{Prefix}/services";
         public static readonly string ServiceLinkSubInfosEndpoint = $"{Prefix}/servicelinksubinfos";
+        public static readonly string genderEndpoint = $"{Prefix}/genders";
     }
 }

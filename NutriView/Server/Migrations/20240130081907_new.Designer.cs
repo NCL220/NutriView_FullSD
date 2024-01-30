@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NutriView.Server.Data;
 
@@ -11,9 +12,11 @@ using NutriView.Server.Data;
 namespace NutriView.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240130081907_new")]
+    partial class @new
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -423,7 +426,7 @@ namespace NutriView.Server.Migrations
                         {
                             Id = "8aa738a7-6c07-4e5a-8a7f-5637388c41b4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6fbc4f33-4083-426f-94cf-ee20eb380bf5",
+                            ConcurrencyStamp = "a5613b9a-14ab-4214-b0d3-e20659bcf896",
                             Email = "admin@localhost.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -431,9 +434,9 @@ namespace NutriView.Server.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOQnKZFszZEdEC/+3iDgyy2ux8kgvhFIOggBCMIpyvT0iPEZu2CeQXq+4rZG4yaa0A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHvvlZCoZEulDcZnmsXsFy+WEALtxjHy/mA+X77DzH3l4aafgJnV1rwdSBYkaWr7hQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f90caa84-2a47-4eac-86a7-8357981c5de3",
+                            SecurityStamp = "6f2ae1db-f41b-4dcd-9917-031b7938265a",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         },
@@ -441,7 +444,7 @@ namespace NutriView.Server.Migrations
                         {
                             Id = "41624b27-7496-447c-b299-4892483d6b47",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0d97c19b-2961-469b-a6b1-f40d9b5aa8b8",
+                            ConcurrencyStamp = "f0d3dd4c-500e-4d2d-992f-4e42dc74ff78",
                             Email = "Customer@localhost.com",
                             EmailConfirmed = false,
                             FirstName = "Customer",
@@ -449,9 +452,9 @@ namespace NutriView.Server.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "Customer@LOCALHOST.COM",
                             NormalizedUserName = "CUSTOMER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEK3BS1fVN7p/DJolpyzqCLEc3/K740SqBwkIWXi760wfE/1csUKw2QDHmxI1KHBFSg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKj9ZMBNbvjNjPNUf/WmRegQcPf9AWG+ikopSZZYpjtAvKvzfjsAjGbMYH5W5LA4Bw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "44227144-01e0-4c41-ad24-797f9620af12",
+                            SecurityStamp = "c193f557-f156-4733-a7d3-990c7f41a078",
                             TwoFactorEnabled = false,
                             UserName = "Customer@localhost.com"
                         },
@@ -459,7 +462,7 @@ namespace NutriView.Server.Migrations
                         {
                             Id = "1507dbd1-1c83-4ad2-9b0e-4d298c7b4521",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0f5131ec-794e-44d0-be00-6d126ffef1c4",
+                            ConcurrencyStamp = "ebdf3b3f-cd28-46d2-919e-471872c1125d",
                             Email = "Manager@localhost.com",
                             EmailConfirmed = false,
                             FirstName = "Manager",
@@ -467,9 +470,9 @@ namespace NutriView.Server.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "Manager@LOCALHOST.COM",
                             NormalizedUserName = "MANAGER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJ5KhXwRjL2QjoEBAX2CLK3FXdHOMAkPOoxA7j6q/lVms37uM2uzLftVbyMT2QQoWg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEETVFykDAwPA8XIseylBnoVmujNQx8CK4/RC8M5YLTBmJwhsM/0Yeexr2gY6IWx9+g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "814b84ff-9d37-462e-a1d8-ab0a1b482c69",
+                            SecurityStamp = "7313f14e-4da0-4017-8ef0-5532cf7e2aa8",
                             TwoFactorEnabled = false,
                             UserName = "Manager@localhost.com"
                         },
@@ -477,7 +480,7 @@ namespace NutriView.Server.Migrations
                         {
                             Id = "4d3dfcba-a0af-4b10-989d-d63dcfec5e97",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a342e264-495b-4505-9420-33f5b7f93761",
+                            ConcurrencyStamp = "fe7abc33-7827-4d2d-ad08-3ac607e531d8",
                             Email = "Staff@localhost.com",
                             EmailConfirmed = false,
                             FirstName = "Staff",
@@ -485,9 +488,9 @@ namespace NutriView.Server.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "Staff@LOCALHOST.COM",
                             NormalizedUserName = "STAFF@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJY3pv2OV8b8hYfZdc6Nr4oqmlg2TsH8g6cgkFKpXM1GcE68JWNjMJpZIK5gHMXypA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMoDX6h55Nk/gKDEDb+W3lXZ7ea//ajWLqMUuiyWQlCoHgPuf88IidI98QnYVx8VAQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "979011e4-8ea7-4f4e-90b9-e43b0ef93787",
+                            SecurityStamp = "85738dcf-906c-42d9-a358-1570d23beb8a",
                             TwoFactorEnabled = false,
                             UserName = "Staff@localhost.com"
                         });
@@ -536,8 +539,8 @@ namespace NutriView.Server.Migrations
                             CompanyDescription = "At NuriView Corporations, we believe that a heathy lifestyle would always begins with proper nutrition.We are a dedicated team of nutritionists and dietitians comitted in providing you with the knowledge and tools to aid you in your journey to a healthier diet.",
                             CompanyName = "NutriView",
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(1404),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(1404),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 6, 801, DateTimeKind.Local).AddTicks(9469),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 6, 801, DateTimeKind.Local).AddTicks(9470),
                             Mission = "Our mission is to empower individuals to achieve optimal health through mindful eating. We understand that nutrition is not always a one-size-fits-all.Our goal is to guide you on a personalized journey towards a balanced and nourishing lifestyle that will bring you a step closer to a healthier you.",
                             UpdatedBy = "System"
                         },
@@ -547,8 +550,8 @@ namespace NutriView.Server.Migrations
                             CompanyDescription = "Not Yet Available",
                             CompanyName = "NutriViewCorps",
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(1406),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(1407),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 6, 801, DateTimeKind.Local).AddTicks(9473),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 6, 801, DateTimeKind.Local).AddTicks(9474),
                             Mission = "Our Mission is to encourage people to eat healthy and live healthy",
                             UpdatedBy = "System"
                         });
@@ -580,9 +583,6 @@ namespace NutriView.Server.Migrations
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GenderId")
-                        .HasColumnType("int");
-
                     b.Property<double?>("Height")
                         .HasColumnType("float");
 
@@ -603,8 +603,6 @@ namespace NutriView.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GenderId");
-
                     b.ToTable("Customers");
 
                     b.HasData(
@@ -613,8 +611,8 @@ namespace NutriView.Server.Migrations
                             Id = 1,
                             Age = 31,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8388),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8403),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5220),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5237),
                             Email = "Test@Blazor.com",
                             Gender = "Male",
                             Height = 160.0,
@@ -628,8 +626,8 @@ namespace NutriView.Server.Migrations
                             Id = 2,
                             Age = 32,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8408),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8409),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5241),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5241),
                             Email = "Test2@Blazor.com",
                             Gender = "Female",
                             Height = 178.0,
@@ -753,8 +751,8 @@ namespace NutriView.Server.Migrations
                             Calories = 25.0,
                             Carbohydrates = 6.0,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(2295),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(2296),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 6, 802, DateTimeKind.Local).AddTicks(39),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 6, 802, DateTimeKind.Local).AddTicks(43),
                             Fats = 0.10000000000000001,
                             FoodDesc = "Carrots Contains 25 Calories and 6g of Carbohydrates , etc",
                             Name = "Carrots",
@@ -769,8 +767,8 @@ namespace NutriView.Server.Migrations
                             Calories = 165.0,
                             Carbohydrates = 0.0,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(2299),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(2300),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 6, 802, DateTimeKind.Local).AddTicks(47),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 6, 802, DateTimeKind.Local).AddTicks(48),
                             Fats = 3.6000000000000001,
                             FoodDesc = "Chicken Contains 165 Calories per 100 grams and does not have any Carbohydrates , etc",
                             Name = "Chicken",
@@ -822,9 +820,9 @@ namespace NutriView.Server.Migrations
                             Id = 1,
                             CreatedBy = "System",
                             CustomerID = 1,
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8947),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8948),
-                            Time_Stamp = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8947),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5876),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5877),
+                            Time_Stamp = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5874),
                             TotalCalories = 22.0,
                             UpdatedBy = "System"
                         },
@@ -833,68 +831,11 @@ namespace NutriView.Server.Migrations
                             Id = 2,
                             CreatedBy = "System",
                             CustomerID = 2,
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8950),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8951),
-                            Time_Stamp = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8949),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5879),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5880),
+                            Time_Stamp = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5879),
                             TotalCalories = 34.0,
                             UpdatedBy = "System"
-                        });
-                });
-
-            modelBuilder.Entity("NutriView.Shared.Domain.Gender", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateUpdated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Genders");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateUpdated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Male"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateUpdated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Female"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateUpdated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Others"
                         });
                 });
 
@@ -945,8 +886,8 @@ namespace NutriView.Server.Migrations
                             Id = 1,
                             Calories = 0.0,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 8, 23, 19, 998, DateTimeKind.Utc).AddTicks(9396),
-                            DateUpdated = new DateTime(2024, 1, 30, 8, 23, 19, 998, DateTimeKind.Utc).AddTicks(9397),
+                            DateCreated = new DateTime(2024, 1, 30, 8, 19, 7, 60, DateTimeKind.Utc).AddTicks(6293),
+                            DateUpdated = new DateTime(2024, 1, 30, 8, 19, 7, 60, DateTimeKind.Utc).AddTicks(6294),
                             FoodEntryID = 1,
                             Name = "Carrots",
                             PortionSize = 1.0,
@@ -958,8 +899,8 @@ namespace NutriView.Server.Migrations
                             Id = 2,
                             Calories = 0.0,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 8, 23, 19, 998, DateTimeKind.Utc).AddTicks(9400),
-                            DateUpdated = new DateTime(2024, 1, 30, 8, 23, 19, 998, DateTimeKind.Utc).AddTicks(9400),
+                            DateCreated = new DateTime(2024, 1, 30, 8, 19, 7, 60, DateTimeKind.Utc).AddTicks(6297),
+                            DateUpdated = new DateTime(2024, 1, 30, 8, 19, 7, 60, DateTimeKind.Utc).AddTicks(6298),
                             FoodEntryID = 2,
                             Name = "ChickenRice",
                             PortionSize = 1.0,
@@ -1011,8 +952,8 @@ namespace NutriView.Server.Migrations
                         {
                             Id = 1,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(1597),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(1598),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 6, 801, DateTimeKind.Local).AddTicks(9737),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 6, 801, DateTimeKind.Local).AddTicks(9738),
                             NutritionDescription = "Essential for vision, immune function, and skin health.",
                             NutritionImagePath = "-",
                             NutritionName = "Vitamin A",
@@ -1023,8 +964,8 @@ namespace NutriView.Server.Migrations
                         {
                             Id = 2,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(1600),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(1600),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 6, 801, DateTimeKind.Local).AddTicks(9740),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 6, 801, DateTimeKind.Local).AddTicks(9741),
                             NutritionDescription = "Supports bone health, immune system, and overall well-being.",
                             NutritionImagePath = "-",
                             NutritionName = "Vitamin D",
@@ -1077,8 +1018,8 @@ namespace NutriView.Server.Migrations
                             Id = 1,
                             CreatedBy = "System",
                             CustomerID = 1,
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(9694),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(9696),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(6796),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(6798),
                             TargetBMI = 19.0,
                             TargetCalorieDaily = 2000.0,
                             TargetCarbDaily = 300.0,
@@ -1089,8 +1030,8 @@ namespace NutriView.Server.Migrations
                             Id = 2,
                             CreatedBy = "System",
                             CustomerID = 2,
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(9698),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(9699),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(6800),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(6801),
                             TargetBMI = 21.0,
                             TargetCalorieDaily = 2000.0,
                             TargetCarbDaily = 290.0,
@@ -1261,8 +1202,8 @@ namespace NutriView.Server.Migrations
                             Id = 1,
                             CompanyId = 1,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(2719),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(2721),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 6, 802, DateTimeKind.Local).AddTicks(1667),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 6, 802, DateTimeKind.Local).AddTicks(1672),
                             Email = "ngchunlim04@gmail.com",
                             ManagerID = 1,
                             Password = "Chun11",
@@ -1276,8 +1217,8 @@ namespace NutriView.Server.Migrations
                             Id = 2,
                             CompanyId = 1,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(2724),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(2724),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 6, 802, DateTimeKind.Local).AddTicks(1675),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 6, 802, DateTimeKind.Local).AddTicks(1675),
                             Email = "Test04@gmail.com",
                             ManagerID = 2,
                             Password = "Lim12",
@@ -1341,10 +1282,10 @@ namespace NutriView.Server.Migrations
                             Cost = 0.0,
                             CreatedBy = "System",
                             CustomerID = 1,
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8636),
-                            DateEnd = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8634),
-                            DateStart = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8632),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8636),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5587),
+                            DateEnd = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5586),
+                            DateStart = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5584),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5588),
                             SubInfoID = 0,
                             UpdatedBy = "System"
                         },
@@ -1354,10 +1295,10 @@ namespace NutriView.Server.Migrations
                             Cost = 0.0,
                             CreatedBy = "System",
                             CustomerID = 2,
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8640),
-                            DateEnd = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8639),
-                            DateStart = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8639),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 998, DateTimeKind.Local).AddTicks(8640),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5591),
+                            DateEnd = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5591),
+                            DateStart = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5591),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 7, 60, DateTimeKind.Local).AddTicks(5592),
                             SubInfoID = 0,
                             UpdatedBy = "System"
                         });
@@ -1407,8 +1348,8 @@ namespace NutriView.Server.Migrations
                         {
                             Id = 1,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(1180),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(1201),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 6, 801, DateTimeKind.Local).AddTicks(9164),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 6, 801, DateTimeKind.Local).AddTicks(9187),
                             SubCost = 5.0,
                             SubDescription = "Unlocks The Personal Quota Tracker",
                             SubMonthsDuration = 0,
@@ -1420,8 +1361,8 @@ namespace NutriView.Server.Migrations
                         {
                             Id = 2,
                             CreatedBy = "System",
-                            DateCreated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(1204),
-                            DateUpdated = new DateTime(2024, 1, 30, 16, 23, 19, 797, DateTimeKind.Local).AddTicks(1205),
+                            DateCreated = new DateTime(2024, 1, 30, 16, 19, 6, 801, DateTimeKind.Local).AddTicks(9190),
+                            DateUpdated = new DateTime(2024, 1, 30, 16, 19, 6, 801, DateTimeKind.Local).AddTicks(9190),
                             SubCost = 30.0,
                             SubDescription = "Unlocks The Personal Quota Tracker and other Features!!",
                             SubMonthsDuration = 0,
@@ -1482,13 +1423,6 @@ namespace NutriView.Server.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NutriView.Shared.Domain.Customer", b =>
-                {
-                    b.HasOne("NutriView.Shared.Domain.Gender", null)
-                        .WithMany("Customers")
-                        .HasForeignKey("GenderId");
-                });
-
             modelBuilder.Entity("NutriView.Shared.Domain.EntryLinkFood", b =>
                 {
                     b.HasOne("NutriView.Shared.Domain.FoodEntry", "FoodEntry")
@@ -1526,15 +1460,6 @@ namespace NutriView.Server.Migrations
                         .HasForeignKey("CustomerID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("NutriView.Shared.Domain.Gender", b =>
-                {
-                    b.HasOne("NutriView.Shared.Domain.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
 
                     b.Navigation("Customer");
                 });
@@ -1639,11 +1564,6 @@ namespace NutriView.Server.Migrations
                     b.Navigation("EntryLinkFood");
 
                     b.Navigation("Meals");
-                });
-
-            modelBuilder.Entity("NutriView.Shared.Domain.Gender", b =>
-                {
-                    b.Navigation("Customers");
                 });
 
             modelBuilder.Entity("NutriView.Shared.Domain.Service", b =>

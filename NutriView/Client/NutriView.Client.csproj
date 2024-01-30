@@ -8,10 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Genders\Create.razor" />
+    <Content Remove="Pages\Genders\Edit.razor" />
+    <Content Remove="Pages\Genders\Index.razor" />
     <Content Remove="Pages\SubmitFoodEntry.razor" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Pages\Genders\Create.razor" />
+    <None Include="Pages\Genders\Edit.razor" />
+    <None Include="Pages\Genders\Index.razor" />
     <None Include="Pages\Services\Create.razor" />
     <None Include="Pages\Services\Edit.razor" />
     <None Include="Pages\Services\Index.razor" />
