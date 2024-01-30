@@ -75,7 +75,7 @@
     [Parameter] public bool Disabled { get; set; } = false;
     [Parameter] public bool SubmitDataThroughForm { get; set; }
 
-    public int ServiceIDForFoodEntry = 1; //Service ID is 1 (Which allow User to use SubmitFormEntries) (Adminstrator Only)
+    private string ServiceIDForFoodEntry = "9e7)9bD"; //Service ID is  9e7)9bD (Which allow User to use SubmitFormEntries) (Adminstrator Only)
 
 
     private IList<Customer>? Customers;
@@ -118,9 +118,13 @@
                         {
                             foreach (var l in LinkServSubInfo)
                             {
-                                if (ServiceIDForFoodEntry == l.ServiceID)
+                                var Servicing = Services.Where(ser => ser.Id == l.ServiceID).FirstOrDefault();
+                                if (ServiceIDForFoodEntry == Servicing.ServiceCode)
                                 {
-                                    FilterredCustomers.Add(c);
+                                    if (!FilterredCustomers.Contains(c))
+                                    {
+                                        FilterredCustomers.Add(c);
+                                    }
                                 }
                             }
                         }

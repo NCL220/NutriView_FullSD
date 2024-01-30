@@ -11,6 +11,7 @@ namespace NutriView.Shared.Domain
         public string? ServiceName { get; set; }
         public string? ServiceDescription { get; set; }
 
+        public string? ServiceCode { get; set; }
         public virtual List<ServiceLinkSubInfo>? ServiceLinkSubInfos { get; set; }
     }
 }

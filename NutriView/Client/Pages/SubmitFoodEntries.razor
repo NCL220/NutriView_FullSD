@@ -168,8 +168,6 @@
     {
         try
         {
-
-
             IList<int> foodeatenids = foodeaten.Select(food => food.Id).ToList();
 
 
@@ -200,20 +198,16 @@
                         await _client.PostAsJsonAsync(Endpoints.EntryLinkFoodsEndpoint, entrylinkfood);
                         Console.WriteLine($"Created FoodEntryLink For FoodId: {IndividualFoodEatenId} ");
                     }
-                    //Navigate to the appropriate page or perform other actions
                     _navManager.NavigateTo($"/");
                 }
                 else
                 {
-                    Console.WriteLine($"---------------------------Created FoodEntry is null");
-                    // Handle the case where the response content couldn't be parsed as FoodEntry
-                    // You might want to add error handling logic here
+                    Console.WriteLine($"Created FoodEntry is null");
                 }
             }
             else
             {
-                Console.WriteLine($"----------------------Response is null");
-                // Handle errors here
+                Console.WriteLine($"Response - null");
             }
         }
         catch (Exception ex)

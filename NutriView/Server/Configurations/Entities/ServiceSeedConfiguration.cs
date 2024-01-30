@@ -14,12 +14,14 @@ namespace NutriView.Server.Configurations.Entities
                  Id = 1,
                  ServiceName = "Test",
                  ServiceDescription = "Test",
+                 ServiceCode = ""
              },
              new Service
              {
                  Id = 2,
                  ServiceName = "Test2",
                  ServiceDescription = "Test2",
+                 ServiceCode=""
              }
             );
         }

@@ -109,7 +109,7 @@
           vertical-align:middle;
           font-weight: 300;
           font-size: 12px;
-          color: forestgreen;
+          color: white;
           border: 2px solid aqua;
         }
 
@@ -278,11 +278,11 @@
     private List<ServiceLinkSubInfo>? servicelinksubinfos;
     private List<Service>? services;
     private List<Food>? foodlist;
-    public int ServiceIDForNutriQuota = 2; //Service ID is 2 (Which allow User to use NutriQuota) (Adminstrator Only)
+    public string ServiceCodeForNutriQuota = "4I${wHZ" ; //Service ID is 4I${wHZ (Which allow User to use NutriQuota) (Adminstrator Only)
     public double TotalCaloriesCheck = 0;
 
 
-    
+
 
     protected async override Task OnInitializedAsync()
     {
@@ -411,7 +411,7 @@
                             if (response.IsSuccessStatusCode)
                             {
                                 Console.WriteLine("Successfully dynamically changed total calories");
-                                
+
                             }
                             else
                             {
@@ -434,33 +434,40 @@
     private void ServiceIDCheckForNutriQuota()
     {
 
-        if (customer is not null)
+        if (customers is not null)
         {
-
-            var subscription = subscriptions.Where(s => s.CustomerID == customer.Id).OrderByDescending(s => s.DateCreated).FirstOrDefault();
-            if (subscription is not null)
+            foreach (var c in customers)
             {
-                var sinfo = subscriptioninfos.Where(si => si.Id == subscription.SubInfoID).FirstOrDefault();
-                if (sinfo is not null)
+                var subscription = subscriptions.Where(s => s.CustomerID == c.Id).OrderByDescending(s => s.DateCreated).FirstOrDefault();
+                if (subscription is not null)
                 {
-                    var LinkServSubInfo = servicelinksubinfos.Where(sl => sl.SubscriptionInfoID == sinfo.Id).ToList(); // ToList() to materialize the collection
-
-                    if (LinkServSubInfo is not null)
+                    var sinfo = subscriptioninfos.Where(si => si.Id == subscription.SubInfoID).FirstOrDefault();
+                    if (sinfo is not null)
                     {
-                        foreach (var l in LinkServSubInfo)
+                        var LinkServSubInfo = servicelinksubinfos.Where(sl => sl.SubscriptionInfoID == sinfo.Id).ToList(); // ToList() to materialize the collection
+
+                        if (LinkServSubInfo is not null)
                         {
-                            if (ServiceIDForNutriQuota == l.ServiceID)
+                            foreach (var l in LinkServSubInfo)
                             {
-                                _navManager.NavigateTo($"/PersonalNutritionalQuotas/create/{id}");
+                                var Servicing = services.Where(ser => ser.Id == l.ServiceID).ToList();
+                                foreach(var eachservice in Servicing)
+                                {
+                                    if (ServiceCodeForNutriQuota ==eachservice.ServiceCode)
+                                    {
+                                        Console.WriteLine($"Service Matched");
+                                        _navManager.NavigateTo($"/nutritionalQuotas/create/");
+                                    } 
+                                    Console.WriteLine($"Service UnMatched");
+                                }
+
+                            }
                             }
                         }
                     }
                 }
             }
-
         }
 
 
     }
-
-}

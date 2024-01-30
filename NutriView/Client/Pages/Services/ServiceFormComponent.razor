@@ -19,6 +19,13 @@
 				<ValidationMessage For="@(() => service.ServiceDescription)" />
 			</div>
 		</div>
+		<div class="form-group">
+			<label>Service Code: </label>
+			<div>
+				<InputText @bind-Value="service.ServiceCode" class="form-control" />
+				<ValidationMessage For="@(() => service.ServiceCode)" />
+			</div>
+		</div>
     </fieldset>
 	@if (!Disabled)
 	{
