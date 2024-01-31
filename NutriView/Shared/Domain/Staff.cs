@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -9,15 +10,22 @@ namespace NutriView.Shared.Domain
 {
     public class Staff : BaseDomainModel
     {
-        public string? UserName { get; set; }
-
+        [Required(ErrorMessage = "Username is required.")]
+        [StringLength(100, ErrorMessage = "Username must be less than 100 characters.")]
+        public string UserName { get; set; }
+        [StringLength(100, ErrorMessage = "Role must be less than 100 characters.")]
         public string? Role { get; set; }
+        [Required(ErrorMessage = "Password is required.")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+        [Required(ErrorMessage = "Email is required.")]
+        [DataType(DataType.EmailAddress)]
+        [EmailAddress(ErrorMessage = "Invalid Email Address.")]
+        public string Email { get; set; }
 
-        public string? Password { get; set; }
-
-        public string? Email { get; set; }
-
-        public int? PhoneNumber { get; set; }
+        [Required] 
+        [DataType(DataType.PhoneNumber)]
+        public int PhoneNumber { get; set; }
 
         public byte[]? ImageByte { get; set; }
         public virtual List<NutritionInfo>? NutritionInfos { get; set; }
@@ -25,6 +33,7 @@ namespace NutriView.Shared.Domain
 
         public int? ManagerID { get; set; }
 
+        [Required(ErrorMessage = "Company ID is required.")]
         public int CompanyId {  get; set; }
         public virtual Company? Company { get; set; }
     }
