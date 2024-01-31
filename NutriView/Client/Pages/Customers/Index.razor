@@ -41,7 +41,7 @@ else
                     <td>@customer.Email</td>
                     <td>@customer.Height cm</td>
                     <td>@customer.Weight kg</td>
-                    <td>@customer.Gender</td>
+                    <td>@customer.GenderID</td>
                     <td>
                         <a href="/customers/edit/@customer.Id" class="btn btn-primary">Edit</a>
                         <button class="btn btn-danger" @onclick="() => DeleteCustomer(customer.Id)">Delete</button>

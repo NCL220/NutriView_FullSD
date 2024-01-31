@@ -15,7 +15,9 @@ namespace NutriView.Shared.Domain
 
         public double? Weight { get; set; }
 
-        public string? Gender { get; set; }
+        public int GenderID { get; set; }
+
+        public virtual Gender? Gender { get; set; }
 
         public byte[]? ImageBytes { get; set; }
 
