@@ -17,7 +17,7 @@
     }
     private async Task CreateGender()
     {
-        var response = await _client.PostAsJsonAsync($"{Endpoints.genderEndpoint}", gender);
+        var response = await _client.PostAsJsonAsync($"{Endpoints.GendersEndpoint}", gender);
 
         if (response.IsSuccessStatusCode)
         {

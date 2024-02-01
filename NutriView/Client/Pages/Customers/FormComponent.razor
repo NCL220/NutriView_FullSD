@@ -104,6 +104,13 @@
             <InputText id="email" class="form-control" @bind-Value="customer.Email" />
             <ValidationMessage For="@(() => customer.Email)" />
         </div>
+
+        <div class="form-group">
+            <label for="pwd">Password:</label>
+            <InputText id="pwd" class="form-control" @bind-Value="customer.Password" />
+            <ValidationMessage For="@(() => customer.Password)" />
+        </div>
+
         <div class="form-group">
             <label for="height">Height (cm):</label>
             <InputNumber id="height" class="form-control" @bind-Value="customer.Height" />
@@ -120,10 +127,13 @@
     <label for="gender">Gender:</label>
     <InputSelect id="gender" class="form-control" @bind-Value="customer.GenderID">
         <option value="">-- Select Gender --</option>
-        @foreach (var gender in Genders)
-        {
-            <option value="@gender.Id">@gender.Name</option>
-        }
+             @if(Genders is not null){
+                 @foreach (var gender in Genders)
+                 {
+                    <option value="@gender.Id">@gender.Name</option>
+                 }
+             }
+
     </InputSelect>
 </div>
     </div>
@@ -143,11 +153,11 @@
         [Parameter] public bool Disabled { get; set; } = false;
 
         private IList<FoodEntry>? Entries;
-        private IList<Gender> Genders;
+        private IList<Gender>? Genders;
 
         protected async override Task OnInitializedAsync()
         {
-            Genders = await _client.GetFromJsonAsync<List<Gender>>($"{Endpoints.genderEndpoint}");
+            Genders = await _client.GetFromJsonAsync<List<Gender>>($"{Endpoints.GendersEndpoint}");
             Entries = await _client.GetFromJsonAsync<List<FoodEntry>>($"{Endpoints.FoodEntriesEndpoint}");
         }
         private async Task HandleFileSelection(InputFileChangeEventArgs e)

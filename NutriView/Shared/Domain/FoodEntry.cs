@@ -24,6 +24,7 @@ namespace NutriView.Shared.Domain
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+
             throw new NotImplementedException();
         }
     }
