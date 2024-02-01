@@ -12,17 +12,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Pages\Services\Create.razor" />
-    <None Include="Pages\Services\Edit.razor" />
-    <None Include="Pages\Services\Index.razor" />
-    <None Include="Pages\Services\ServiceFormComponent.razor" />
+    <None Include="Pages\Services_CRUD\Create.razor" />
+    <None Include="Pages\Services_CRUD\Edit.razor" />
+    <None Include="Pages\Services_CRUD\Index.razor" />
+    <None Include="Pages\Services_CRUD\ServiceFormComponent.razor" />
     <None Include="Pages\ServiceLinkSubInfos_CRUD\Create.razor" />
     <None Include="Pages\ServiceLinkSubInfos_CRUD\Edit.razor" />
     <None Include="Pages\ServiceLinkSubInfos_CRUD\Index.razor" />
     <None Include="Pages\ServiceLinkSubInfos_CRUD\SLSIFormComponent.razor" />
-    <None Include="Pages\SubscriptionInfo\Create.razor" />
-    <None Include="Pages\SubscriptionInfo\Edit.razor" />
-    <None Include="Pages\SubscriptionInfo\Index.razor" />
+    <None Include="Pages\SubscriptionInfo_CRUD\Create.razor" />
+    <None Include="Pages\SubscriptionInfo_CRUD\Edit.razor" />
+    <None Include="Pages\SubscriptionInfo_CRUD\Index.razor" />
   </ItemGroup>
 
   <ItemGroup>

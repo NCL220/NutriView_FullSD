@@ -63,7 +63,7 @@
 	[Parameter] public EntryLinkFood? entryLinkFood { get; set; }
 	[Parameter] public string ButtonText { get; set; } = "Save";
 	[Parameter] public EventCallback OnValidSubmit { get; set; }
-
+	[Parameter] public bool AddingFoodThroughProfile { get; set; }
 	[Parameter] public bool SubmitDataThroughForm { get; set; }
 
 	private IList<Food>? Foods;

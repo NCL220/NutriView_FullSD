@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace NutriView.Shared.Domain
 {
-    public class Food : BaseDomainModel, IValidatableObject
+    public class Food : BaseDomainModel
     {
         [Required(ErrorMessage = "The name of the food is required.")]
         [StringLength(200, ErrorMessage = "The name must be less than 200 characters long.")]
@@ -33,9 +33,5 @@ namespace NutriView.Shared.Domain
         public virtual List<EntryLinkFood>? EntryLinkFood {  get; set; }
         public virtual Staff? Staff { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

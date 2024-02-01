@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NutriView.Shared.Domain
 {
-    public class Company : BaseDomainModel, IValidatableObject
+    public class Company : BaseDomainModel
     {
         
         [StringLength(300, ErrorMessage = "Mission is too long.")]
@@ -24,9 +24,6 @@ namespace NutriView.Shared.Domain
 
         public virtual List<Staff>? Staffs { get; set;}
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

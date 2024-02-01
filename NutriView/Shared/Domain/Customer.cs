@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace NutriView.Shared.Domain
 {
-    public class Customer : BaseDomainModel, IValidatableObject
+    public class Customer : BaseDomainModel
     {
         [Required(ErrorMessage = "Username is required.")]
         [StringLength(100, ErrorMessage = "Username must be less than 100 characters.")]
@@ -36,10 +36,6 @@ namespace NutriView.Shared.Domain
         public byte[]? ImageBytes { get; set; }
 
         public virtual List<FoodEntry>? Entries { get; set; }
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            throw new NotImplementedException();
-        }
 
     }
 }

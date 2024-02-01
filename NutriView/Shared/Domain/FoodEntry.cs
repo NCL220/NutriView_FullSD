@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NutriView.Shared.Domain
 {
-    public class FoodEntry : BaseDomainModel, IValidatableObject
+    public class FoodEntry : BaseDomainModel
     {
         [Range(0, double.MaxValue, ErrorMessage = "Total calories must be a non-negative number.")]
         public double TotalCalories { get; set; }
@@ -22,10 +22,5 @@ namespace NutriView.Shared.Domain
 
         public virtual Customer? Customer { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-
-            throw new NotImplementedException();
-        }
     }
 }

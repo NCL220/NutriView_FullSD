@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace NutriView.Shared.Domain
 {
-    public class Meal : BaseDomainModel, IValidatableObject
+    public class Meal : BaseDomainModel
     {
-        [Required(ErrorMessage = "Meal name is required.")]
+        [Required(ErrorMessage = "Meal nae is required.")]
         [StringLength(200, ErrorMessage = "Meal name must be less than 200 characters.")]
         public string Name { get; set; }
         [Range(0, double.MaxValue, ErrorMessage = "Calories must be a non-negative number.")]
@@ -23,9 +23,5 @@ namespace NutriView.Shared.Domain
         
         public virtual FoodEntry? FoodEntry { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

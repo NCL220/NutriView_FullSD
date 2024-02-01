@@ -1,7 +1,7 @@
 ﻿@page "/PersonalNutritionalQuotas/edit/{id:int}"
 @inject HttpClient _client
 @inject NavigationManager _navManager
-@using NutriView.Client.Pages.NutritionalQuotas;
+@using NutriView.Client.Pages.NutritionalQuotas_CRUD;
 
 <FormComponent ButtonText="Update" OnValidSubmit="EditNutritionalQuota" EditQuotaThroughPersonalProfile="@EditQuotaThroughPersonalProfile" nutritionalQuota="nutritionalQuota" />
 @code {
