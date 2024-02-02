@@ -34,7 +34,13 @@ else
                 <tr>
                     <td>@foodEntry.TotalCalories</td>
                     <td>@foodEntry.Time_Stamp</td>
-                    <td>@foodEntry.CustomerID</td>
+                        @if(customers is not null)
+                        {
+                            @foreach (var customer in customers.Where(c => c.Id == foodEntry.CustomerID))
+                            {
+                                <td>@customer.UserName</td>
+                            }
+                        }
                     <td>
                         <button class="btn btn-primary" @onclick="() => EditFoodEntry(foodEntry.Id)">Edit</button>
                         <button class="btn btn-danger" @onclick="() => DeleteFoodEntry(foodEntry.Id)">Delete</button>
@@ -47,9 +53,10 @@ else
 
 @code {
     private List<FoodEntry>? foodEntries;
-
+    private List<Customer>? customers;
     protected override async Task OnInitializedAsync()
     {
+        customers = await Http.GetFromJsonAsync<List<Customer>>("api/Customers");
         foodEntries = await Http.GetFromJsonAsync<List<FoodEntry>>("api/FoodEntries");
     }
 

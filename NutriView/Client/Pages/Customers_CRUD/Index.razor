@@ -41,6 +41,13 @@ else
                     <td>@customer.Email</td>
                     <td>@customer.Height cm</td>
                     <td>@customer.Weight kg</td>
+                    @if(genders is not null)
+                    {
+                        @foreach (var gender in genders.Where(g => g.Id == customer.GenderID))
+                        {
+                            <td>@gender.Name</td>
+                        }
+                    }
                     <td>@customer.GenderID</td>
                     <td>
                         <a href="/customers/edit/@customer.Id" class="btn btn-primary">Edit</a>
@@ -55,6 +62,7 @@ else
 
 @code {
     private List<Customer>? customers;
+    private List<Gender>? genders;
 
     protected override async Task OnInitializedAsync()
     {
@@ -63,6 +71,7 @@ else
         {
             customers = new List<Customer>();
         }
+        genders = await _client.GetFromJsonAsync<List<Gender>>("api/genders");
     }
 
     private async Task DeleteCustomer(int customerId)
