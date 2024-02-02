@@ -1,0 +1,30 @@
+﻿@page "/entrylinkfoods/edit/{id:int}"
+@using NutriView.Shared.Domain
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Edit Food Entry</h3>
+<ELFFormComponent ButtonText="Update" OnValidSubmit="EditEntrylinkfoods" entryLinkFood="entryLinkFood"></ELFFormComponent>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private EntryLinkFood? entryLinkFood = new EntryLinkFood();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        entryLinkFood = await _client.GetFromJsonAsync<EntryLinkFood>($"{Endpoints.EntryLinkFoodsEndpoint}/{Id}");
+    }
+
+    private async Task EditEntrylinkfoods()
+    {
+        var response = await _client.PutAsJsonAsync($"{Endpoints.EntryLinkFoodsEndpoint}/{Id}", entryLinkFood);
+        if (response.IsSuccessStatusCode)
+        {
+            _navManager.NavigateTo("/entrylinkfoods/");
+        }
+        else
+        {
+            // Handle errors here
+        }
+    }
+}

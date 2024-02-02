@@ -12,16 +12,16 @@ namespace NutriView.Server.Configurations.Entities
              new Service
              {
                  Id = 1,
-                 ServiceName = "Test",
-                 ServiceDescription = "Test",
-                 ServiceCode = ""
+                 ServiceName = "SubmitFoodEntries",
+                 ServiceDescription = "This Service will allow customer to Submit Food Entries",
+                 ServiceCode = "9e7)9bD"
              },
              new Service
              {
                  Id = 2,
-                 ServiceName = "Test2",
-                 ServiceDescription = "Test2",
-                 ServiceCode=""
+                 ServiceName = "Create Nutritional Quota",
+                 ServiceDescription = "This Service will allow customer to create their Nutrtional Quota",
+                 ServiceCode= "4I${wHZ"
              }
             );
         }

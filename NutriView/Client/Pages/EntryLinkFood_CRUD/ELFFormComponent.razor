@@ -20,11 +20,14 @@
 					{
 						@foreach (var foodentry in FoodEntries)
 						{
-							<option value="@foodentry.Id">@foodentry.Id</option>
-							@* @foreach (var customer in Customers.Where(c => c.Id == foodentry.CustomerID))
-							{
-								<option value="@foodentry.Id">@foodentry.Time_Stamp</option>
-							} *@
+								@if (Customers != null)
+								{
+
+									@foreach (var customer in Customers.Where(c => c.Id == foodentry.CustomerID))
+									{
+										<option value="@foodentry.Id">@customer.UserName | @foodentry.DateUpdated</option>
+									}
+								}
 						}
 					}
 			</InputSelect>
@@ -73,6 +76,7 @@
     {
 		FoodEntries = await _client.GetFromJsonAsync<List<FoodEntry>>($"{Endpoints.FoodEntriesEndpoint}");
 		Foods = await _client.GetFromJsonAsync<List<Food>>($"{Endpoints.FoodsEndpoint}");
+		Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
     }
     
 }

@@ -1,62 +1,7 @@
 ﻿@using NutriView.Shared.Domain;
 @inject HttpClient _client
 <head>
-    <style>
-        .rounded-div {
-            margin-top:5%;
-            width: 80%;
-            height: 60%;
-            margin-left:10%;
-            border-radius: 15px; /* Adjust the value for more or less rounded corners */
-            background-color: white;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Shadow effect */
-            border:2px solid black;
-            padding:20px;
-            display:flex;
-            flex-direction:row;
-        }
-        
-        .rounded-normaldiv{
-            flex: 3;
-            width: 20%;
-            height: 30%;
-            border: 2px solid black;
-            border-radius: 20px;
-            margin:auto;
-            padding:20px;
-        }
-
-        .rounded-imagediv{
-            flex : 1;
-            width:auto;
-            height:auto;
-            border:2px solid black;
-            border-radius:20px;
-            flex-direction: column;
-        }
-        .rounded-imagesubdiv1{
-            width:90%;
-            height:auto;
-            border:2px solid black;
-            border-radius:20px;
-            margin:auto;
-        }
-        .rounded-imagesubdiv2{
-            width:auto;
-            height:auto;
-            bottom:0;
-            display: flex;
-            align-items: flex-end;
-        }
-        .rounded-imagediv img {
-                margin:auto;
-                left: 50%;
-                width: 90%;
-                height: 200px;
-                border-radius: 15px; /* Match the border-radius to the outer container */
-                object-fit: cover;
-            }
-    </style>
+    <link href="./css/StaffAndCustomerForm.css" rel="stylesheet" />
 </head>
 <EditForm Model="@customer" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />

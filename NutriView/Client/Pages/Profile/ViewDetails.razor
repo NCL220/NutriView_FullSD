@@ -220,8 +220,8 @@
                                 @foreach (var foodentry in foodEntries.Where(FoodEntry => FoodEntry.CustomerID == customer.Id))
                                 {
                                     <tr>  
-                                        <td>@foodentry.Time_Stamp</td>
-                                        <td>@foodentry.TotalCalories</td>
+                                        <td>TimeStamp : @foodentry.Time_Stamp</td>
+                                        <td>TotalCalories : @foodentry.TotalCalories</td>
                                         @if (entrylinkfoods is not null)
                                         {
                                             <td>
@@ -231,8 +231,11 @@
                                                     {
                                                         @foreach (var food in foods.Where(fd => fd.Id == foodinfoodentries.FoodID))
                                                         {
-                                                            <li>@food.Name
-                                                            <button class="small-button" @onclick="() => DeleteFoodLink(foodinfoodentries.Id)">Remove Food</button>
+                                                            Food:
+                                                            <li>
+                                                                @food.Name
+                                                                <button class="btn btn-primary" @onclick="() => EditEntryLinkFood(foodinfoodentries.Id)">Edit Food</button>
+                                                                <button class="small-button" @onclick="() => DeleteFoodLink(foodinfoodentries.Id)">Remove Food</button>
                                                             </li>
                                                         }
                                                         
@@ -242,19 +245,25 @@
 
                                             </td>
                                         }
-                                        @if(meals is not null)
+                                        @if (meals is not null)
                                         {
-                                                @foreach (var meal in meals.Where(m => m.FoodEntryID == foodentry.Id))
+                                            @foreach (var meal in meals.Where(m => m.FoodEntryID == foodentry.Id).OrderByDescending(m => m.DateUpdated).Take(1))
+                                            {
+                                                @if (meal != null)
                                                 {
-                                                    <td>@meal.Name</td>
-                                                    <td>@meal.PortionSize</td>
-                                                    <td>@meal.TimePeriod</td>
+                                                    <td>MealName: @meal.Name</td>
+                                                    <td>PortionSize: @meal.PortionSize</td>
+                                                    <td>TimePeriod: @meal.TimePeriod</td>
                                                     <td>
                                                         <button class="btn btn-primary" @onclick="() => EditMeal(meal.Id)">Edit Meal</button>
-                                                        @* <button class="btn btn-primary" @onclick="() => AddFoodthroughPersonal(foodentry.Id)">Add Food</button> *@
+                                                        <button class="btn btn-danger" @onclick="() => DeleteMeal(meal.Id)">Remove Meal</button>
                                                     </td>
+                                                }
                                             }
                                         }
+
+                                    
+
                                     </tr>
                                 }
                             </tbody>
@@ -362,17 +371,31 @@
     }
 
 
-    // private void NavigateToCreatePage()
-    // {
-    //     ServiceIDCheckForNutriQuota();
-    //     // Pass data as a query parameter in the URL
-    //     _navManager.NavigateTo($"/PersonalNutritionalQuotas/create/{id}");
-    // }
+    private async Task DeleteMeal(int mealId)
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete this meal?");
+        if (confirmed)
+        {
+            var response = await _client.DeleteAsync($"api/meals/{mealId}");
+            if (response.IsSuccessStatusCode)
+            {
+                meals = meals.Where(m => m.Id != mealId).ToList();
+                StateHasChanged();
+            }
+            else
+            {
+                // Handle error here
+            }
+        }
+    }
     private void EditMeal(int mealId)
     {
         _navManager.NavigateTo($"/meals/edit/{mealId}");
     }
-
+    private void EditEntryLinkFood(int infoId)
+    {
+        _navManager.NavigateTo($"/entrylinkfoods/edit/{infoId}");
+    }
     private async Task DeleteFoodLink(int foodlinkId)
     {
         var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete this nutrition information?");

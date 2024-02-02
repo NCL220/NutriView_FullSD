@@ -15,6 +15,7 @@ namespace NutriView.Server.Configurations.Entities
             {
                 Id= 1,
                 CustomerID= 1,
+                SubInfoID= 1,
                 DateStart = DateTime.Now,
                 DateEnd = DateTime.Now,
                 DateCreated = DateTime.Now,
@@ -26,6 +27,19 @@ namespace NutriView.Server.Configurations.Entities
             {
                 CustomerID= 2,
                 Id = 2,
+                SubInfoID = 2,
+                DateStart = DateTime.Now,
+                DateEnd = DateTime.Now,
+                DateCreated = DateTime.Now,
+                DateUpdated = DateTime.Now,
+                CreatedBy = "System",
+                UpdatedBy = "System"
+            },
+            new Subscription
+            {
+                CustomerID = 3,
+                Id = 3,
+                SubInfoID = 3,
                 DateStart = DateTime.Now,
                 DateEnd = DateTime.Now,
                 DateCreated = DateTime.Now,

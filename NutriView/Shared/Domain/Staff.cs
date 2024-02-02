@@ -25,7 +25,8 @@ namespace NutriView.Shared.Domain
 
         [Required] 
         [DataType(DataType.PhoneNumber)]
-        public int PhoneNumber { get; set; }
+        [RegularExpression(@"(6|8|9)\d{7}", ErrorMessage = "Contact Number is not a valid phone number")]
+        public string? PhoneNumber { get; set; }
 
         public byte[]? ImageByte { get; set; }
         public virtual List<NutritionInfo>? NutritionInfos { get; set; }

@@ -20,18 +20,6 @@ namespace NutriView.Server.Configurations.Entities
                  DateUpdated = DateTime.Now,
                  CreatedBy = "System",
                  UpdatedBy = "System"
-             },
-             new NutritionalQuota
-             {
-                 Id = 2,
-                 CustomerID = 2,
-                 TargetBMI = 21,
-                 TargetCalorieDaily = 2000,
-                 TargetCarbDaily = 290,
-                 DateCreated = DateTime.Now,
-                 DateUpdated = DateTime.Now,
-                 CreatedBy = "System",
-                 UpdatedBy = "System"
              }
             );
         }

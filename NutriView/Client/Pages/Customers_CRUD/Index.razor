@@ -29,6 +29,7 @@ else
                 <th>Height</th>
                 <th>Weight</th>
                 <th>Gender</th>
+                <th>Profile Pic</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -48,7 +49,16 @@ else
                             <td>@gender.Name</td>
                         }
                     }
-                    <td>@customer.GenderID</td>
+                    <td>
+                            @if (customer.ImageBytes != null && customer.ImageBytes.Length > 0)
+                            {
+                            <img src="@($"data:image/png;base64,{Convert.ToBase64String(customer.ImageBytes)}")" alt="Image" style="height:70px;width:70px;">
+                            }
+                            else
+                            {
+                            <img src="Images/Defaultimg.jpg" class="card-img" alt="Image" style="height:70px;width:70px;">
+                            }
+                    </td>
                     <td>
                         <a href="/customers/edit/@customer.Id" class="btn btn-primary">Edit</a>
                         <button class="btn btn-danger" @onclick="() => DeleteCustomer(customer.Id)">Delete</button>

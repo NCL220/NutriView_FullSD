@@ -1,88 +1,103 @@
 ﻿@using NutriView.Shared.Domain;
 @inject HttpClient _client
-
+<head>
+	<link href="./css/StaffAndCustomerForm.css" rel="stylesheet" />
+</head>
 <EditForm Model="@staff" OnValidSubmit="@OnValidSubmit">
 	<DataAnnotationsValidator />
     <ValidationSummary />
 	
-    <fieldset disabled="@Disabled">
-		<div class="form-group">
-			<label>Role:</label>
-			<InputSelect @bind-Value="staff.Role" class="form-control">
-				<option value="">-- Select Role --</option>
-				<option value="Staff">Staff</option>
-				<option value="Manager">Manager</option>
-			</InputSelect>
-		</div>
-
-		@if (staff.Role == "Manager")
-		{
-			<div class="form-group">
-				<label>Manager ID (for internal use only):</label>
-				<InputNumber @bind-Value="staff.ManagerID" class="form-control" />
-			</div>
-		}
-		<div class="form-group">
-		<label>
-			Company:
-		</label>
-		<div>
-			<InputSelect @bind-Value="staff.CompanyId" class="form-control">
-				<option value="">--Select Company--</option>
-				@if(Companies != null)
+<div class="rounded-div">
+		<div class="rounded-imagediv">
+			<div class="rounded-imagesubdiv1">
+				@if (staff.ImageByte != null && staff.ImageByte.Length > 0)
 				{
-					foreach(var company in Companies)
-					{
-						<option value="@company.Id">@company.CompanyName</option>
-					}
+					<img src="@($"data:image/png;base64,{Convert.ToBase64String(staff.ImageByte)}")" alt="Image">
 				}
-			</InputSelect>
+				else
+				{
+					<img src="Images/Defaultimg.jpg" class="card-img" alt="Image">
+				}
+			</div>
+			<div class="rounded-imagesubdiv2">
+				<div class="form-group">
+					<label for="StaffImage">Insert Staff Image : </label>
+					<InputFile id="images" class="file-input" OnChange="HandleFileSelection" />
+				</div>
+			</div>
+
+			<div class="bottom-container">
+				<button type="submit" class="btn btn-success">@ButtonText</button>
+			</div>
 		</div>
-	</div>
-	<div class="form-group">
-		<label>Name: </label>
-		<div>
-			<InputText @bind-Value="staff.UserName" class="form-control" />
-			<ValidationMessage For="@(() => staff.UserName)" />
-		</div>
-	</div>
+		<div class="rounded-normaldiv">
+			<div class="form-group">
+				<label>Role:</label>
+				<InputSelect @bind-Value="staff.Role" class="form-control">
+					<option value="">-- Select Role --</option>
+					<option value="Staff">Staff</option>
+					<option value="Manager">Manager</option>
+				</InputSelect>
+			</div>
+
+			@if (staff.Role == "Manager")
+			{
+				<div class="form-group">
+					<label>Manager ID (for internal use only):</label>
+					<InputNumber @bind-Value="staff.ManagerID" class="form-control" />
+				</div>
+			}
+			<div class="form-group">
+			<label>
+				Company:
+			</label>
+			<div>
+				<InputSelect @bind-Value="staff.CompanyId" class="form-control">
+					<option value="">--Select Company--</option>
+					@if(Companies != null)
+					{
+						foreach(var company in Companies)
+						{
+							<option value="@company.Id">@company.CompanyName</option>
+						}
+					}
+				</InputSelect>
+			</div>
+			</div>
+			<div class="form-group">
+				<label>Name: </label>
+				<div>
+					<InputText @bind-Value="staff.UserName" class="form-control" />
+					<ValidationMessage For="@(() => staff.UserName)" />
+				</div>
+			</div>
 	
-	<div class="form-group">
-		<label>Password: </label>
-		<div>
-			<InputText @bind-Value="staff.Password" class="form-control" />
-			<ValidationMessage For="@(() => staff.Password)" />
-		</div>
-	</div>
-	<div class="form-group">
-		<label>Email: </label>
-		<div>
-			<InputText @bind-Value="staff.Email" class="form-control" />
-			<ValidationMessage For="@(() => staff.Email)" />
-		</div>
-	</div>
-	<div class="form-group">
-		<label>PhoneNumber: </label>
-		<div>
-			<InputNumber @bind-Value="staff.PhoneNumber" class="form-control" />
-			<ValidationMessage For="@(() => staff.PhoneNumber)" />
-		</div>
-	</div>
+			<div class="form-group">
+				<label>Password: </label>
+				<div>
+					<InputText @bind-Value="staff.Password" class="form-control" />
+					<ValidationMessage For="@(() => staff.Password)" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label>Email: </label>
+				<div>
+					<InputText @bind-Value="staff.Email" class="form-control" />
+					<ValidationMessage For="@(() => staff.Email)" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label>PhoneNumber: </label>
+				<div>
+					<InputText @bind-Value="staff.PhoneNumber" class="form-control" />
+					<ValidationMessage For="@(() => staff.PhoneNumber)" />
+				</div>
+			</div>
 
 
-		<div class="form-group">
-			<label for="foodDesc">Insert Staff Image : </label>
-			<InputFile id="images" class="file-input" OnChange="HandleFileSelection" />
-		</div>
-    </fieldset>
-	@if (!Disabled)
-	{
-		<button type="submit" class="btn btn-success btn-block">
-			@ButtonText
-		</button>
-	}
 	
-	<BackToList Target="staff" />
+		</div>
+</div>
 </EditForm>
 @code {
 

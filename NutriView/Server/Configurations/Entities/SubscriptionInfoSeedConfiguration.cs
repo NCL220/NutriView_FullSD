@@ -13,9 +13,9 @@ namespace NutriView.Server.Configurations.Entities
              new SubscriptionInfo
              {
                  Id = 1,
-                 SubDescription = "Unlocks The Personal Quota Tracker",
-                 SubCost = 5.0,
-                 SubTierName = "Health Enthusiasts",
+                 SubDescription = "Unlocks The Personal Quota With Food Entries Submission!!",
+                 SubCost = 40.0,
+                 SubTierName = "Health Enthusiasts (Tier 3)",
                  SubType = "Monthly",
                  DateCreated = DateTime.Now,
                  DateUpdated = DateTime.Now,
@@ -25,9 +25,21 @@ namespace NutriView.Server.Configurations.Entities
              new SubscriptionInfo
              {
                  Id = 2,
-                 SubDescription = "Unlocks The Personal Quota Tracker and other Features!!",
-                 SubCost = 30.0,
-                 SubTierName = "Health Enthusiasts",
+                 SubDescription = "Unlocks The Food Entries Submission!!",
+                 SubCost = 25.0,
+                 SubTierName = "Food Enthusiasts (Tier 2)",
+                 SubType = "Yearly",
+                 DateCreated = DateTime.Now,
+                 DateUpdated = DateTime.Now,
+                 CreatedBy = "System",
+                 UpdatedBy = "System"
+             },
+             new SubscriptionInfo
+             {
+                 Id = 3,
+                 SubDescription = "Unlocks The Personal Quota Tracker!!",
+                 SubCost = 25.0,
+                 SubTierName = "Nutritional Enthusiasts (Tier 1)",
                  SubType = "Yearly",
                  DateCreated = DateTime.Now,
                  DateUpdated = DateTime.Now,

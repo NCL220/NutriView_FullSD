@@ -12,9 +12,9 @@ namespace NutriView.Server.Configurations.Entities
              new Customer
              {
                  Id = 1,
-                 UserName = "TestLim",
-                 Age = 31,
-                 Password = "Test222",
+                 UserName = "Chun Lim",
+                 Age = 19,
+                 Password = "adcmiJXdwx",
                  Email = "Test@Blazor.com",
                  Height = 160,
                  Weight = 88.5,
@@ -28,9 +28,25 @@ namespace NutriView.Server.Configurations.Entities
              new Customer
              {
                  Id = 2,
-                 UserName = "TestRRLim",
+                 UserName = "Kenneth Lim",
+                 Age = 19,
+                 Password = "Tpwads21dxw",
+                 Email = "Test2@Blazor.com",
+                 Height = 178,
+                 Weight = 69,
+                 GenderID = 1,
+                 DateCreated = DateTime.Now,
+                 DateUpdated = DateTime.Now,
+                 CreatedBy = "System",
+                 UpdatedBy = "System"
+
+             },
+             new Customer
+             {
+                 Id = 3,
+                 UserName = "Jake Lim",
                  Age = 32,
-                 Password = "Test2212",
+                 Password = "Teasc01x2212",
                  Email = "Test2@Blazor.com",
                  Height = 178,
                  Weight = 77,

@@ -29,7 +29,9 @@ else
                 <th>Vitamins</th>
                 <th>Serving Size (g)</th>
                 <th>Description</th>
-                <th></th>
+                <th>Image</th>
+                <th>Created By</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -44,6 +46,24 @@ else
                     <td>@food.ServingSize</td>
                     <td>@food.FoodDesc</td>
                     <td>
+                        @if (food.Imagebytes != null && food.Imagebytes.Length > 0)
+                        {
+                            <img src="@($"data:image/png;base64,{Convert.ToBase64String(food.Imagebytes)}")" alt="Image" style="height:70px;width:70px;">
+                        }
+                        else
+                        {
+                            <img src="Images/Defaultimg.jpg" class="card-img" alt="Image" style="height:70px;width:70px;">
+                        }
+                    </td>
+                    <td>
+                        @if (staffs is not null)
+                        {
+                            foreach(var staff in staffs.Where(s => s.Id == food.StaffId)){
+                                @staff.UserName
+                            }
+                         }
+                    </td>
+                    <td>
                         <button class="btn btn-primary" @onclick="() => EditFood(food.Id)">Edit</button>
                         <button class="btn btn-danger" @onclick="() => DeleteFood(food.Id)">Delete</button>
                     </td>
@@ -55,9 +75,10 @@ else
 
 @code {
     private List<Food>? foods;
-
+    private List<Staff>? staffs;
     protected override async Task OnInitializedAsync()
     {
+        staffs = await Http.GetFromJsonAsync<List<Staff>>("api/staffs");
         foods = await Http.GetFromJsonAsync<List<Food>>("api/foods");
     }
 

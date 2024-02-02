@@ -31,9 +31,9 @@ else
                 <th>Password</th>
                 <th>Email</th>
                 <th>PhoneNumber</th>
-                <th>ImagePathStaff</th>
-                <th>ManagerID</th>
-                <th>CompanyId</th>
+                <th>Company</th>
+                <th>Images</th>
+                <th> Actions </th>
             </tr>
         </thead>
         <tbody>
@@ -45,8 +45,26 @@ else
                     <td>@Staff.Password</td>
                     <td>@Staff.Email</td>
                     <td>@Staff.PhoneNumber</td>
-                    <td>@Staff.ManagerID</td>
-                    <td>@Staff.CompanyId</td>
+                    <td>
+                        @if(companies is not null){
+                            foreach(var company in companies.Where(c => c.Id == Staff.CompanyId))
+                            {
+                                @company.CompanyName
+                            }
+                        }
+                        
+                        
+                    </td>
+                    <td>
+                        @if (Staff.ImageByte != null && Staff.ImageByte.Length > 0)
+                        {
+                            <img src="@($"data:image/png;base64,{Convert.ToBase64String(Staff.ImageByte)}")" alt="Image" style="height:70px;width:70px;">
+                        }
+                        else
+                        {
+                            <img src="Images/Defaultimg.jpg" class="card-img" alt="Image" style="height:70px;width:70px;">
+                        }
+                    </td>
                     <td>
                         <a href="/Staffs/edit/@Staff.Id" class="btn btn-primary">Edit</a>
                         <button class="btn btn-danger" @onclick="() => Delete(Staff.Id)">Delete</button>
@@ -59,7 +77,7 @@ else
 
 @code {
     private List<Staff>? Staffs;
-
+    private List<Company>? companies;
     protected override async Task OnInitializedAsync()
     {
         try
@@ -69,6 +87,8 @@ else
             {
                 Staffs = new List<Staff>(); // Initialize to an empty list if null is returned
             }
+
+            companies = await _client.GetFromJsonAsync<List<Company>>("api/Companies");
         }
         catch (AccessTokenNotAvailableException ex)
         {

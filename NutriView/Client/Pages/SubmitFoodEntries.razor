@@ -14,13 +14,12 @@
         body{
             
             margin: 0;
-            background-color: white; /* Adjust background color as needed */
+            background-color: white;
         }
 
         .content {
             background-color: #ddd;
             padding: 10px;
-            height: 200px; /* Should be removed. Only for demonstration */
         }
 
         .rounded-div {
@@ -28,13 +27,13 @@
             margin-left:auto;
             margin-right:auto;
             align-items: center;
-            width: 80%; /* Adjust width as needed */
-            height: auto; /* Adjust height as needed */
-            border-radius: 10px; /* Adjust border-radius for rounded corners */
-            background-color: #3498db; /* Adjust background color as needed */
-            padding: 20px; /* Adjust padding as needed */
+            width: 80%;
+            height: auto;
+            border-radius: 10px;
+            background-color: #3498db;
+            padding: 20px;
             text-align: center;
-            color: #fff; /* Adjust text color as needed */
+            color: #fff;
         }
 
             .Food-Container {
@@ -44,7 +43,7 @@
                 display: flex;
                 flex-wrap: wrap;
                 flex-direction: row;
-                height: 50vh; /* Adjust the height as needed */
+                height: 50vh;
                 overflow: auto;
             }
 
@@ -54,13 +53,11 @@
                 height: 200px;
                 display: flex;
                 flex-direction: row;
-                height: 50vh; /* Adjust the height as needed */
+                height: 50vh;
                 
             }
 
-        .search-container{
-        }
-        .FoodButton{
+        .FoodButtonAdd{
             height:390px;
             width:200px;
             font-size:small;
@@ -68,6 +65,18 @@
             margin:20px;
             border-radius: 20px;
             background: linear-gradient(to right, pink, red);
+            color: white;
+            outline-offset: 4px;
+        }
+
+        .FoodButtonRemove {
+            height: 100px;
+            width: 175px;
+            font-size:small;
+            flex-direction: row;
+            margin: 20px;
+            border-radius: 20px;
+            background: linear-gradient(to right,blue,green);
             color: white;
             outline-offset: 4px;
         }
@@ -104,7 +113,7 @@
             @foreach (var food in filteredfoods)
             {
 
-                    <button class="FoodButton" @onclick="()=>AddToSelected(food)">
+                    <button class="FoodButtonAdd" @onclick="()=>AddToSelected(food)">
                     <h1>@food.Name</h1>
                         @if (food.Imagebytes != null && food.Imagebytes.Length > 0)
                         {
@@ -130,7 +139,7 @@
         {
             @foreach (var foodeaten in foodeaten)
             {
-                <button class="FoodButton" @onclick="() =>RemoveFromList(foodeaten)">
+                <button class="FoodButtonRemove" @onclick="() =>RemoveFromList(foodeaten)">
                     <h1>@foodeaten.Name</h1>
                     <p>X</p>
                 </button>
