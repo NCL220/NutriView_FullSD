@@ -9,6 +9,14 @@
                 @foreach (var company in companies)
                 {
                     <h1>About @company.CompanyName</h1>
+                    @if (company.CompanyImageByte != null && company.CompanyImageByte.Length > 0)
+                    {
+                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(company.CompanyImageByte)}")" alt="Image" width="300" height="150" />
+                    }
+                    else
+                    {
+                        <p>No image available</p>
+                    }
                     <p>@company.Mission</p>
                     <h2>Our Mission</h2>
                     <p>@company.CompanyDescription</p>

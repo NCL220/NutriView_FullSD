@@ -309,7 +309,7 @@
 
         try
         {
-            servicelinksubinfos = await _client.GetFromJsonAsync<List<ServiceLinkSubInfo>>($"{Endpoints.ServicesEndpoint}");
+            servicelinksubinfos = await _client.GetFromJsonAsync<List<ServiceLinkSubInfo>>($"{Endpoints.ServiceLinkSubInfosEndpoint}");
             if (servicelinksubinfos is null)
             {
                 servicelinksubinfos = new List<ServiceLinkSubInfo>(); // Initialize to an empty list if null is returned
@@ -484,26 +484,27 @@
     private void ServiceIDCheckForNutriQuota()
     {
 
-        if (customers is not null)
-        {
-            foreach (var c in customers)
-            {
-                var subscription = subscriptions.Where(s => s.CustomerID == c.Id).OrderByDescending(s => s.DateCreated).FirstOrDefault();
+            Console.WriteLine($"Check1");
+
+                var subscription = subscriptions.Where(s => s.CustomerID == customer.Id).OrderByDescending(s => s.DateCreated).FirstOrDefault();
                 if (subscription is not null)
                 {
+                    Console.WriteLine($"Check2");
                     var sinfo = subscriptioninfos.Where(si => si.Id == subscription.SubInfoID).FirstOrDefault();
                     if (sinfo is not null)
                     {
                         var LinkServSubInfo = servicelinksubinfos.Where(sl => sl.SubscriptionInfoID == sinfo.Id).ToList(); // ToList() to materialize the collection
-
+                        Console.WriteLine($"Check3");
                         if (LinkServSubInfo is not null)
                         {
                             foreach (var l in LinkServSubInfo)
                             {
+                                Console.WriteLine($"Check4");
                                 var Servicing = services.Where(ser => ser.Id == l.ServiceID).ToList();
                                 foreach(var eachservice in Servicing)
                                 {
-                                    if (ServiceCodeForNutriQuota ==eachservice.ServiceCode)
+                                    Console.WriteLine($"Check5");
+                                    if (ServiceCodeForNutriQuota == eachservice.ServiceCode)
                                     {
                                         Console.WriteLine($"Service Matched");
                                         _navManager.NavigateTo($"/nutritionalQuotas/create/");
@@ -516,7 +517,7 @@
                         }
                     }
                 }
-            }
+            
         }
 
 
