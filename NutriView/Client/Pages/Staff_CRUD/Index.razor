@@ -3,6 +3,8 @@
 @inject IJSRuntime js
 @using NutriView.Client.Shared
 @using NutriView.Shared.Domain
+@inject HttpInterceptorService _interceptor
+@implements IDisposable
 
 <h3 class="card-title">Staffs</h3>
 
@@ -80,8 +82,7 @@ else
     private List<Company>? companies;
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
+        _interceptor.MonitorEvent();
             Staffs = await _client.GetFromJsonAsync<List<Staff>>("api/Staffs");
             if (Staffs is null)
             {
@@ -89,11 +90,7 @@ else
             }
 
             companies = await _client.GetFromJsonAsync<List<Company>>("api/Companies");
-        }
-        catch (AccessTokenNotAvailableException ex)
-        {
-            ex.Redirect();
-        }
+
     }
 
     async Task Delete(int StaffId)
@@ -115,5 +112,9 @@ else
                 // Handle the error, e.g., show a message to the user
             }
         }
+    }
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
     }
 }

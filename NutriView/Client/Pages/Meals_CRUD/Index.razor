@@ -3,6 +3,8 @@
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 @using NutriView.Shared.Domain
+@inject HttpInterceptorService _interceptor
+@implements IDisposable
 
 <h3>Meals Configuration</h3>
 <a href="/meals/create" class="btn btn-secondary">
@@ -54,18 +56,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
+        _interceptor.MonitorEvent();
             meals = await _client.GetFromJsonAsync<List<Meal>>("api/Meals");
             if (meals is null)
             {
                 meals = new List<Meal>(); // Initialize to an empty list if null is returned
             }
-        }
-        catch (AccessTokenNotAvailableException ex)
-        {
-            ex.Redirect();
-        }
+
     }
 
     private void EditMeal(int mealId)
@@ -89,5 +86,9 @@ else
                 // Handle error here
             }
         }
+    }
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
     }
 }

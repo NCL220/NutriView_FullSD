@@ -3,6 +3,8 @@
 @inject HttpClient _client
 @inject IJSRuntime js
 @using NutriView.Shared.Domain
+@inject HttpInterceptorService _interceptor
+@implements IDisposable
 
 <h3>Subscriptions</h3>
 <a href="/subscriptions/create" class="btn btn-secondary">
@@ -53,18 +55,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
+        _interceptor.MonitorEvent();
             Subscriptions = await _client.GetFromJsonAsync<List<Subscription>>("api/Subscriptions");
             if (Subscriptions is null)
             {
                 Subscriptions = new List<Subscription>(); // Initialize to an empty list if null is returned
             }
-        }
-        catch (AccessTokenNotAvailableException ex)
-        {
-            ex.Redirect();
-        }
+
     }
 
     private void EditSubscription(int subscriptionId)
@@ -91,5 +88,9 @@ else
                 // Handle the error, e.g., show a message to the user
             }
         }
+    }
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
     }
 }

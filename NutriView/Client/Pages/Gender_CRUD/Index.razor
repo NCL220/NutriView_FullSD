@@ -2,6 +2,8 @@
 @inject HttpClient _client
 @inject IJSRuntime js
 @using NutriView.Shared.Domain
+@inject HttpInterceptorService _interceptor
+@implements IDisposable
 
 <h3>Genders</h3>
 <a href="/genders/create" class="btn btn-secondary">
@@ -49,6 +51,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        _interceptor.MonitorEvent();
         genders = await _client.GetFromJsonAsync<List<Gender>>("api/genders");
         if (genders is null)
         {
@@ -75,5 +78,9 @@ else
         {
             // Handle the error, e.g., show an error message
         }
+    }
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
     }
 }

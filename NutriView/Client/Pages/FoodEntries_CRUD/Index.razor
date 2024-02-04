@@ -3,6 +3,8 @@
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 @using NutriView.Shared.Domain
+@inject HttpInterceptorService _interceptor
+@implements IDisposable
 
 <h3>Food Entries</h3>
 <a href="/foodentries/create" class="btn btn-secondary">
@@ -56,6 +58,7 @@ else
     private List<Customer>? customers;
     protected override async Task OnInitializedAsync()
     {
+        _interceptor.MonitorEvent();
         customers = await Http.GetFromJsonAsync<List<Customer>>("api/Customers");
         foodEntries = await Http.GetFromJsonAsync<List<FoodEntry>>("api/FoodEntries");
     }
@@ -81,5 +84,9 @@ else
                 // Handle error here
             }
         }
+    }
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
     }
 }

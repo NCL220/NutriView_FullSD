@@ -3,6 +3,8 @@
 @inject NavigationManager _navManager
 @inject IJSRuntime JSRuntime
 @using NutriView.Shared.Domain
+@inject HttpInterceptorService _interceptor
+@implements IDisposable
 
 <h3>Subscription Services</h3>
 <a href="/services/create" class="btn btn-secondary">
@@ -49,6 +51,7 @@ else
     private List<Service>? services;
     protected override async Task OnInitializedAsync()
     {
+        _interceptor.MonitorEvent();
         services = await _client.GetFromJsonAsync<List<Service>>("api/Services");
     }
 
@@ -74,4 +77,8 @@ else
             }
         }
     }
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
     }
+}
