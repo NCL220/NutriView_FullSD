@@ -1,0 +1,126 @@
+﻿body {
+    margin: 0;
+    background-color: #10889E;
+    font-family: Verdana;
+    flex-direction: column;
+}
+
+.container {
+    margin-top: 4%;
+    display: flex;
+    height: 98%;
+    width: 98%;
+    background-color: antiquewhite;
+}
+
+.left-column {
+    flex: 1;
+    padding: 50px;
+    border: 1px solid #ccc;
+}
+
+    .left-column img {
+        width: 100%;
+        height: auto;
+        border-radius: 15px; /* Match the border-radius to the outer container */
+        object-fit: cover;
+    }
+
+.right-column {
+    flex: 3;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+h1 {
+    text-align: center;
+    font-size: 3em;
+    color: #445566;
+    font-family: Georgia, Times, Serif;
+    font-weight: normal;
+    margin: 0;
+    padding: 20px;
+}
+
+h2 {
+    color: #445566;
+    padding: 0px;
+}
+
+h3 {
+    color: #445566;
+    margin: 0px;
+}
+
+nav {
+    background-color: #45bcd2;
+    height: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+aside {
+    margin: auto;
+    width: 300px;
+    height: 100%;
+    border: 1px solid #10889E;
+    float: left;
+    margin-left: 30px;
+    padding: 5px;
+}
+
+
+#main {
+    width: 75%;
+    float: right;
+    margin-right: 30px;
+    line-height: 20px;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+    background-color: black;
+}
+
+.tbl-header {
+    background-color: aqua;
+}
+
+.tbl-content {
+    height: 300px;
+    overflow-x: auto;
+    margin-top: 0px;
+    border: 2px solid aqua;
+}
+
+th {
+    padding: 20px 15px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 12px;
+    color: ghostwhite;
+    text-transform: uppercase;
+}
+
+td {
+    padding: 15px;
+    text-align: left;
+    vertical-align: middle;
+    font-weight: 300;
+    font-size: 12px;
+    color: white;
+    border: 2px solid aqua;
+}
+
+.card-img {
+    width: 270px;
+    height: 280px;
+}
+
+.small-button {
+    font-size: 12px;
+    padding: 5px 10px;
+}
+
+</style >

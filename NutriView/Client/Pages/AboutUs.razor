@@ -5,67 +5,16 @@
 
 
 <head>
-    <style>
-        *{
-            box-sizing: border-box;
-        }
-        .container {
-            height:100%;
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            position:relative;
-
-        }
-
-        .header {
-            display:flex;
-            min-height:500px;
-            max-width:100%;
-            background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)), url('images/aboutus.jpg');
-            background-size:cover;
-            position: relative;
-        }
-
-        .leftDiv {
-            text-align: center;
-            flex: 3; /* Three times wider than the right div */
-            background-color: #e0e0e0;
-            padding: 20px;
-            z-index: 1;
-        }
-
-        .leftDiv img {
-            align-content: center;
-            max-width: 100%; /* Ensure images don't exceed the width of the right div */
-            display: block;
-            margin-bottom: 10px;
-            padding:10px;
-        }
-        .rightDiv {
-            text-align: center;
-            flex: 1;
-            background-color: #f0f0f0;
-            padding: 20px;
-            z-index: 1;
-        }
-
-        .rightDiv img {
-            align-content:center;
-            max-width: 100%; /* Ensure images don't exceed the width of the right div */
-            height: 100px;
-            display: float ;
-            border-radius: 50%;
-        }
-    </style>
+    <link href="css/AboutUs.css" rel="stylesheet" />
 </head>
 <div class="header">
 
 </div>
+<body>
 <CompanyAndStaffDetailsComponent />
 
 
 
-
+</body>
 
 

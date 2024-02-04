@@ -23,6 +23,7 @@
     <None Include="Pages\SubscriptionInfo_CRUD\Create.razor" />
     <None Include="Pages\SubscriptionInfo_CRUD\Edit.razor" />
     <None Include="Pages\SubscriptionInfo_CRUD\Index.razor" />
+    <None Include="wwwroot\css\BMICalculator.css" />
   </ItemGroup>
 
   <ItemGroup>

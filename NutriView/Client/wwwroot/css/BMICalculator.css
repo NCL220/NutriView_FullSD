@@ -1,0 +1,66 @@
+﻿body {
+    height: 100%;
+    background: linear-gradient(to right, #001f3f, #0074cc, #001f3f);
+    background-size: 200% 100%;
+    color: white;
+}
+
+.container {
+    height: auto;
+}
+
+.top-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .top-container > div {
+        flex: 2;
+        margin: 10px;
+        padding: 20px;
+        border: 2px solid #000;
+    }
+
+.buttons {
+    width: 200px;
+    height: 50px;
+    color: white;
+    border-radius: 20px;
+    background-color: red;
+}
+
+
+.middle-container {
+    flex: 0 0 auto;
+    padding: 20px;
+    margin: 10px;
+    border: 2px solid #000;
+}
+
+.bottom-container {
+    margin: 10px;
+    padding: 20px;
+    border: 2px solid #000;
+}
+
+table {
+    width: 100%;
+    margin-bottom: 1em;
+    color: darkred;
+}
+
+th, td {
+    font-size: large;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+}

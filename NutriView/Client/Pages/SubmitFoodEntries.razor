@@ -8,89 +8,13 @@
 @using System.IO;
 @layout NoMenuLayout
 <head>
-    <style>
-        
-
-        body{
-            
-            margin: 0;
-            background-color: white;
-        }
-
-        .content {
-            background-color: #ddd;
-            padding: 10px;
-        }
-
-        .rounded-div {
-            margin-top:3%;
-            margin-left:auto;
-            margin-right:auto;
-            align-items: center;
-            width: 80%;
-            height: auto;
-            border-radius: 10px;
-            background-color: #3498db;
-            padding: 20px;
-            text-align: center;
-            color: #fff;
-        }
-
-            .Food-Container {
-                
-                border-block:double;
-                height: 200px;
-                display: flex;
-                flex-wrap: wrap;
-                flex-direction: row;
-                height: 50vh;
-                overflow: auto;
-            }
-
-            .Selected-Container {
-                background-color:black;
-                border-block: double;
-                height: 200px;
-                display: flex;
-                flex-direction: row;
-                height: 50vh;
-                
-            }
-
-        .FoodButtonAdd{
-            height:390px;
-            width:200px;
-            font-size:small;
-            flex-direction:row;
-            margin:20px;
-            border-radius: 20px;
-            background: linear-gradient(to right, pink, red);
-            color: white;
-            outline-offset: 4px;
-        }
-
-        .FoodButtonRemove {
-            height: 100px;
-            width: 175px;
-            font-size:small;
-            flex-direction: row;
-            margin: 20px;
-            border-radius: 20px;
-            background: linear-gradient(to right,blue,green);
-            color: white;
-            outline-offset: 4px;
-        }
-        .FoodButton:active .front {
-            transform: translateY(-2px);
-        }
-    </style>
+    <link href="css/SubmitFoodEntries.css" rel="stylesheet" />
 </head>
 
 <body>
     <div class="rounded-div">
         <div class="sidenav">
-            <input type="text" placeholder="Search..." @bind="searchTerm" />
-            <button type="submit"><span class="oi oi-magnifying-glass"></span></button>
+            
         </div>       
         <div>
             <EntryFormComponent ButtonText="" foodEntry="foodEntry" SubmitDataThroughForm=@SubmitDataThroughForm @ref="FoodEntriesComponentRef" />
@@ -105,7 +29,10 @@
 
     
 
+
     <h2>What have you ate?</h2>
+        <input type="text" placeholder="Search..." @bind="searchTerm" />
+        <button type="submit"><span class="oi oi-magnifying-glass"></span></button>
     <div class="Food-Container">
         
         @if(foods is not null)
@@ -191,7 +118,6 @@
                 {
                     Console.WriteLine($"Created FoodEntry with ID: {createdFoodEntry.Id}");
 
-                    // Use createdFoodEntry.Id as needed
                     int foodEntryIdfromFE = createdFoodEntry.Id;
 
                     MealComponentRef.meal.FoodEntryID = foodEntryIdfromFE;
@@ -221,8 +147,7 @@
         }
         catch (Exception ex)
         {
-            // Log the exception
-            Console.WriteLine($"Exception during FoodEntry creation: {ex.Message}");
+            Console.WriteLine($"FoodEntry creation: {ex.Message} Exception");
         }
     }
     private async Task AddToSelected(Food food)

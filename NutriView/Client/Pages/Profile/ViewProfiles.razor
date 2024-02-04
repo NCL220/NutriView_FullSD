@@ -3,56 +3,7 @@
 @inject IJSRuntime js
 @using NutriView.Shared.Domain
 <head>
-    <style>
-        body {
-            margin: 0;
-            background: linear-gradient(to right, #3498db, #e74c3c);
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: column;
-        }
-
-        .topcontainer {
-            text-align: center;
-            height: auto;
-        }
-
-        .searchbar {
-            width:auto;
-            align-items: center;
-            border-radius: 20px;
-            outline:none;
-        }
-
-        .bordercontainer {
-            width: 250px;
-            height: 275px;
-            border: 5px solid black;
-            padding: 20px;
-            margin:20px;
-            text-align: center;
-            background-color:aliceblue;
-            border-radius: 10px; /* rounded corners */
-        }
-
-            .bordercontainer img {
-                width: 90%;
-                height: 200px;
-                border-radius: 15px; /* Match the border-radius to the outer container */
-                object-fit: cover;
-            }
-        .profilecontainer{
-            display: flex;
-            flex-direction: row;
-            flex-grow: 1; /* Take up the remaining vertical space */
-            flex-wrap: wrap;
-            gap: 10px;
-            padding: 10px;
-            overflow-y: auto;
-        }
-
-
-    </style>
+    <link href="css/ViewProfiles.css" rel="stylesheet" />
 </head>
 
 <body>

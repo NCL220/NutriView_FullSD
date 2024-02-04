@@ -4,9 +4,9 @@
     width: 80%;
     height: 60%;
     margin-left: 10%;
-    border-radius: 15px; /* Adjust the value for more or less rounded corners */
+    border-radius: 15px;
     background-color: white;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Shadow effect */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     border: 2px solid black;
     padding: 20px;
     display: flex;
